@@ -37,6 +37,15 @@ class AdminDashboardController extends Controller
         return view('admin.dashboard.dashboard')->with(compact('studentCourses','paymentStatus','studentPrograms','users','studentGraphResult','panding_kots_count','kitchen_complete_kot_count','total_kots_count','cash_print_count'));
     }
 
+    public function redirects(){
+        $role = Auth::user()->role;
+        if ($role == 'admin'){
+            return redirect()->route('adminDashboard');
+        }elseif ($role == 'operator'){
+            return redirect()->route('operatorDashboard');
+        }
+    }
+
     public function allCourseDownload($type){
 
         $page_type = ['master','courses'];

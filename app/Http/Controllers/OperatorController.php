@@ -20,7 +20,7 @@ class OperatorController extends Controller
 //        dump($tblRestName_data);
 //        die();
 
-        return view('operator.operatorOutlets',compact('profileData', 'tblRestName_data'));
+        return view('admin.operator.operatorOutlets',compact('profileData', 'tblRestName_data'));
     } // End Dashboard Method
 
     public function OperatorSetOutlets(){
@@ -33,6 +33,9 @@ class OperatorController extends Controller
     } // End Dashboard Method
 
     public function OperatorDashboard(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
         // $date = date("Y-m-d");
@@ -47,7 +50,7 @@ class OperatorController extends Controller
         $total_kots_count = DB::table('order_kot')->where('cancel', '=', 'N')->whereDate('date', '=', $date)->count();
         $cash_print_count = DB::table('order_kot')->where('status', '=', '2')->where('cancel', '=', 'N')->whereDate('date', '=', $date)->count();
 
-        return view('operator.operatorDashboard',compact('profileData', 'panding_kots_count', 'kitchen_complete_kot_count', 'total_kots_count', 'cash_print_count', 'date'));
+        return view('admin.operator.operatorDashboard',compact('profileData', 'panding_kots_count', 'kitchen_complete_kot_count', 'total_kots_count', 'cash_print_count', 'date'));
     } // End Dashboard Method
 
     public function OperatorProfile(){
@@ -146,7 +149,7 @@ class OperatorController extends Controller
 //        $tblWaiter_data = DB::connection('sqlsrv')->table('tblWaiter')->where($uotletID, '1')->orderBy('Name')->get();
         $tblWaiter_data = DB::connection('mysql')->table('rest_fortis.tblwaiter')->where($uotletID, '1')->orderBy('Name')->get();
 
-        return view('operator.operatorNewOrder',compact('profileData','tblGuestInfo_data','tblWaiter_data', 'bill_No', 'billauto','userOperator'));
+        return view('admin.operator.operatorNewOrder',compact('profileData','tblGuestInfo_data','tblWaiter_data', 'bill_No', 'billauto','userOperator'));
     } // End OperatorNewOrder Method
 
 

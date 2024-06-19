@@ -7,7 +7,7 @@
             <a href="{{route('home')}}">
                 <img src="{{ asset('/') }}/assets/admin/layout/img/nice-removebg-preview.png" alt="logo" style="height: 46px;"/>
             </a>
-            <div class="menu-toggler sidebar-toggler">
+{{--            <div class="menu-toggler sidebar-toggler">--}}
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
 {{--                <li class="sidebar-toggler-wrapper">--}}
                     <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
@@ -15,12 +15,12 @@
 {{--                    </div>--}}
                     <!-- END SIDEBAR TOGGLER BUTTON -->
 {{--                </li>--}}
-            </div>
+{{--            </div>--}}
         </div>
         <!-- END LOGO -->
         <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
-        </a>
+{{--        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">--}}
+{{--        </a>--}}
         <!-- END RESPONSIVE MENU TOGGLER -->
         <!-- BEGIN TOP NAVIGATION MENU -->
         <div class="top-menu">
