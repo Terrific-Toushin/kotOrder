@@ -149,7 +149,23 @@ class OperatorController extends Controller
 //        $tblWaiter_data = DB::connection('sqlsrv')->table('tblWaiter')->where($uotletID, '1')->orderBy('Name')->get();
         $tblWaiter_data = DB::connection('mysql')->table('rest_fortis.tblwaiter')->where($uotletID, '1')->orderBy('Name')->get();
 
-        return view('admin.operator.operatorNewOrder',compact('profileData','tblGuestInfo_data','tblWaiter_data', 'bill_No', 'billauto','userOperator'));
+        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
+
+        $uotletName = "";
+        foreach($uotlet as $uotletData){
+            $uotletName = $uotletData->ResName;
+        }
+
+//        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
+        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
+
+        $kitchen = array();
+        foreach($tblMenu_data as $kitchen_items){
+            array_push($kitchen, $kitchen_items->kitchen);
+        }
+        $kitchen = array_unique($kitchen);
+
+        return view('admin.operator.operatorNewOrder',compact('profileData','tblGuestInfo_data','tblWaiter_data', 'bill_No', 'billauto','userOperator','tblMenu_data', 'kitchen'));
     } // End OperatorNewOrder Method
 
 
@@ -230,7 +246,9 @@ class OperatorController extends Controller
 
     } // End OperatorNewOrderItem Method
 
-    public function NewOrderItemSave(){
+    public function NewOrderItemSave(Request $request){
+//        dump($request);
+//        die();
         $id = Auth::user()->id;
         $username = Auth::user()->username;
         $uotletID = session()->get('uotlet');
@@ -248,10 +266,10 @@ class OperatorController extends Controller
         $terminal = request('terminal');
         $serveTime = request('serveTime');
         $pax = request('pax');
-        $waterName = request('waterName');
+        $waterName = Auth::user()->name;
         $gustName = request('gustName');
-        $companyName = request('companyName');
-        $email = request('email');
+        $companyName = '';
+        $email = '';
         $contactNo = request('contactNo');
         $itemCount = request('itemCount');
 
@@ -269,25 +287,21 @@ class OperatorController extends Controller
 
         $InsertOrderKot = DB::insert('insert into order_kot (billNo, tableNo, roomNo, terminal, serveTime, pax, waterName, gustName, companyName, email, contactNo, outlet, ResSL, userID) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$billNo, $tableNo, $roomNo, $terminal, $serveTime, $pax, $waterName, $gustName, $companyName, $email, $contactNo, $uotletName, $uotletID, $username]);
 
-        $iRepidS = array();
-        $qtyS = array();
-        $priceS = array();
         for($count=1;$count<=$itemCount;$count++){
             if(request('repid'.$count)!=""){
-                array_push($iRepidS, request('repid'.$count));
-                array_push($qtyS, request('qty'.$count));
-                array_push($priceS, request('price'.$count));
 
                 $repid = request('repid'.$count);
                 $qty = request('qty'.$count);
                 $price = request('price'.$count);
+                $kitchen = request('kitchen'.$count);
+                $remark = request('remark'.$count);
                 if($InsertOrderKot){
-                    DB::insert('insert into order_kot_item (billNo, repID, price, qty) values (?, ?, ?, ?)', [$billNo, $repid, $price, $qty]);
+                    DB::insert('insert into order_kot_item (billNo, repID, price, qty, remark, kitchen) values (?, ?, ?, ?, ?, ?)', [$billNo, $repid, $price, $qty,$remark, $kitchen]);
                 }
             }
         }
 
-        return redirect()->route('operator.kotView',compact('billNo'));
+        return redirect()->route('kotView',compact('billNo'));
 
     } // End OperatorNewOrderItemSave Method
 
@@ -549,7 +563,7 @@ class OperatorController extends Controller
         $itencount_new=1;
         $cancel_itencount=1;
 
-        return view('operator.kotView',compact('billNo','tableNo','roomNo','terminal','serveTime','pax','waterName','gustName','companyName','email','contactNo', 'itencount', 'itencount_new', 'cancel_itencount', 'cancel', 'status', 'date', 'time', ['allMenuItems'], ['allMenuItems_new'], ['cancel_allMenuItems']));
+        return view('admin.operator.kotView',compact('billNo','tableNo','roomNo','terminal','serveTime','pax','waterName','gustName','companyName','email','contactNo', 'itencount', 'itencount_new', 'cancel_itencount', 'cancel', 'status', 'date', 'time', ['allMenuItems'], ['allMenuItems_new'], ['cancel_allMenuItems']));
     } // End OperatorKOTView Method
 
     public function OperatorSendToKOT(){

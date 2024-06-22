@@ -923,9 +923,6 @@ var TableAdvanced = function () {
             if (!jQuery().dataTable) {
                 return;
             }
-
-            console.log('me 1');
-
             initTableLatest();
             initTableMaster();
             initTableDiploma();
@@ -939,7 +936,6 @@ var TableAdvanced = function () {
             initTable5();
             initTable6();
 
-            console.log('me 2');
         }
 
     };
