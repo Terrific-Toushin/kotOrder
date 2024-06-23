@@ -29,28 +29,32 @@ class OperatorController extends Controller
 //        error_log($uotlet);
         session()->put('uotlet',$uotlet);
 
-        return redirect()->intended('/operator/dashboard');
+        return redirect()->intended('/operator-dashboard');
     } // End Dashboard Method
 
     public function OperatorDashboard(){
         if (empty(session()->get('uotlet'))){
             return redirect()->route('outlets');
+        }else{
+            $outlet = session()->get('uotlet');
         }
         $id = Auth::user()->id;
         $profileData = User::find($id);
         // $date = date("Y-m-d");
 
-        date_default_timezone_set('Asia/Dhaka');
-
-        $timestamp = time();
-        $date = date("Y-m-d", $timestamp);
-
-        $panding_kots_count = DB::table('order_kot')->where('status', '=', '1')->orWhere('status', '=', '4')->where('cancel', '=', 'N')->whereDate('date', '=', $date)->count();
-        $kitchen_complete_kot_count = DB::table('order_kot')->where('status', '=', '3')->where('cancel', '=', 'N')->whereDate('date', '=', $date)->count();
-        $total_kots_count = DB::table('order_kot')->where('cancel', '=', 'N')->whereDate('date', '=', $date)->count();
-        $cash_print_count = DB::table('order_kot')->where('status', '=', '2')->where('cancel', '=', 'N')->whereDate('date', '=', $date)->count();
-
-        return view('admin.operator.operatorDashboard',compact('profileData', 'panding_kots_count', 'kitchen_complete_kot_count', 'total_kots_count', 'cash_print_count', 'date'));
+//        DB::enableQueryLog();
+        $panding_kots_count = DB::table('order_kot')->where('cancel', 'N')
+            ->where('ResSL',$outlet)
+            ->where('userID',Auth::user()->username)
+            ->where(static function ($query) {
+                $query->where('status', '=', '1')
+                ->orWhere('status', '=', '4');
+            })->count();
+        $kitchen_complete_kot_count = DB::table('order_kot')->where('ResSL',$outlet)->where('userID',Auth::user()->username)->where('status', '=', '3')->where('cancel', '=', 'N')->count();
+        $total_kots_count = DB::table('order_kot')->where('ResSL',$outlet)->where('userID',Auth::user()->username)->where('cancel', '=', 'N')->count();
+        $cash_print_count = DB::table('order_kot')->where('ResSL',$outlet)->where('userID',Auth::user()->username)->where('status', '=', '2')->where('cancel', '=', 'N')->count();
+//        dd(DB::getQueryLog());
+        return view('admin.operator.operatorDashboard',compact('profileData', 'panding_kots_count', 'kitchen_complete_kot_count', 'total_kots_count', 'cash_print_count'));
     } // End Dashboard Method
 
     public function OperatorProfile(){
@@ -674,15 +678,20 @@ class OperatorController extends Controller
     public function OperatorPendingKOT(){
         $id = Auth::user()->id;
         $profileData = User::find($id);
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }else{
+            $outlet = session()->get('uotlet');
+        }
 
-        date_default_timezone_set('Asia/Dhaka');
+        $pending_kots = DB::table('order_kot')->where('cancel', '=', 'N')->where('ResSL',$outlet)
+            ->where('userID',Auth::user()->username)
+            ->where(static function ($query) {
+                $query->where('status', '=', '1')
+                    ->orWhere('status', '=', '4');
+            })->orderBy('date', 'DESC')->get();
 
-        $timestamp = time();
-        $date = date("Y-m-d", $timestamp);
-
-        $pending_kots = DB::table('order_kot')->where('cancel', '=', 'N')->where('status', '=', '1')->orWhere('status', '=', '4')->whereDate('date', '=', $date)->get();
-
-        return view('operator.operatorPendingKOT',compact('profileData', 'pending_kots'));
+        return view('admin.operator.operatorPendingKOT',compact('profileData', 'pending_kots'));
     } // End OperatorPandingKOT Method
 
     public function KitchenCompleteKotHistory(){

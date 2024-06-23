@@ -5,7 +5,7 @@
         <!-- BEGIN LOGO -->
         <div class="page-logo">
             <a href="{{route('home')}}">
-                <img src="{{ asset('/') }}/assets/admin/layout/img/nice-removebg-preview.png" alt="logo" style="height: 46px;"/>
+                <img src="{{ asset('/') }}assets/admin/layout/img/nice-removebg-preview.png" alt="logo" style="height: 46px;"/>
             </a>
             <div class="menu-toggler sidebar-toggler">
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -41,7 +41,7 @@
                 <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                 <li class="dropdown dropdown-user">
                     <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                        <img alt="" class="img-circle" src="{{ asset('/') }}/assets/admin/layout/img/imtiaz.png"/>
+                        <img alt="" class="img-circle" src="{{ asset('/') }}assets/admin/layout/img/imtiaz.png"/>
                         <span class="username username-hide-on-mobile">
 					{{Auth::user()->name}} </span>
                         <i class="fa fa-angle-down"></i>
