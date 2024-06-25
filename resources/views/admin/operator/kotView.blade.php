@@ -212,7 +212,7 @@
                                         </div>
                                     @endif
                                     <div class="col-md-3">
-                                        <a href="#">
+                                        <a href="{{ route('editOrderItem', ['billNo' => $billNo]) }}">
                                             <button type="submit" class="btn btn-primary btn-block" >Edit</button>
                                         </a>
                                     </div>

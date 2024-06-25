@@ -77,6 +77,8 @@
                         <table class="table table-hover table-striped table-bordered" id="sample_user">
                             <thead>
                             <tr role="row" class="heading">
+                                <th>SL</th>
+                                <th>Date</th>
                                 <th>Bill NO</th>
                                 <th >Terminal</th>
                                 <th >Serve Time</th>
@@ -88,11 +90,13 @@
                             <tbody>
                             @foreach($pending_kots as $kots)
                                 <tr>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$kots->date}}</td>
                                     <td>{{$kots->billNo}}</td>
                                     <td>{{$kots->terminal}}</td>
                                     <td>{{$kots->serveTime}}</td>
-                                    <td>{{$kots->tableNo}}{{$kots->roomNo}}</td>
-                                    <td>{{$kots->pax}}</td>
+                                    <td>{{$kots->tableNo!=''?'Table-':($kots->roomNo!=''?'Room-':'')}}{{$kots->tableNo}}{{$kots->roomNo}}</td>
+                                    <td>{{$kots->pax}} Person</td>
                                     <td>
                                         <a href="{{ route('kotView', ['billNo' => $kots->billNo]) }}" class="btn btn-sm green"><i class="fa fa-file-o"></i> Details </a>
                                     </td>
