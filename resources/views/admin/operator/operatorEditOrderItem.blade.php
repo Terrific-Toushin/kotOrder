@@ -113,50 +113,52 @@
                             @csrf
                             <div class="form-body">
                                 <div class="form-group">
-                                    <label class="col-sm-1 control-label">Bill NO (<span>{{$bill_No}}</span>)</label>
+                                    <label class="col-sm-1 control-label">Bill NO</label>
                                     <div class="col-sm-2">
-                                        <input type="text" name="billNo" class="form-control" placeholder="Bill Number" value="{{$bill_No+1}}" readonly>
+                                        <input type="text" name="billNo" class="form-control" placeholder="Bill Number" value="{{$billNo}}" readonly>
                                     </div>
                                     <label class="col-sm-1 control-label">Table NO</label>
                                     <div class="col-sm-2">
-                                        <input id="tableNo" type="text" name="tableNo" class="form-control" placeholder="Table Number" onblur="onTableNo()" >
+                                        <input id="tableNo" type="text" name="tableNo" class="form-control" placeholder="Table Number" value="{{$tableNo}}" onblur="onTableNo()" >
                                     </div>
                                     <label class="col-sm-1 control-label">Room NO</label>
                                     <div class="col-sm-2">
-                                        <input id="roomNo" type="text" name="room" class="form-control" placeholder="Room Number" onkeypress="onRoomNo()" onclick="onRoomNo()" >
+                                        <input id="roomNo" type="text" name="room" class="form-control" placeholder="Room Number" value="{{$room}}" onkeypress="onRoomNo()" onclick="onRoomNo()" >
                                     </div>
                                     <label class="col-sm-1 control-label">Terminal</label>
                                     <div class="col-sm-2">
-                                        <select class="form-control" name="terminal">
-                                            <option value="Restaurant">Restaurant</option>
+                                        <select class="form-control" name="terminal" required>
+                                            <option value="">Select</option>
+                                            <option value="Restaurant" {{$terminal == 'Breakfast' ? 'selected' : ''}}>Restaurant</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-1 control-label">Serve Time</label>
                                     <div class="col-sm-2">
-                                        <select class="form-control" name="serveTime">
-                                            <option value="Breakfast">Breakfast</option>
-                                            <option value="Lunch">Lunch</option>
-                                            <option value="Dinner">Dinner</option>
+                                        <select class="form-control" name="serveTime" required>
+                                            <option value="" >Select</option>
+                                            <option value="Breakfast" {{$serveTime == 'Breakfast' ? 'selected' : ''}}>Breakfast</option>
+                                            <option value="Lunch" {{$serveTime == 'Lunch' ? 'selected' : ''}}>Lunch</option>
+                                            <option value="Dinner" {{$serveTime == 'Dinner' ? 'selected' : ''}}>Dinner</option>
                                         </select>
                                     </div>
                                     <label class="col-sm-1 control-label">PAX</label>
                                     <div class="col-sm-2">
-                                        <input id="pax" type="number" name="pax" min="1" class="form-control" placeholder="Number Of Guest" onchange="showItemList()">
+                                        <input id="pax" type="number" name="pax" min="1" class="form-control" placeholder="Number Of Guest" value="{{$pax}}" onchange="showItemList()" required>
                                     </div>
                                     <label class="col-sm-1 control-label">Guest Name</label>
                                     <div class="col-sm-2">
-                                        <input type="text" name="gustName" class="form-control" placeholder="Guest Name">
+                                        <input type="text" name="gustName" class="form-control" value="{{$gustName}}" placeholder="Guest Name">
                                     </div>
                                     <label class="col-sm-1 control-label">Contact No</label>
                                     <div class="col-sm-2">
-                                        <input type="text" name="contactNo" class="form-control" placeholder="Contact Number">
+                                        <input type="text" name="contactNo" class="form-control" value="{{$contactNo}}" placeholder="Contact Number">
                                     </div>
                                 </div>
 
                             </div>
-                            <div id="orderItemList" class="row" style="display: none">
+                            <div id="orderItemList" class="row">
                                 <div class="col-sm-6" style="padding-right: 2px">
                                     <!-- Begin: life time stats -->
                                     <div class="portlet box blue-steel">
@@ -248,16 +250,70 @@
                                 </div>
                                 <div class="col-md-6" style="padding-left: 2px">
                                     <!-- Begin: life time stats -->
+                                    <div class="portlet box yellow-lemon-stripe">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-thumb-tack"></i>Already Order Item List
+                                            </div>
+                                            <div class="tools">
+                                                <a href="javascript:;" class="collapse"></a>
+                                                <a href="javascript:;" class="remove"></a>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body">
+                                            <div class="table-responsive">
+                                                <table  class="table table-striped table-bordered table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>ID</th>
+                                                        <th>Name</th>
+                                                        <th>Price(s)</th>
+                                                        <th>Qty</th>
+                                                        <th>Kitchen</th>
+                                                        <th>Remarks</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach($allMenuItems as $allMenuItem)
+                                                        <tr>
+                                                            <td>{{$loop->iteration}}</td>
+                                                            <td>{{$allMenuItem['repID']}}</td>
+                                                            <td>{{$allMenuItem['repname']}}</td>
+                                                            <td>{{$allMenuItem['price']}}</td>
+                                                            <td>{{$allMenuItem['qty']}}</td>
+                                                            <td>{{$allMenuItem['kitchen']}}</td>
+                                                            <td>{{$allMenuItem['remark']}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <td colspan="6">
+                                                            <div class="form-group row">
+                                                                <label for="total" class="col-sm-2 col-form-label">Totel :</label>
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" readonly class="form-control-plaintext" id="total" value="0" style="border: solid transparent; width: 15%">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                                <div id="modalItem"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End: life time stats -->
+                                    <!-- Begin: life time stats -->
                                     <div class="portlet box green-haze">
                                         <div class="portlet-title">
                                             <div class="caption">
-                                                <i class="fa fa-thumb-tack"></i>Order Item List
+                                                <i class="fa fa-thumb-tack"></i>Update Order Item List
                                             </div>
                                             <div class="tools">
-                                                <a href="javascript:;" class="collapse">
-                                                </a>
-                                                <a href="javascript:;" class="remove">
-                                                </a>
+                                                <a href="javascript:;" class="collapse"></a>
+                                                <a href="javascript:;" class="remove"></a>
                                             </div>
                                         </div>
                                         <div class="portlet-body">
@@ -275,6 +331,7 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody id="itemTable"></tbody>
+
                                                     <tfoot>
                                                     <tr>
                                                         <td colspan="6">

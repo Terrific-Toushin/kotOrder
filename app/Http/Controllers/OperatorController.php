@@ -432,12 +432,12 @@ class OperatorController extends Controller
                 $kitchens = $kot_items_select->kitchen;
             }
 
-            array_push($allMenuItems, array("kotID"=>$kotID, "repID"=>$repID, "repname"=>$repname, "price"=>$price, "qty"=>$qty, "kitchen"=>$kitchens));
+            array_push($allMenuItems, array("kotID"=>$kotID, "repID"=>$repID, "repname"=>$repname, "price"=>$price, "qty"=>$qty, "kitchen"=>$kitchens, "remark"=>$order_kot_item->remark));
         }
 
         $itemcount=1;
 
-        return view('operator.operatorEditOrderItem',compact('tblMenu_data', 'kitchen','billNo','tableNo','room','terminal','serveTime','pax','waterName','gustName','companyName','email','contactNo', 'itemcount', ['allMenuItems']));
+        return view('admin.operator.operatorEditOrderItem',compact('tblMenu_data', 'kitchen','billNo','tableNo','room','terminal','serveTime','pax','waterName','gustName','companyName','email','contactNo', 'itemcount', ['allMenuItems']));
 
 
     } // End EditOrderItem Method
