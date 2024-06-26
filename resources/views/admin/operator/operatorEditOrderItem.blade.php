@@ -250,7 +250,7 @@
                                 </div>
                                 <div class="col-md-6" style="padding-left: 2px">
                                     <!-- Begin: life time stats -->
-                                    <div class="portlet box yellow-lemon-stripe">
+                                    <div class="portlet box grey-cascade">
                                         <div class="portlet-title">
                                             <div class="caption">
                                                 <i class="fa fa-thumb-tack"></i>Already Order Item List
@@ -264,17 +264,18 @@
                                             <div class="table-responsive">
                                                 <table  class="table table-striped table-bordered table-hover">
                                                     <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>ID</th>
-                                                        <th>Name</th>
-                                                        <th>Price(s)</th>
-                                                        <th>Qty</th>
-                                                        <th>Kitchen</th>
-                                                        <th>Remarks</th>
-                                                    </tr>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>ID</th>
+                                                            <th>Name</th>
+                                                            <th>Price(s)</th>
+                                                            <th>Qty</th>
+                                                            <th>Kitchen</th>
+                                                            <th>Remarks</th>
+                                                        </tr>
                                                     </thead>
                                                     <tbody>
+                                                    @php $totalPrice = 0; @endphp
                                                     @foreach($allMenuItems as $allMenuItem)
                                                         <tr>
                                                             <td>{{$loop->iteration}}</td>
@@ -284,23 +285,20 @@
                                                             <td>{{$allMenuItem['qty']}}</td>
                                                             <td>{{$allMenuItem['kitchen']}}</td>
                                                             <td>{{$allMenuItem['remark']}}</td>
+                                                            @php $totalPrice = $totalPrice + $allMenuItem['price']; @endphp
                                                         </tr>
                                                     @endforeach
                                                     </tbody>
                                                     <tfoot>
-                                                    <tr>
-                                                        <td colspan="6">
-                                                            <div class="form-group row">
-                                                                <label for="total" class="col-sm-2 col-form-label">Totel :</label>
-                                                                <div class="col-sm-10">
-                                                                    <input type="text" readonly class="form-control-plaintext" id="total" value="0" style="border: solid transparent; width: 15%">
+                                                        <tr>
+                                                            <td colspan="7">
+                                                                <div class="form-group row">
+                                                                    <label for="total" class="col-sm-12 col-form-label">Totel : {{$totalPrice}}</label>
                                                                 </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                                                            </td>
+                                                        </tr>
                                                     </tfoot>
                                                 </table>
-                                                <div id="modalItem"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -330,24 +328,72 @@
                                                         <th></th>
                                                     </tr>
                                                     </thead>
-                                                    <tbody id="itemTable"></tbody>
-
+                                                    <tbody id="itemTable">
+                                                        @php
+                                                            $orderNewItem = 0;
+                                                        @endphp
+                                                        @foreach($allMenuItems as $allMenuItem)
+                                                            <tr>
+                                                                @php
+                                                                    $orderNewItem++
+                                                                @endphp
+                                                                <td><a class="btn default" data-target="#stack{{$orderNewItem}}" data-toggle="modal"><i class="fa fa-comments-o"></i></a></td>
+                                                                <td>{{$allMenuItem['repname']}}</td>
+                                                                <td>
+                                                                    <span id="priceT{{$orderNewItem}}">{{$allMenuItem['price']}}</span>
+                                                                    <input type="hidden" readonly="" id="price{{$orderNewItem}}" name="price{{$orderNewItem}}" size="7" value="{{$allMenuItem['price']/$allMenuItem['qty']}}">
+                                                                </td>
+                                                                <td>
+                                                                    <div class="input-group">
+                                                                        <div class="spinner-buttons input-group-btn">
+                                                                            <div class="btn spinner-down red decrement" onclick="decrement('{{$orderNewItem}}')"><i class="fa fa-minus"></i></div>
+                                                                        </div>
+                                                                        <input type="number" class="form-control quantity" id="qty{{$orderNewItem}}" name="qty{{$orderNewItem}}" min="1" size="2" value="{{$allMenuItem['qty']}}" onchange="indItem('{{$orderNewItem}}')">
+                                                                        <input type="hidden"  id="priviasQty{{$orderNewItem}}" name="priviasQty{{$orderNewItem}}" value="{{$allMenuItem['qty']}}" >
+                                                                        <div class="spinner-buttons input-group-btn">
+                                                                            <div class="btn spinner-up blue increment" onclick="increment('{{$orderNewItem}}')"><i class="fa fa-plus"></i></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>{{$allMenuItem['kitchen']}}</td>
+                                                                <td><div class="btn btn-danger btn-block remove-table-row"><i class="fa fa-trash-o"></i></div>
+                                                                    <input type="hidden" id="repid{{$orderNewItem}}" name="repid{{$orderNewItem}}" value="{{$allMenuItem['repID']}}">
+                                                                    <input type="hidden" id="kitchen{{$orderNewItem}}" name="kitchen{{$orderNewItem}}" value="{{$allMenuItem['kitchen']}}">
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
                                                     <tfoot>
                                                     <tr>
                                                         <td colspan="6">
                                                             <div class="form-group row">
                                                                 <label for="total" class="col-sm-2 col-form-label">Totel :</label>
                                                                 <div class="col-sm-10">
-                                                                    <input type="text" readonly class="form-control-plaintext" id="total" value="0" style="border: solid transparent; width: 15%">
+                                                                    <input type="text" readonly class="form-control-plaintext" id="total" value="{{$totalPrice}}" style="border: solid transparent; width: 15%">
                                                                 </div>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     </tfoot>
                                                 </table>
-                                                <div id="modalItem"></div>
+                                                <div id="modalItem">
+                                                    @php
+                                                        $orderNewItem = 0;
+                                                    @endphp
+                                                    @foreach($allMenuItems as $allMenuItem)
+                                                        @php
+                                                            $orderNewItem++
+                                                        @endphp
+                                                        <div id="stack{{$orderNewItem}}" class="modal fade modal-custom-css" tabindex="-1" data-focus-on="input:first">
+                                                            <label>Remark </label>
+                                                            <textarea name="remark{{$orderNewItem}}" placeholder="Food Remark" autocomplete="off">{{$allMenuItem['remark']}}</textarea>
+                                                            <button type="button" data-dismiss="modal" class="btn btn-sm btn-success">Save</button>
+                                                        </div>
+                                                    @endforeach
+
+                                                </div>
                                                 <div id="formSubmit" class="form-actions right" style="display: none">
-                                                    <button type="submit" class="btn green">Submit New Order</button>
+                                                    <button type="submit" class="btn green">Update Order</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -558,6 +604,7 @@
             var total = document.getElementById("total").value;
 
             document.getElementById("total").value=parseFloat(total) == parseFloat(price.replace(",", ""),'2') ? 0 : parseFloat(total) - parseFloat(price.replace(",", ""),'2');
+            document.getElementById('formSubmit').style.display = 'block';
             // alert(price);
             // document.getElementById('add-'+productId).style.display = 'block';
             var divsToHide = document.getElementsByClassName('add-'+productId); //divsToHide is an array
@@ -594,6 +641,7 @@
 
                 document.getElementById("priceT"+countID).innerText=qtyTotalPrice;
                 document.getElementById("total").value = totalVal;
+                document.getElementById('formSubmit').style.display = 'block';
                 // alert(qtyTotalPrice);
             }
             document.getElementById("priviasQty"+countID).value = qty;
@@ -607,7 +655,6 @@
     FormWizard.init();
     ComponentsFormTools.init();
     {{--    TableAdvanced.init();--}}
-    document.getElementById("total").value = 0;
     new DataTable('table.display', {
     lengthChange: false
     });
