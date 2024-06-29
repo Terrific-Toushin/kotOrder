@@ -119,10 +119,10 @@ class UserController extends Controller
         $privileged = $request->privileges;
         if ($request->role == 'operator'){
             $outlets = json_encode($request->outlets);
-            $privileged = ["OPT"];
+            $privileged = ["OPT","UE"];
         }elseif ($request->role == 'kitchen'){
             $outlets = json_encode($request->kitchens);
-            $privileged = ["KOT"];
+            $privileged = ["KOT","UE"];
         }else{
             $outlets = '';
         }

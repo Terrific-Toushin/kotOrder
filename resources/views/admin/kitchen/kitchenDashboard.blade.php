@@ -31,15 +31,9 @@
                 <ul class="page-breadcrumb">
                     <li>
                         <i class="fa fa-home"></i>
-                        <a href="{{route('operatorDashboard')}}">Operator Dashboard</a>
+                        <a href="{{route('kitchenDashboard')}}">Kitchen Dashboard</a>
                     </li>
                 </ul>
-                <div class="page-toolbar">
-                    <div class="btn-group clearfix pull-right">
-                        <a href="{{ route('newOrder') }}" class="btn btn-circle green" style="margin-right: 10px">Take New Order <i class="fa fa-plus"></i></a>
-                        <a href="{{route('orderHistry')}}" class="btn btn-circle blue-hoki ml-5">Order History <i class="fa fa-link"></i></a>
-                    </div>
-                </div>
             </div>
             <!-- END PAGE HEADER-->
             {{--            @dump($studentCounts)--}}
@@ -55,10 +49,10 @@
                                 {{$panding_kots_count}}
                             </div>
                             <div class="desc">
-                                Pending KOT
+                                Kitchen Pending KOT
                             </div>
                         </div>
-                        <a class="more" href="{{ route('pendingKOT') }}">
+                        <a class="more" href="{{ route('kitchenPendingKOT') }}">
                             View more <i class="m-icon-swapright m-icon-white"></i>
                         </a>
                     </div>
@@ -76,43 +70,7 @@
                                 Kitchen Complete KOT
                             </div>
                         </div>
-                        <a class="more" href="{{ route('operatorCompleteKOTHistory') }}">
-                            View more <i class="m-icon-swapright m-icon-white"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="dashboard-stat purple-intense">
-                        <div class="visual">
-                            <i class="fa fa-comments"></i>
-                        </div>
-                        <div class="details">
-                            <div class="number">
-                                {{$total_kots_count}}
-                            </div>
-                            <div class="desc">
-                                Total KOT
-                            </div>
-                        </div>
-                        <a class="more" href="{{ route('totalKOT') }}">
-                            View more <i class="m-icon-swapright m-icon-white"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="dashboard-stat green-haze">
-                        <div class="visual">
-                            <i class="fa fa-group fa-icon-medium"></i>
-                        </div>
-                        <div class="details">
-                            <div class="number">
-                                {{$cash_print_count}}
-                            </div>
-                            <div class="desc">
-                                Cash Print
-                            </div>
-                        </div>
-                        <a class="more" href="{{ route('cashPrint') }}">
+                        <a class="more" href="{{ route('kitchenCompleteKOTHistory') }}">
                             View more <i class="m-icon-swapright m-icon-white"></i>
                         </a>
                     </div>

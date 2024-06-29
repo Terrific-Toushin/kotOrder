@@ -58,6 +58,9 @@ class OperatorController extends Controller
     } // End Dashboard Method
 
     public function OperatorProfile(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
@@ -71,6 +74,9 @@ class OperatorController extends Controller
     } // End Profile Method
 
     public function ProfileUpdateSave(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $username = Auth::user()->username;
         $profileData = User::find($id);
@@ -126,6 +132,9 @@ class OperatorController extends Controller
     } // End ChangPassword Method
 
     public function NewOrder(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
@@ -149,9 +158,9 @@ class OperatorController extends Controller
         }
 
 //        $tblGuestInfo_data = DB::connection('sqlsrv')->table('tblGuestInfo')->orderBy('fldRoom')->get();
-        $tblGuestInfo_data = DB::connection('mysql')->table('rest_fortis.tblguestinfo')->orderBy('fldRoom')->get();
+//        $tblGuestInfo_data = DB::connection('mysql')->table('rest_fortis.tblguestinfo')->orderBy('fldRoom')->get();
 //        $tblWaiter_data = DB::connection('sqlsrv')->table('tblWaiter')->where($uotletID, '1')->orderBy('Name')->get();
-        $tblWaiter_data = DB::connection('mysql')->table('rest_fortis.tblwaiter')->where($uotletID, '1')->orderBy('Name')->get();
+//        $tblWaiter_data = DB::connection('mysql')->table('rest_fortis.tblwaiter')->where($uotletID, '1')->orderBy('Name')->get();
 
         $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
 
@@ -169,7 +178,7 @@ class OperatorController extends Controller
         }
         $kitchen = array_unique($kitchen);
 
-        return view('admin.operator.operatorNewOrder',compact('profileData','tblGuestInfo_data','tblWaiter_data', 'bill_No', 'billauto','userOperator','tblMenu_data', 'kitchen'));
+        return view('admin.operator.operatorNewOrder',compact('profileData','bill_No', 'billauto','userOperator','tblMenu_data', 'kitchen'));
     } // End OperatorNewOrder Method
 
 
@@ -210,6 +219,9 @@ class OperatorController extends Controller
     } // End RoomExist Method
 
     public function NewOrderItem(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
@@ -251,6 +263,9 @@ class OperatorController extends Controller
     } // End OperatorNewOrderItem Method
 
     public function NewOrderItemSave(Request $request){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
 //        dump($request);
 //        die();
         $id = Auth::user()->id;
@@ -310,6 +325,9 @@ class OperatorController extends Controller
     } // End OperatorNewOrderItemSave Method
 
     public function EditOrderAddItemSave(Request $request){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
 //        dump($request);
 //        die();
         $uotletID = session()->get('uotlet');
@@ -327,10 +345,10 @@ class OperatorController extends Controller
         $terminal = request('terminal');
         $serveTime = request('serveTime');
         $pax = request('pax');
-        $waterName = request('waterName');
+        $waterName = Auth::user()->name;
         $gustName = request('gustName');
-        $companyName = request('companyName');
-        $email = request('email');
+        $companyName = '';
+        $email = '';
         $contactNo = request('contactNo');
         $itemCount = request('itemCount');
 
@@ -341,20 +359,15 @@ class OperatorController extends Controller
         $nextBillState++;
 
         $updateOrderKotItem = DB::table('order_kot_item')->where('billNo', $billNo)->update(['cancel' => 'Y']);
-
-        $iRepidS = array();
-        $qtyS = array();
-        $priceS = array();
         for($count=1;$count<=$itemCount;$count++){
             if(request('repid'.$count)!=""){
-                array_push($iRepidS, request('repid'.$count));
-                array_push($qtyS, request('qty'.$count));
-                array_push($priceS, request('price'.$count));
 
                 $repid = request('repid'.$count);
                 $qty = request('qty'.$count);
                 $price = request('price'.$count);
-                DB::insert('insert into order_kot_item (billNo, billState, repID, price, qty, status) values (?, ?, ?, ?, ?, ?)', [$billNo, $nextBillState, $repid, $price, $qty, '2']);
+                $kitchen = request('kitchen'.$count);
+                $remark = request('remark'.$count);
+                DB::insert('insert into order_kot_item (billNo, billState, repID, price, qty, remark, kitchen) values (?, ?, ?, ?, ?, ?, ?)', [$billNo, $nextBillState, $repid, $price, $qty, $remark, $kitchen]);
 
             }
         }
@@ -364,11 +377,14 @@ class OperatorController extends Controller
             $updateOrderKot = DB::table('order_kot')->where('billNo', $billNo)->update(['billState' => $nextBillState,'status' => '4']);
         }
 
-        return redirect()->route('operator.kotView',compact('billNo'));
+        return redirect()->route('kotView',compact('billNo'));
 
     } // End EditOrderAddItem Method
 
     public function EditOrderItem(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
@@ -443,6 +459,9 @@ class OperatorController extends Controller
     } // End EditOrderItem Method
 
     public function OrderCancle(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $username = Auth::user()->username;
         $profileData = User::find($id);
@@ -457,6 +476,9 @@ class OperatorController extends Controller
     } // End OrderCancle Method
 
     public function ItemCancle(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         // $id = Auth::user()->id;
         // $username = Auth::user()->username;
         // $profileData = User::find($id);
@@ -471,6 +493,9 @@ class OperatorController extends Controller
     } // End  Cancle Item Method
 
     public function OperatorKotView(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
@@ -499,7 +524,7 @@ class OperatorController extends Controller
             $time = date('H:m:s',strtotime($entyDate));
         }
 
-        $order_kot_items = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('status', '=', '1')->get();
+        $order_kot_items = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('billState', '=', 'A')->get();
 
         $allMenuItems = array();
 
@@ -520,7 +545,7 @@ class OperatorController extends Controller
             array_push($allMenuItems, array("repID"=>$repID, "repname"=>$repname, "price"=>$price, "qty"=>$qty, "kitchen"=>$kitchen, "complete"=>$complete));
         }
 
-        $order_kot_items_new = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('status', '=', '2')->get();
+        $order_kot_items_new = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('billState', '!=', 'A')->get();
 //        dump($order_kot_items_new);
 //        die();
 
@@ -571,6 +596,9 @@ class OperatorController extends Controller
     } // End OperatorKOTView Method
 
     public function OperatorSendToKOT(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $username = Auth::user()->username;
         $profileData = User::find($id);
@@ -642,17 +670,22 @@ class OperatorController extends Controller
 
             $date_time = array( 'date' => $date.' '.$time, 'timezone_type' => '3', 'timezone' => 'Asia/Dhaka' );
 
-            if(DB::connection('sqlsrv')->insert('insert into tblSales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
-//            if(DB::connection('mysql')->insert('insert into rest_fortis.tblsales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
+//            if(DB::connection('sqlsrv')->insert('insert into tblSales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
+//            DB::enableQueryLog();
+            if(DB::connection('mysql')->insert('insert into rest_fortis.tblsales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
                 $order_kot_sent_cash = DB::table('order_kot')->where('billNo', $billNo)->update(['status' => '2']);
             }
+//            dd(DB::getQueryLog());
         }
 
-        return redirect()->route('operator.kitchenCompleteKOTHistory');
+        return redirect()->route('operatorCompleteKOTHistory');
 
     } // End OperatorSendToKOT Method
 
     public function OperatorOrderHistry(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
@@ -672,10 +705,13 @@ class OperatorController extends Controller
         $order_kots = DB::table('order_kot')->whereDate('date', '=', $date)->get();
         // $order_kots = DB::table('order_kot')->get();
 
-        return view('operator.operatorOrderHistry',compact('profileData', 'order_kots'));
+        return view('admin.operator.operatorOrderHistry',compact('profileData', 'order_kots'));
     } // End OperatorOrderHistry Method
 
     public function OperatorPendingKOT(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
         if (empty(session()->get('uotlet'))){
@@ -695,20 +731,22 @@ class OperatorController extends Controller
     } // End OperatorPandingKOT Method
 
     public function KitchenCompleteKotHistory(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
-        date_default_timezone_set('Asia/Dhaka');
 
-        $timestamp = time();
-        $date = date("Y-m-d", $timestamp);
+        $kitchen_complete_kots = DB::table('order_kot')->where('cancel', '=', 'N')->where('status', '=', '3')->get();
 
-        $kitchen_complete_kots = DB::table('order_kot')->where('cancel', '=', 'N')->where('status', '=', '3')->whereDate('date', '=', $date)->get();
-
-        return view('operator.operatorKitchenCompleteKOTHistory',compact('profileData', 'kitchen_complete_kots'));
+        return view('admin.operator.operatorKitchenCompleteKOTHistory',compact('profileData', 'kitchen_complete_kots'));
     } // End KitchenCompleteKot Method
 
     public function OperatorTotalKOT(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
@@ -719,10 +757,13 @@ class OperatorController extends Controller
 
         $total_kots = DB::table('order_kot')->where('cancel', '=', 'N')->whereDate('date', '=', $date)->get();
 
-        return view('operator.operatorTotalKOT',compact('profileData', 'total_kots'));
+        return view('admin.operator.operatorTotalKOT',compact('profileData', 'total_kots'));
     } // End OperatorTotalKOT Method
 
     public function OperatorCashPrint(){
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
@@ -736,6 +777,6 @@ class OperatorController extends Controller
 
         $cashPrint = DB::table('order_kot')->where('cancel', '=', 'N')->where('status', '=', '2')->whereDate('date', '=', $date)->get();
 
-        return view('operator.operatorCashPrint',compact('profileData', 'cashPrint'));
+        return view('admin.operator.operatorCashPrint',compact('profileData', 'cashPrint'));
     } // End OperatorCashPrint Method
 }

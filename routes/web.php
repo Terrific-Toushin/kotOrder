@@ -6,6 +6,7 @@ use \App\Http\Controllers\ConfigController;
 use \App\Http\Controllers\UserController;
 use \App\Http\Controllers\ReportController;
 use \App\Http\Controllers\OperatorController;
+use \App\Http\Controllers\KitchenController;
 use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
@@ -69,8 +70,20 @@ Route::middleware(['auth','checkprivilege:OPT'])->group(function(){
     Route::get('/operator-orderHistry', [OperatorController::class, 'OperatorOrderHistry'])->name ('orderHistry');
     Route::get('/operator-sendToKOT', [OperatorController::class, 'OperatorSendToKOT'])->name ('sendToKOT');
     Route::get('/operator-pendingKOT', [OperatorController::class, 'OperatorPendingKOT'])->name ('pendingKOT');
-    Route::get('/operator-kitchenCompleteKOTHistory', [OperatorController::class, 'KitchenCompleteKOTHistory'])->name ('kitchenCompleteKOTHistory');
+    Route::get('/operator-kitchenCompleteKOTHistory', [OperatorController::class, 'KitchenCompleteKOTHistory'])->name ('operatorCompleteKOTHistory');
     Route::get('/operator-totalKOT', [OperatorController::class, 'OperatorTotalKOT'])->name ('totalKOT');
     Route::get('/operator-cashPrint', [OperatorController::class, 'OperatorCashPrint'])->name ('cashPrint');
 }); // End Group Operator Middleware
+
+Route::middleware(['auth','checkprivilege:KOT'])->group(function(){
+    Route::get('/kitchen/dashboard', [KitchenController::class, 'KitchenDashboard'])->name ('kitchenDashboard');
+    Route::get('/kitchen/profile', [KitchenController::class, 'KitchenProfile'])->name ('kitchenProfile');
+    Route::post('/kitchen/profileUpdateSave', [KitchenController::class, 'KitchenProfileUpdateSave'])->name ('kitchenProfileUpdateSave');
+    Route::get('/kitchen/changePassword', [KitchenController::class, 'KitchenChangePassword'])->name ('kitchenChangePassword');
+    Route::post('/kitchen/changePasswordSave', [KitchenController::class, 'ChangePasswordSave'])->name ('kitchenChangePasswordSave');
+    Route::get('/kitchen/kotView', [KitchenController::class, 'KitchenKOTView'])->name ('kitchenKotView');
+    Route::get('/kitchen/pendingKOT', [KitchenController::class, 'KitchenPendingKOT'])->name ('kitchenPendingKOT');
+    Route::get('/kitchen/kitchenCompleteKOTHistory', [KitchenController::class, 'KitchenCompleteKOTHistory'])->name ('kitchenCompleteKOTHistory');
+    Route::get('/kitchen/kitchenCompleteKOT:id', [KitchenController::class, 'KitchenCompleteKOT'])->name ('kitchenCompleteKOT');
+});
 

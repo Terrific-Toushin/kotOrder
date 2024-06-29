@@ -20,7 +20,7 @@
     <!-- END PAGE LEVEL STYLES -->
 @endsection
 @section('content')
-    <!-- BEGIN CONTENT -->
+
     <div class="page-content-wrapper">
         <div class="page-content" style="min-height:224px">
             <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
@@ -31,98 +31,91 @@
                 <ul class="page-breadcrumb">
                     <li>
                         <i class="fa fa-home"></i>
-                        <a href="{{route('operatorDashboard')}}">Operator Dashboard</a>
+                        <a href="{{route('kitchenDashboard')}}">Kitchen Dashboard</a>
                     </li>
                 </ul>
-                <div class="page-toolbar">
-                    <div class="btn-group clearfix pull-right">
-                        <a href="{{ route('newOrder') }}" class="btn btn-circle green" style="margin-right: 10px">Take New Order <i class="fa fa-plus"></i></a>
-                        <a href="{{route('orderHistry')}}" class="btn btn-circle blue-hoki ml-5">Order History <i class="fa fa-link"></i></a>
-                    </div>
-                </div>
+
             </div>
             <!-- END PAGE HEADER-->
-            {{--            @dump($studentCounts)--}}
-            <!-- BEGIN PAGE CONTENT-->
+            @if(session('message'))
+                <div class="alert alert-success alert-dismissible show" role="alert">
+                    {{session('message')}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+            @if (count($errors) > 0)
+                <div class = "alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <!-- BEGIN PORTLET-->
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 margin-bottom-10">
-                    <div class="dashboard-stat yellow-crusta">
-                        <div class="visual">
-                            <i class="fa fa-briefcase fa-icon-medium"></i>
+                <div class="portlet box yellow">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-gift"></i>Kitchen Pending KOT History
                         </div>
-                        <div class="details">
-                            <div class="number">
-                                {{$panding_kots_count}}
-                            </div>
-                            <div class="desc">
-                                Pending KOT
-                            </div>
+                        <div class="tools">
+                            <a href="javascript:;" class="collapse">
+                            </a>
+                            <a href="javascript:;" class="reload">
+                            </a>
                         </div>
-                        <a class="more" href="{{ route('pendingKOT') }}">
-                            View more <i class="m-icon-swapright m-icon-white"></i>
-                        </a>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="dashboard-stat grey-salsa">
-                        <div class="visual">
-                            <i class="fa fa-shopping-cart"></i>
-                        </div>
-                        <div class="details">
-                            <div class="number">
-                                {{$kitchen_complete_kot_count}}
-                            </div>
-                            <div class="desc">
-                                Kitchen Complete KOT
-                            </div>
-                        </div>
-                        <a class="more" href="{{ route('operatorCompleteKOTHistory') }}">
-                            View more <i class="m-icon-swapright m-icon-white"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="dashboard-stat purple-intense">
-                        <div class="visual">
-                            <i class="fa fa-comments"></i>
-                        </div>
-                        <div class="details">
-                            <div class="number">
-                                {{$total_kots_count}}
-                            </div>
-                            <div class="desc">
-                                Total KOT
-                            </div>
-                        </div>
-                        <a class="more" href="{{ route('totalKOT') }}">
-                            View more <i class="m-icon-swapright m-icon-white"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="dashboard-stat green-haze">
-                        <div class="visual">
-                            <i class="fa fa-group fa-icon-medium"></i>
-                        </div>
-                        <div class="details">
-                            <div class="number">
-                                {{$cash_print_count}}
-                            </div>
-                            <div class="desc">
-                                Cash Print
-                            </div>
-                        </div>
-                        <a class="more" href="{{ route('cashPrint') }}">
-                            View more <i class="m-icon-swapright m-icon-white"></i>
-                        </a>
+                    <div class="portlet-body">
+                        <table class="table table-hover table-striped table-bordered" id="sample_user">
+                            <thead>
+                            <tr role="row" class="heading">
+                                <th>SL</th>
+                                <th>Date</th>
+                                <th>Bill NO</th>
+                                <th>Outlet</th>
+                                <th>Item ID</th>
+                                <th>Item Name</th>
+                                <th>Quantity</th>
+                                <th>Remark</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($pending_kots as $kots)
+                                <tr>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$kots->date}}</td>
+                                    <td>{{$kots->billNo}}</td>
+                                    <td>{{$kots->outlet}}</td>
+                                    <td>{{$kots->repID}}</td>
+                                    <td>{{$itemName[$kots->repID]}}</td>
+                                    <td>{{$kots->qty}}</td>
+                                    <td>{{$kots->remark}}</td>
+                                    <td>
+                                        @if($kots->complete == 'N')
+                                            <a href="{{ route('kitchenCompleteKOT', ['id' => $kots->id]) }}" class="btnprn">
+                                                <button type="button" class=" btn btn-info" >Complete Order</button>
+                                            </a>
+                                        @elseif($kots->complete == 'Y')
+                                            <a href="#" class="btnprn">
+                                                <button type="button" class=" btn btn-success" >Completed</button>
+                                            </a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                        <!-- responsive -->
+
                     </div>
                 </div>
             </div>
-            <!-- END PAGE CONTENT-->
+            <!-- END PORTLET-->
         </div>
     </div>
-    <!-- END CONTENT -->
-
 @endsection
 @section('customJs')
     <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/fuelux/js/spinner.min.js"></script>
@@ -168,6 +161,27 @@
     <script type="text/javascript"
             src="{{ asset('/') }}assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js"></script>
     <script src="{{ asset('/') }}assets/admin/pages/scripts/table-advanced.js"></script>
+    @if(Session::has('success'))
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript">
+            $.bootstrapGrowl('{{ Session::get('success') }}', {
+                ele: 'body', // which element to append to
+                type: 'info', // (null, 'info', 'danger', 'success', 'warning')
+                offset: {
+                    from: 'top',
+                    amount: 50
+                }, // 'top', or 'bottom'
+                align: 'right', // ('left', 'right', or 'center')
+                width: 'auto', // (integer, or 'auto')
+                delay: 10000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+                allow_dismiss: 1, // If true then will display a cross to close the popup.
+                stackup_spacing: 10 // spacing between consecutively stacked growls.
+            });
+        </script>
+    @endif
 @endsection
 @section('documentJquery')
+    {{--    <script>--}}
+    TableAdvanced.init();
+    {{--    </script>--}}
 @endsection

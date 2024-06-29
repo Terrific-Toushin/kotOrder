@@ -43,6 +43,8 @@ class AdminDashboardController extends Controller
             return redirect()->route('adminDashboard');
         }elseif ($role == 'operator'){
             return redirect()->route('operatorDashboard');
+        }elseif ($role == 'kitchen'){
+            return redirect()->route('kitchenDashboard');
         }
     }
 

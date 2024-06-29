@@ -195,7 +195,6 @@
                             </div>
                             <!-- /.card-body -->
                         @endif
-
                         <div class="card-body" id="printButton">
                             <div class="row">
                                 @if($cancel == 'N' and $status!='2')
@@ -210,15 +209,16 @@
                                                 <button type="button" class="btn btn-danger btn-block" >KOT Void</button>
                                             </a>
                                         </div>
+                                    @elseif($showVoid == false && $status == '3')
+                                        <div class="col-md-3">
+                                            <a href="{{ route('sendToKOT', ['billNo' => $billNo]) }}" onclick="return confirm('Are you sure to complete Order?')">
+                                                <button type="button" class="btn btn-success btn-block" >Send To Cash</button>
+                                            </a>
+                                        </div>
                                     @endif
                                     <div class="col-md-3">
                                         <a href="{{ route('editOrderItem', ['billNo' => $billNo]) }}">
                                             <button type="submit" class="btn btn-primary btn-block" >Edit</button>
-                                        </a>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <a href="#" onclick="return confirm('Are you sure to cancel?')">
-                                            <button type="button" class="btn btn-danger btn-block" >Exit</button>
                                         </a>
                                     </div>
                                 @endif

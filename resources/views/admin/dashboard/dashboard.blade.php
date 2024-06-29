@@ -126,7 +126,7 @@
                                 Pending KOT
                             </div>
                         </div>
-                        <a class="more" href="#">
+                        <a class="more" href="{{ route('pendingKOT') }}">
                             View more <i class="m-icon-swapright m-icon-white"></i>
                         </a>
                     </div>
@@ -144,7 +144,7 @@
                                 Kitchen Complete KOT
                             </div>
                         </div>
-                        <a class="more" href="#">
+                        <a class="more" href="{{ route('operatorCompleteKOTHistory') }}">
                             View more <i class="m-icon-swapright m-icon-white"></i>
                         </a>
                     </div>
@@ -162,7 +162,7 @@
                                 Total KOT
                             </div>
                         </div>
-                        <a class="more" href="#">
+                        <a class="more" href="{{ route('totalKOT') }}">
                             View more <i class="m-icon-swapright m-icon-white"></i>
                         </a>
                     </div>
@@ -180,7 +180,7 @@
                                 Cash Print
                             </div>
                         </div>
-                        <a class="more" href="#">
+                        <a class="more" href="{{ route('cashPrint') }}">
                             View more <i class="m-icon-swapright m-icon-white"></i>
                         </a>
                     </div>
@@ -521,7 +521,7 @@
                         <!-- End: life time stats -->
                     </div>
                 @endif
-                <div class="col-md-12">
+                <div class="col-md-12" style="display: none">
                     <!-- Begin: life time stats -->
                     <div class="portlet box red-sunglo">
                         <div class="portlet-title">

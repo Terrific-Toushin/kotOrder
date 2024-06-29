@@ -13,19 +13,13 @@ class KitchenController extends Controller
     public function KitchenDashboard(){
         $id = Auth::user()->id;
         $profileData = User::find($id);
-        // $date = date("Y-m-d");
-
-        date_default_timezone_set('Asia/Dhaka');
-
-        $timestamp = time();
-        $date = date("Y-m-d", $timestamp);
 
         $panding_kots_count = DB::table('order_kot')->where('status', '=', '1')->orWhere('status', '=', '4')->where('cancel', '=', 'N')->count();
         $kitchen_complete_kot_count = DB::table('order_kot')->where('status', '=', '3')->where('cancel', '=', 'N')->count();
         $total_kots_count = DB::table('order_kot')->where('cancel', '=', 'N')->count();
         $cash_print_count = DB::table('order_kot')->where('status', '=', '2')->where('cancel', '=', 'N')->count();
 
-        return view('kitchen.kitchenDashboard',compact('profileData', 'panding_kots_count', 'kitchen_complete_kot_count', 'total_kots_count', 'cash_print_count', 'date'));
+        return view('admin.kitchen.kitchenDashboard',compact('profileData', 'panding_kots_count', 'kitchen_complete_kot_count', 'total_kots_count', 'cash_print_count'));
     } // End Dashboard Method
 
     public function KitchenProfile(){
@@ -132,7 +126,7 @@ class KitchenController extends Controller
 //        dump($kot_items_selects);
 //        dump($itemName);
 //        die();
-        return view('kitchen.kitchenPendingKOT',compact('profileData', 'pending_kots','itemName'));
+        return view('admin.kitchen.kitchenPendingKOT',compact('profileData', 'pending_kots','itemName'));
 
     } // End KitchenPendingKOT Method
 
@@ -229,7 +223,7 @@ class KitchenController extends Controller
         $itencount_new=1;
         $cancel_itencount=1;
 
-        return view('kitchen.kitchenKOTView',compact('billNo','tableNo','roomNo','terminal','serveTime','pax','waterName','gustName','companyName','email','contactNo', 'itencount', 'itencount_new', 'cancel_itencount', 'cancel', 'status', 'date', 'time', ['allMenuItems'], ['allMenuItems_new'], ['cancel_allMenuItems']));
+        return view('admin.kitchen.kitchenKOTView',compact('billNo','tableNo','roomNo','terminal','serveTime','pax','waterName','gustName','companyName','email','contactNo', 'itencount', 'itencount_new', 'cancel_itencount', 'cancel', 'status', 'date', 'time', ['allMenuItems'], ['allMenuItems_new'], ['cancel_allMenuItems']));
     } // End KitchenKOTView Method
 
     public function KitchenCompleteKOT(){
@@ -251,7 +245,7 @@ class KitchenController extends Controller
         }
 //        die();
 
-        return redirect()->route('kitchen.KitchenPendingKOT',compact('billId'));
+        return redirect()->route('kitchenPendingKOT',compact('billId'));
 
     } // End KitchenCompleteKOT Method
 
@@ -276,6 +270,6 @@ class KitchenController extends Controller
         foreach ($kot_items_selects as $kot_items_select){
             $itemName[$kot_items_select->repid] = $kot_items_select->repname;
         }
-        return view('kitchen.kitchenKitchenCompleteKOTHistory',compact('profileData', 'kitchen_complete_kots','itemName'));
+        return view('admin.kitchen.kitchenCompleteKOTHistory',compact('profileData', 'kitchen_complete_kots','itemName'));
     } // End KitchenCompleteKOTHistory Method
 }

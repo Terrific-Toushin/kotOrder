@@ -135,52 +135,54 @@
                                         <input type="text" class="form-control" name="address" value="{{!empty($userInfo) ? $userInfo->address : ''}}" placeholder="Mail Address" autocomplete="off">
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">User Role: <span class="required"> * </span>
-                                    </label>
-                                    <div class="col-md-2">
-                                        <select id="role" class="form-control input-medium select2me"
-                                                data-placeholder="Role Type..." name="role" onchange="showOutlets()">
-                                            <option value=""></option>
-                                            @foreach($userType as $key => $type)
-                                                <option value="{{$key}}" {{!empty($userInfo->role) && $userInfo->role == $key ? 'selected' : ''}}>
-                                                    {{$type}}</option>
-                                            @endforeach
-                                        </select>
-                                        <span class="help-block help-block-error" style="color: red;">@if($errors->has('role')) {{$errors->first('role')}} @endif</span>
+                                @if(empty($userInfo) || $userInfo->role == 'admin')
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">User Role: <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-2">
+                                            <select id="role" class="form-control input-medium select2me"
+                                                    data-placeholder="Role Type..." name="role" onchange="showOutlets()">
+                                                <option value=""></option>
+                                                @foreach($userType as $key => $type)
+                                                    <option value="{{$key}}" {{!empty($userInfo->role) && $userInfo->role == $key ? 'selected' : ''}}>
+                                                        {{$type}}</option>
+                                                @endforeach
+                                            </select>
+                                            <span class="help-block help-block-error" style="color: red;">@if($errors->has('role')) {{$errors->first('role')}} @endif</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div id="form-outlet" class="form-group">
-                                    <input data-vv-as="Form Group" name="privileges[]" type="hidden" class="form-control m-input" value="*">
-                                    <label  id="outletsLabel" class="col-md-2 control-label" style="display: {{!empty($userInfo) && $userInfo->role == 'operator' ? 'block' : 'none'}}">Outlets: <span class="required"> * </span></label>
-                                    <div id="outletsDiv" class="col-md-10" style="display: {{!empty($userInfo) && $userInfo->role == 'operator' ? 'block' : 'none'}}">
-                                        <ul class="list-inline">
-                                            @foreach($outlets as $outlet)
-                                                <li class="list-inline-item">
-                                                    <label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
-                                                        <input data-vv-as="Form Group" name="outlets[]" type="checkbox" class="form-control m-input" id="outlet-{{ $outlet->ResSL }}" value="{{ $outlet->ResSL }}" {{!empty($userInfo->outlets) && ($userInfo->outlets != "null") && array_search($outlet->ResSL, json_decode($userInfo->outlets,true)) !== false ? 'checked' : ''}}>
-                                                        <span></span> {{$outlet->ResName}}
-                                                    </label>
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                                    <div id="form-outlet" class="form-group">
+                                        <input data-vv-as="Form Group" name="privileges[]" type="hidden" class="form-control m-input" value="*">
+                                        <label  id="outletsLabel" class="col-md-2 control-label" style="display: {{!empty($userInfo) && $userInfo->role == 'operator' ? 'block' : 'none'}}">Outlets: <span class="required"> * </span></label>
+                                        <div id="outletsDiv" class="col-md-10" style="display: {{!empty($userInfo) && $userInfo->role == 'operator' ? 'block' : 'none'}}">
+                                            <ul class="list-inline">
+                                                @foreach($outlets as $outlet)
+                                                    <li class="list-inline-item">
+                                                        <label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+                                                            <input data-vv-as="Form Group" name="outlets[]" type="checkbox" class="form-control m-input" id="outlet-{{ $outlet->ResSL }}" value="{{ $outlet->ResSL }}" {{!empty($userInfo->outlets) && ($userInfo->outlets != "null") && array_search($outlet->ResSL, json_decode($userInfo->outlets,true)) !== false ? 'checked' : ''}}>
+                                                            <span></span> {{$outlet->ResName}}
+                                                        </label>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
                                     </div>
-                                </div>
-                                <div id="form-kitchen" class="form-group">
-                                    <label  id="kitchenLabel" class="col-md-2 control-label" style="display: {{!empty($userInfo) && $userInfo->role == 'kitchen' ? 'block' : 'none'}}">Kitchen: <span class="required"> * </span></label>
-                                    <div id="kitchenDiv" class="col-md-10" style="display: {{!empty($userInfo) && $userInfo->role == 'kitchen' ? 'block' : 'none'}}">
-                                        <ul class="list-inline">
-                                            @foreach($kitchen as $kitchenOutlet)
-                                                <li class="list-inline-item">
-                                                    <label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
-                                                        <input data-vv-as="Form Group" name="kitchens[]" id="outlet-{{ $kitchenOutlet }}" type="checkbox" class="form-control m-input" value="{{ $kitchenOutlet }}" {{!empty($userInfo->outlets) && ($userInfo->outlets != "null") && array_search($kitchenOutlet, json_decode($userInfo->outlets,true)) !== false ? 'checked' : ''}}>
-                                                        <span></span> {{$kitchenOutlet}}
-                                                    </label>
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                                    <div id="form-kitchen" class="form-group">
+                                        <label  id="kitchenLabel" class="col-md-2 control-label" style="display: {{!empty($userInfo) && $userInfo->role == 'kitchen' ? 'block' : 'none'}}">Kitchen: <span class="required"> * </span></label>
+                                        <div id="kitchenDiv" class="col-md-10" style="display: {{!empty($userInfo) && $userInfo->role == 'kitchen' ? 'block' : 'none'}}">
+                                            <ul class="list-inline">
+                                                @foreach($kitchen as $kitchenOutlet)
+                                                    <li class="list-inline-item">
+                                                        <label class="m-checkbox m-checkbox--solid m-checkbox--state-success">
+                                                            <input data-vv-as="Form Group" name="kitchens[]" id="outlet-{{ $kitchenOutlet }}" type="checkbox" class="form-control m-input" value="{{ $kitchenOutlet }}" {{!empty($userInfo->outlets) && ($userInfo->outlets != "null") && array_search($kitchenOutlet, json_decode($userInfo->outlets,true)) !== false ? 'checked' : ''}}>
+                                                            <span></span> {{$kitchenOutlet}}
+                                                        </label>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                                 @if(empty($userInfo))
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">Password</label>
@@ -195,19 +197,21 @@
                                         </div>
                                     </div>
                                 @endif
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">Status: <span class="required">
-                                                                * </span>
-                                    </label>
-                                    <div class="col-md-4">
-                                        <select class="form-control input-medium select2me"
-                                                data-placeholder="Status..." name="status">
-                                            <option value=""></option>
-                                            <option value="Y" {{!empty($userInfo->status) && $userInfo->status == 'Y' ? 'selected' : ''}}>Active</option>
-                                            <option value="N" {{!empty($userInfo->status) && $userInfo->status == 'N' ? 'selected' : ''}}>Inactive</option>
-                                        </select>
+                                @if(empty($userInfo) || $userInfo->role == 'admin')
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Status: <span class="required">
+                                                                    * </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select class="form-control input-medium select2me"
+                                                    data-placeholder="Status..." name="status">
+                                                <option value=""></option>
+                                                <option value="Y" {{!empty($userInfo->status) && $userInfo->status == 'Y' ? 'selected' : ''}}>Active</option>
+                                                <option value="N" {{!empty($userInfo->status) && $userInfo->status == 'N' ? 'selected' : ''}}>Inactive</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                                 <div class="form-actions">
                                     <button type="submit" class="btn btn-success" style="float: right">Save</button>
                                 </div>

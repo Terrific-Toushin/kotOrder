@@ -109,7 +109,7 @@
                     <div class="portlet-body form">
                         <div class="col-md-12 form-group" id='errMsg'>
                         </div>
-                        <form class="form-horizontal" role="form" method="POST" action="{{ route('newOrderItemSave') }}">
+                        <form class="form-horizontal" role="form" method="POST" action="{{ route('editOrderAddItemSave') }}">
                             @csrf
                             <div class="form-body">
                                 <div class="form-group">
@@ -129,7 +129,7 @@
                                     <div class="col-sm-2">
                                         <select class="form-control" name="terminal" required>
                                             <option value="">Select</option>
-                                            <option value="Restaurant" {{$terminal == 'Breakfast' ? 'selected' : ''}}>Restaurant</option>
+                                            <option value="Restaurant" @selected($terminal == 'Restaurant')>Restaurant</option>
                                         </select>
                                     </div>
                                 </div>
@@ -138,9 +138,9 @@
                                     <div class="col-sm-2">
                                         <select class="form-control" name="serveTime" required>
                                             <option value="" >Select</option>
-                                            <option value="Breakfast" {{$serveTime == 'Breakfast' ? 'selected' : ''}}>Breakfast</option>
-                                            <option value="Lunch" {{$serveTime == 'Lunch' ? 'selected' : ''}}>Lunch</option>
-                                            <option value="Dinner" {{$serveTime == 'Dinner' ? 'selected' : ''}}>Dinner</option>
+                                            <option value="Breakfast" @selected($serveTime == 'Breakfast')>Breakfast</option>
+                                            <option value="Lunch" @selected($serveTime == 'Lunch')>Lunch</option>
+                                            <option value="Dinner" @selected($serveTime == 'Dinner')>Dinner</option>
                                         </select>
                                     </div>
                                     <label class="col-sm-1 control-label">PAX</label>
@@ -316,7 +316,7 @@
                                         </div>
                                         <div class="portlet-body">
                                             <div class="table-responsive">
-                                                <input type="hidden" id="itemCount" name="itemCount" value="0">
+                                                <input type="hidden" id="itemCount" name="itemCount" value="{{count($allMenuItems)}}">
                                                 <table  class="table table-striped table-bordered table-hover">
                                                     <thead>
                                                     <tr>
@@ -378,15 +378,15 @@
                                                 </table>
                                                 <div id="modalItem">
                                                     @php
-                                                        $orderNewItem = 0;
+                                                        $orderNewModal = 0;
                                                     @endphp
                                                     @foreach($allMenuItems as $allMenuItem)
                                                         @php
-                                                            $orderNewItem++
+                                                            $orderNewModal++
                                                         @endphp
-                                                        <div id="stack{{$orderNewItem}}" class="modal fade modal-custom-css" tabindex="-1" data-focus-on="input:first">
+                                                        <div id="stack{{$orderNewModal}}" class="modal fade modal-custom-css" tabindex="-1" data-focus-on="input:first">
                                                             <label>Remark </label>
-                                                            <textarea name="remark{{$orderNewItem}}" placeholder="Food Remark" autocomplete="off">{{$allMenuItem['remark']}}</textarea>
+                                                            <textarea name="remark{{$orderNewModal}}" placeholder="Food Remark" autocomplete="off">{{$allMenuItem['remark']}}</textarea>
                                                             <button type="button" data-dismiss="modal" class="btn btn-sm btn-success">Save</button>
                                                         </div>
                                                     @endforeach
