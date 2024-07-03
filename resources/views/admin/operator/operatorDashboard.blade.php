@@ -31,8 +31,9 @@
                 <ul class="page-breadcrumb">
                     <li>
                         <i class="fa fa-home"></i>
-                        <a href="{{route('operatorDashboard')}}">Operator Dashboard</a>
+                        <a href="{{route('operatorDashboard')}}">Operator Dashboard @if(Session::has('uotletName')) <b>{{ Session::get('uotletName')}}</b> @endif</a>
                     </li>
+                    <li style="margin-left: 30vw">current Data: {{$dbDate}}</li>
                 </ul>
                 <div class="page-toolbar">
                     <div class="btn-group clearfix pull-right">

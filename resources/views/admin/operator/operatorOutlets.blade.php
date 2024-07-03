@@ -31,7 +31,7 @@
                 <ul class="page-breadcrumb">
                     <li>
                         <i class="fa fa-home"></i>
-                        <a href="{{route('operatorDashboard')}}">Operator Outlets</a>
+                        <a href="{{route('operatorDashboard')}}">Operator Dashboard @if(Session::has('uotletName')) <b>{{ Session::get('uotletName')}}</b> @endif</a>
                     </li>
                 </ul>
             </div>
@@ -40,7 +40,7 @@
             <!-- BEGIN PAGE CONTENT-->
             <div class="row">
                 @foreach($tblRestName_data as $userOutlet)
-                    <a href="{{ route('selectOutlets',$userOutlet->ResSL) }}">
+                    <a href="{{ route('selectOutlets',['uotlet'=>$userOutlet->ResSL,'uotletName'=>$userOutlet->ResName]) }}">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 margin-bottom-10">
                             <div class="dashboard-stat {{$loop->iteration % 4 == 0 ? 'green-jungle' :($loop->iteration % 4 == 1 ? 'blue-steel' : ($loop->iteration % 4 == 2 ? 'purple-studio' : 'yellow-casablanca'))}}">
                                 <div class="visual">
@@ -51,7 +51,7 @@
                                         {{$userOutlet->ResName}}
                                     </div>
                                 </div>
-                                <a class="more" href="{{ route('selectOutlets',$userOutlet->ResSL) }}">
+                                <a class="more" href="{{ route('selectOutlets',['uotlet'=>$userOutlet->ResSL,'uotletName'=>$userOutlet->ResName]) }}">
                                     select {{$userOutlet->ResName}} <i class="m-icon-swapright m-icon-white"></i>
                                 </a>
                             </div>

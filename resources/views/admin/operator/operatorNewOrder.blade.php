@@ -77,7 +77,7 @@
                 <ul class="page-breadcrumb">
                     <li>
                         <i class="fa fa-home"></i>
-                        <a href="{{route('operatorDashboard')}}">Operator Dashboard</a>
+                        <a href="{{route('operatorDashboard')}}">Operator Dashboard @if(Session::has('uotletName')) <b>{{ Session::get('uotletName')}}</b> @endif</a>
                     </li>
                 </ul>
                 <div class="page-toolbar">
@@ -290,7 +290,7 @@
                                                 </table>
                                                 <div id="modalItem"></div>
                                                 <div id="formSubmit" class="form-actions right" style="display: none">
-                                                    <button type="submit" class="btn green">Submit New Order</button>
+                                                    <button type="submit" class="btn green">Send New KOT</button>
                                                 </div>
                                             </div>
                                         </div>

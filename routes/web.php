@@ -52,7 +52,7 @@ Route::group(['middleware' => 'auth'],function (){
 // Start Group Operator Middleware
 Route::middleware(['auth','checkprivilege:OPT'])->group(function(){
     Route::get('/operator-outlet', [OperatorController::class, 'OperatorOutlets'])->name ('outlets');
-    Route::get('/operator-select-outlet/{uotlet}', [OperatorController::class, 'OperatorSetOutlets'])->name ('selectOutlets');
+    Route::get('/operator-select-outlet/{uotlet}/{uotletName}', [OperatorController::class, 'OperatorSetOutlets'])->name ('selectOutlets');
     Route::get('/operator-dashboard', [OperatorController::class, 'OperatorDashboard'])->name ('operatorDashboard');
     Route::get('/operator-profile', [OperatorController::class, 'OperatorProfile'])->name ('profile');
     Route::post('/operator-profileUpdateSave', [OperatorController::class, 'ProfileUpdateSave'])->name ('profileUpdateSave');

@@ -26,8 +26,10 @@ class OperatorController extends Controller
     public function OperatorSetOutlets(){
         $id = Auth::user()->id;
         $uotlet = request('uotlet');
+        $uotletName = request('uotletName');
 //        error_log($uotlet);
         session()->put('uotlet',$uotlet);
+        session()->put('uotletName',$uotletName);
 
         return redirect()->intended('/operator-dashboard');
     } // End Dashboard Method
@@ -40,7 +42,7 @@ class OperatorController extends Controller
         }
         $id = Auth::user()->id;
         $profileData = User::find($id);
-        // $date = date("Y-m-d");
+        $dbDate = date("d-m-Y");
 
 //        DB::enableQueryLog();
         $panding_kots_count = DB::table('order_kot')->where('cancel', 'N')
@@ -54,7 +56,7 @@ class OperatorController extends Controller
         $total_kots_count = DB::table('order_kot')->where('ResSL',$outlet)->where('userID',Auth::user()->username)->where('cancel', '=', 'N')->count();
         $cash_print_count = DB::table('order_kot')->where('ResSL',$outlet)->where('userID',Auth::user()->username)->where('status', '=', '2')->where('cancel', '=', 'N')->count();
 //        dd(DB::getQueryLog());
-        return view('admin.operator.operatorDashboard',compact('profileData', 'panding_kots_count', 'kitchen_complete_kot_count', 'total_kots_count', 'cash_print_count'));
+        return view('admin.operator.operatorDashboard',compact('profileData', 'panding_kots_count', 'kitchen_complete_kot_count', 'total_kots_count', 'cash_print_count','dbDate'));
     } // End Dashboard Method
 
     public function OperatorProfile(){
@@ -186,8 +188,13 @@ class OperatorController extends Controller
     public function TableExist(Request $request){
         // $id = Auth::user()->id;
         // $profileData = User::find($id);
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }else{
+            $outlet = session()->get('uotlet');
+        }
 
-        $order_kot = DB::table('order_kot')->where('tableNo', '=', $request->tableNo)->where('cancel', '=', 'N')->where(function ($q) {$q->where('status', '=', '1')->orWhere('status', '=', '4');})->get();
+        $order_kot = DB::table('order_kot')->where('tableNo', '=', $request->tableNo)->where('cancel', '=', 'N')->where('ResSL', '=', $outlet)->where(function ($q) {$q->where('status', '=', '1')->orWhere('status', '=', '4');})->get();
 
         foreach($order_kot as $order_kots ){
             $tableNo = $order_kots->tableNo;
@@ -204,8 +211,13 @@ class OperatorController extends Controller
     public function RoomExist(Request $request){
         // $id = Auth::user()->id;
         // $profileData = User::find($id);
+        if (empty(session()->get('uotlet'))){
+            return redirect()->route('outlets');
+        }else{
+            $outlet = session()->get('uotlet');
+        }
 
-        $order_kot = DB::table('order_kot')->where('roomNo', '=', $request->roomNo)->where('cancel', '=', 'N')->where(function ($q) {$q->where('status', '=', '1')->orWhere('status', '=', '4');})->get();
+        $order_kot = DB::table('order_kot')->where('roomNo', '=', $request->roomNo)->where('cancel', '=', 'N')->where('ResSL', '=', $outlet)->where(function ($q) {$q->where('status', '=', '1')->orWhere('status', '=', '4');})->get();
 
         foreach($order_kot as $order_kots ){
             $roomNo = $order_kots->roomNo;
@@ -671,9 +683,9 @@ class OperatorController extends Controller
 
             $date_time = array( 'date' => $date.' '.$time, 'timezone_type' => '3', 'timezone' => 'Asia/Dhaka' );
 
-            if(DB::connection('sqlsrv')->insert('insert into tblSales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
+//            if(DB::connection('sqlsrv')->insert('insert into tblSales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
 //            DB::enableQueryLog();
-//            if(DB::connection('mysql')->insert('insert into rest_fortis.tblsales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
+            if(DB::connection('mysql')->insert('insert into rest_fortis.tblsales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
                 $order_kot_sent_cash = DB::table('order_kot')->where('billNo', $billNo)->update(['status' => '2']);
             }
 //            dd(DB::getQueryLog());
