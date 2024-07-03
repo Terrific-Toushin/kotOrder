@@ -14,8 +14,8 @@ class OperatorController extends Controller
         $id = Auth::user()->id;
         $profileData = User::find($id);
         $userOutlets = json_decode($profileData->outlets,true);
-//        $tblRestName_data = DB::connection('sqlsrv')->table('tblRestName')->whereIn('ResSL',$userOutlets)->orderBy('ResName')->get();
-        $tblRestName_data = DB::connection('mysql')->table('rest_fortis.tblrestname')->whereIn('ResSL',$userOutlets)->orderBy('ResName')->get();
+        $tblRestName_data = DB::connection('sqlsrv')->table('tblRestName')->whereIn('ResSL',$userOutlets)->orderBy('ResName')->get();
+//        $tblRestName_data = DB::connection('mysql')->table('rest_fortis.tblrestname')->whereIn('ResSL',$userOutlets)->orderBy('ResName')->get();
         // $date = date("Y-m-d");
 //        dump($tblRestName_data);
 //        die();
@@ -162,15 +162,16 @@ class OperatorController extends Controller
 //        $tblWaiter_data = DB::connection('sqlsrv')->table('tblWaiter')->where($uotletID, '1')->orderBy('Name')->get();
 //        $tblWaiter_data = DB::connection('mysql')->table('rest_fortis.tblwaiter')->where($uotletID, '1')->orderBy('Name')->get();
 
-        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
+//        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
+        $uotlet = DB::connection('sqlsrv')->table('tblrestname')->where('ResSL', '=', $uotletID)->get();
 
         $uotletName = "";
         foreach($uotlet as $uotletData){
             $uotletName = $uotletData->ResName;
         }
 
-//        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
-        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
+        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
+//        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
 
         $kitchen = array();
         foreach($tblMenu_data as $kitchen_items){
@@ -228,16 +229,16 @@ class OperatorController extends Controller
         // Seclet Outlet
         // error_log(session()->get('uotlet'));
         $uotletID = session()->get('uotlet');
-//        $uotlet = DB::connection('sqlsrv')->table('tblRestName')->where('ResSL', '=', $uotletID)->get();
-        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
+        $uotlet = DB::connection('sqlsrv')->table('tblRestName')->where('ResSL', '=', $uotletID)->get();
+//        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
 
         $uotletName = "";
         foreach($uotlet as $uotletData){
             $uotletName = $uotletData->ResName;
         }
 
-//        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
-        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
+        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
+//        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
 
         $kitchen = array();
         foreach($tblMenu_data as $kitchen_items){
@@ -271,8 +272,8 @@ class OperatorController extends Controller
         $id = Auth::user()->id;
         $username = Auth::user()->username;
         $uotletID = session()->get('uotlet');
-//        $uotlet = DB::connection('sqlsrv')->table('tblRestName')->where('ResSL', '=', $uotletID)->get();
-        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
+        $uotlet = DB::connection('sqlsrv')->table('tblRestName')->where('ResSL', '=', $uotletID)->get();
+//        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
 
         $uotletName = "";
         foreach($uotlet as $uotletData){
@@ -331,8 +332,8 @@ class OperatorController extends Controller
 //        dump($request);
 //        die();
         $uotletID = session()->get('uotlet');
-//        $uotlet = DB::connection('sqlsrv')->table('tblRestName')->where('ResSL', '=', $uotletID)->get();
-        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
+        $uotlet = DB::connection('sqlsrv')->table('tblRestName')->where('ResSL', '=', $uotletID)->get();
+//        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
 
         $uotletName = "";
         foreach($uotlet as $uotletData){
@@ -391,16 +392,16 @@ class OperatorController extends Controller
         // Seclet Outlet
         // error_log(session()->get('uotlet'));
         $uotletID = session()->get('uotlet');
-//        $uotlet = DB::connection('sqlsrv')->table('tblRestName')->where('ResSL', '=', $uotletID)->get();
-        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
+        $uotlet = DB::connection('sqlsrv')->table('tblRestName')->where('ResSL', '=', $uotletID)->get();
+//        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
 
         $uotletName = "";
         foreach($uotlet as $uotletData){
             $uotletName = $uotletData->ResName;
         }
 
-//        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
-        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
+        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
+//        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
 
         $kitchen = array();
         foreach($tblMenu_data as $kitchen_items){
@@ -441,8 +442,8 @@ class OperatorController extends Controller
             $qty = $order_kot_item->qty;
             $price = $order_kot_item->price * $qty;
 
-//            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
-            $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID)->get();
+            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
+//            $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID)->get();
             foreach ($kot_items_selects as $kot_items_select) {
                 $repname = $kot_items_select->repname;
                 $kitchens = $kot_items_select->kitchen;
@@ -535,8 +536,8 @@ class OperatorController extends Controller
             $complete = $order_kot_item->complete;
             $price = $order_kot_item->price * $qty;
 
-//            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
-            $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID)->get();
+            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
+//            $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID)->get();
             foreach ($kot_items_selects as $kot_items_select) {
                 $repname = $kot_items_select->repname;
                 $kitchen = $kot_items_select->kitchen;
@@ -558,8 +559,8 @@ class OperatorController extends Controller
             $complete = $order_kot_item_new->complete;
             $price_new = $order_kot_item_new->price * $qty_new;
 
-//            $kot_items_selects_new = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
-            $kot_items_selects_new = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID_new)->get();
+            $kot_items_selects_new = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
+//            $kot_items_selects_new = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID_new)->get();
             foreach ($kot_items_selects_new as $kot_items_select_new) {
                 $repname_new = $kot_items_select_new->repname;
                 $kitchen_new = $kot_items_select_new->kitchen;
@@ -578,8 +579,8 @@ class OperatorController extends Controller
             $cancel_qty = $cancel_order_kot_item->qty;
             $cancel_price = $cancel_order_kot_item->price * $cancel_qty;
 
-//            $cancel_kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $cancel_repID)->get();
-            $cancel_kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $cancel_repID)->get();
+            $cancel_kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $cancel_repID)->get();
+//            $cancel_kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $cancel_repID)->get();
             foreach ($cancel_kot_items_selects as $cancel_kot_items_select) {
                 $cancel_repname = $cancel_kot_items_select->repname;
                 $cancel_kitchen = $cancel_kot_items_select->kitchen;
@@ -636,8 +637,8 @@ class OperatorController extends Controller
         foreach ($order_kot_items as $order_kot_item) {
 
             $uotletID = session()->get('uotlet');
-//            $uotlet = DB::connection('sqlsrv')->table('tblRestName')->where('ResSL', '=', $uotletID)->get();
-            $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
+            $uotlet = DB::connection('sqlsrv')->table('tblRestName')->where('ResSL', '=', $uotletID)->get();
+//            $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
 
             $uotletName = "";
             foreach($uotlet as $uotletData){
@@ -650,16 +651,16 @@ class OperatorController extends Controller
 
             $total_price = $price * $qty;
 
-//            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
-            $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID)->get();
+            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
+//            $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID)->get();
             foreach ($kot_items_selects as $kot_items_select) {
                 $repname = $kot_items_select->repname;
                 $kitchen = $kot_items_select->kitchen;
                 $foodtype = $kot_items_select->foodtype;
             }
 
-//            $waiter_selects = DB::connection('sqlsrv')->table('tblWaiter')->where('Name', '=', $waterName)->get();
-            $waiter_selects = DB::connection('mysql')->table('rest_fortis.tblwaiter')->where('Name', '=', $waterName)->get();
+            $waiter_selects = DB::connection('sqlsrv')->table('tblWaiter')->where('Name', '=', $waterName)->get();
+//            $waiter_selects = DB::connection('mysql')->table('rest_fortis.tblwaiter')->where('Name', '=', $waterName)->get();
             $waiterno = 0;
             foreach ($waiter_selects as $waiter_select) {
                 $waiterno = $waiter_select->waiterno;
@@ -670,9 +671,9 @@ class OperatorController extends Controller
 
             $date_time = array( 'date' => $date.' '.$time, 'timezone_type' => '3', 'timezone' => 'Asia/Dhaka' );
 
-//            if(DB::connection('sqlsrv')->insert('insert into tblSales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
+            if(DB::connection('sqlsrv')->insert('insert into tblSales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
 //            DB::enableQueryLog();
-            if(DB::connection('mysql')->insert('insert into rest_fortis.tblsales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
+//            if(DB::connection('mysql')->insert('insert into rest_fortis.tblsales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
                 $order_kot_sent_cash = DB::table('order_kot')->where('billNo', $billNo)->update(['status' => '2']);
             }
 //            dd(DB::getQueryLog());

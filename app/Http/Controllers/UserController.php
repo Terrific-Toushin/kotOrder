@@ -39,10 +39,10 @@ class UserController extends Controller
         }
         $userType = config('dashboard_constant.USER_TYPE');
         $userPrivileges = config('dashboard_constant.USER_PRIVILEGE');
-//        $outlets = DB::connection('sqlsrv')->table('tblRestName')->orderBy('ResName')->get();
-        $outlets = DB::connection('mysql')->table('rest_fortis.tblrestname')->orderBy('ResName')->get();
-//        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->orderBy('repname')->get();
-        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->orderBy('repname')->get();
+        $outlets = DB::connection('sqlsrv')->table('tblRestName')->orderBy('ResName')->get();
+//        $outlets = DB::connection('mysql')->table('rest_fortis.tblrestname')->orderBy('ResName')->get();
+        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->orderBy('repname')->get();
+//        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->orderBy('repname')->get();
         $kitchen = array();
         foreach($tblMenu_data as $kitchen_items){
             array_push($kitchen, $kitchen_items->kitchen);
