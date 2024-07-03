@@ -42,7 +42,9 @@ class OperatorController extends Controller
         }
         $id = Auth::user()->id;
         $profileData = User::find($id);
-        $dbDate = date("d-m-Y");
+        $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
+        $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10);
+        $dbDate = date("d-m-Y", strtotime($dbDateOnly));
 
 //        DB::enableQueryLog();
         $panding_kots_count = DB::table('order_kot')->where('cancel', 'N')
