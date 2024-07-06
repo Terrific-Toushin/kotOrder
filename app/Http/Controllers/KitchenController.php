@@ -14,8 +14,8 @@ class KitchenController extends Controller
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
-        $panding_kots_count = DB::table('order_kot')->where('status', '=', '1')->orWhere('status', '=', '4')->where('cancel', '=', 'N')->count();
-        $kitchen_complete_kot_count = DB::table('order_kot')->where('status', '=', '3')->where('cancel', '=', 'N')->count();
+        $panding_kots_count = DB::table('order_kot_item')->where('complete', '=', 'N')->where('cancel', '=', 'N')->count();
+        $kitchen_complete_kot_count = DB::table('order_kot_item')->where('complete', '=', 'Y')->where('cancel', '=', 'N')->count();
         $total_kots_count = DB::table('order_kot')->where('cancel', '=', 'N')->count();
         $cash_print_count = DB::table('order_kot')->where('status', '=', '2')->where('cancel', '=', 'N')->count();
 
@@ -112,16 +112,20 @@ class KitchenController extends Controller
 //        dump($pending_kots);
 //        dump(DB::getQueryLog());
 //        die();
-        $alreadyOrderItem = array_map(function($item) {
-            return $item->repID;
-        }, $pending_kots);
-
-            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $alreadyOrderItem)->get()->toArray();
-//        $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->select('repid','repname')->whereIn('repid', $alreadyOrderItem)->get()->toArray();
         $itemName = [];
-        foreach ($kot_items_selects as $kot_items_select){
-            $itemName[$kot_items_select->repid] = $kot_items_select->repname;
+        if(!empty($pending_kots)){
+            $alreadyOrderItem = array_map(function($item) {
+                return $item->repID;
+            }, $pending_kots);
+
+            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $alreadyOrderItem)->get();
+//        $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->select('repid','repname')->whereIn('repid', $alreadyOrderItem)->get()->toArray();
+
+            foreach ($kot_items_selects as $kot_items_select){
+                $itemName[$kot_items_select->repid] = $kot_items_select->repname;
+            }
         }
+
 //        dump($alreadyOrderItem);
 //        dump($kot_items_selects);
 //        dump($itemName);
