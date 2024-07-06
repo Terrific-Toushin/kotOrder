@@ -343,7 +343,7 @@ class OperatorController extends Controller
 
         return redirect()->route('kotView',compact('billNo'));
 
-    } // End OperatorNewOrderItemSave Method
+    } // End OperatorNewOrderItemSave
 
     public function EditOrderAddItemSave(Request $request){
         if (empty(session()->get('uotlet'))){
