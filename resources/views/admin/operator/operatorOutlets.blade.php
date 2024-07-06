@@ -27,14 +27,7 @@
             <!-- /.modal -->
             <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
             <!-- END STYLE CUSTOMIZER -->
-            <div class="page-bar">
-                <ul class="page-breadcrumb">
-                    <li>
-                        <i class="fa fa-home"></i>
-                        <a href="{{route('operatorDashboard')}}">Operator Dashboard @if(Session::has('uotletName')) <b>{{ Session::get('uotletName')}}</b> @endif</a>
-                    </li>
-                </ul>
-            </div>
+            @include('admin.includes.operatorBar')
             <!-- END PAGE HEADER-->
             {{--            @dump($studentCounts)--}}
             <!-- BEGIN PAGE CONTENT-->

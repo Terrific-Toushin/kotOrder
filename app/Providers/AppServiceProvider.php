@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Models\Menus;
-use App\Models\Pages;
+
 use Illuminate\Support\ServiceProvider;
 use View;
+use DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,5 +27,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 //
+        $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
+        $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10);
+        $dbDate = date("d-m-Y", strtotime($dbDateOnly));
+        View::composer('*', function ($view) use ($dbDate) {
+            $view->with(compact('dbDate'));
+        });
     }
 }
