@@ -113,44 +113,44 @@
                             @csrf
                             <div class="form-body">
                                 <div class="form-group">
-                                    <label class="col-sm-1 control-label">Bill NO (<span>{{$bill_No}}</span>)</label>
-                                    <div class="col-sm-2">
+                                    <label class="col-md-1 control-label">Bill NO (<span>{{$bill_No}}</span>)</label>
+                                    <div class="col-md-2">
                                         <input type="text" name="billNo" class="form-control" placeholder="Bill Number" value="{{$bill_No+1}}" readonly>
                                     </div>
-                                    <label class="col-sm-1 control-label">Table NO</label>
-                                    <div class="col-sm-2">
+                                    <label class="col-md-1 control-label">Table NO</label>
+                                    <div class="col-md-2">
                                         <input id="tableNo" type="text" name="tableNo" class="form-control" placeholder="Table Number" onblur="onTableNo()" >
                                     </div>
-                                    <label class="col-sm-1 control-label">Room NO</label>
-                                    <div class="col-sm-2">
+                                    <label class="col-md-1 control-label">Room NO</label>
+                                    <div class="col-md-2">
                                         <input id="roomNo" type="text" name="room" class="form-control" placeholder="Room Number" onkeypress="onRoomNo()" onclick="onRoomNo()" >
                                     </div>
-                                    <label class="col-sm-1 control-label">Terminal</label>
-                                    <div class="col-sm-2">
+                                    <label class="col-md-1 control-label">Terminal</label>
+                                    <div class="col-md-2">
                                         <select class="form-control" name="terminal">
                                             <option value="Restaurant">Restaurant</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-1 control-label">Serve Time</label>
-                                    <div class="col-sm-2">
+                                    <label class="col-md-1 control-label">Serve Time</label>
+                                    <div class="col-md-2">
                                         <select class="form-control" name="serveTime">
                                             <option value="Breakfast">Breakfast</option>
                                             <option value="Lunch">Lunch</option>
                                             <option value="Dinner">Dinner</option>
                                         </select>
                                     </div>
-                                    <label class="col-sm-1 control-label">PAX</label>
-                                    <div class="col-sm-2">
+                                    <label class="col-md-1 control-label">PAX</label>
+                                    <div class="col-md-2">
                                         <input id="pax" type="number" name="pax" min="1" class="form-control" placeholder="Number Of Guest" onchange="showItemList()">
                                     </div>
-                                    <label class="col-sm-1 control-label">Guest Name</label>
-                                    <div class="col-sm-2">
+                                    <label class="col-md-1 control-label">Guest Name</label>
+                                    <div class="col-md-2">
                                         <input type="text" name="gustName" class="form-control" placeholder="Guest Name">
                                     </div>
-                                    <label class="col-sm-1 control-label">Contact No</label>
-                                    <div class="col-sm-2">
+                                    <label class="col-md-1 control-label">Contact No</label>
+                                    <div class="col-md-2">
                                         <input type="text" name="contactNo" class="form-control" placeholder="Contact Number">
                                     </div>
                                 </div>
