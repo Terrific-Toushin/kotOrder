@@ -49,11 +49,12 @@
     <form id="form" class="login-form" action="{{ route('login') }}" method="post">
         @csrf
         <h3 class="form-title">Sign In</h3>
-        <div class="alert alert-danger display-hide">
-            <button class="close" data-close="alert"></button>
-            <span>
-			Enter any email and password. </span>
-        </div>
+        @if ($errors->has('email'))
+            <div class="alert alert-danger">
+                <button class="close" data-close="alert"></button>
+                <span>{{ $errors->first('email') }}</span>
+            </div>
+        @endif
         <div class="form-group">
             <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
             <label class="control-label visible-ie8 visible-ie9">Email</label>
@@ -64,8 +65,8 @@
             <input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password" required/>
         </div>
         <div class="form-actions">
-            <button type="submit" class="btn btn-success uppercase">Login</button>
-            <a href="javascript:;" id="forget-password" class="forget-password">Forgot Password?</a>
+            <button type="submit" class="btn btn-success uppercase btn-block">Login</button>
+{{--            <a href="javascript:;" id="forget-password" class="forget-password">Forgot Password?</a>--}}
         </div>
     </form>
     <!-- END LOGIN FORM -->

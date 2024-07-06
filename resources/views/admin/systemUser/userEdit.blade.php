@@ -135,7 +135,7 @@
                                         <input type="text" class="form-control" name="address" value="{{!empty($userInfo) ? $userInfo->address : ''}}" placeholder="Mail Address" autocomplete="off">
                                     </div>
                                 </div>
-                                @if(empty($userInfo) || $userInfo->role == 'admin')
+                                @if(empty($userInfo) || Auth::user()->role == 'admin')
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">User Role: <span class="required"> * </span>
                                         </label>
@@ -197,7 +197,7 @@
                                         </div>
                                     </div>
                                 @endif
-                                @if(empty($userInfo) || $userInfo->role == 'admin')
+                                @if(empty($userInfo) || Auth::user()->role == 'admin')
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">Status: <span class="required">
                                                                     * </span>

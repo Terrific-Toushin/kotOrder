@@ -173,7 +173,13 @@
                                                         <label class="control-label"><b>Address :</b> {{$users->address}}</label>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="control-label"><b>Status :</b> {{$users->status}}</label>
+                                                        <label class="control-label"><b>Created By :</b> {{$users->createby}}</label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label"><b>Created Time:</b> {{$users->created_at}}</label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label"><b>Status :</b> {{$users->status == 'Y'?'Active':'Inactive'}}</label>
                                                     </div>
                                                 </div>
                                                 <!-- END PERSONAL INFO TAB -->

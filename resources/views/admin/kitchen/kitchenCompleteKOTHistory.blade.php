@@ -91,7 +91,7 @@
                                     <td>{{$kots->billNo}}</td>
                                     <td>{{$kots->outlet}}</td>
                                     <td>{{$kots->repID}}</td>
-                                    <td>{{$itemName[$kots->repID]}}</td>
+                                    <td>{{isset($itemName[$kots->repID]) ? $itemName[$kots->repID] : $kots->repID}}</td>
                                     <td>{{$kots->qty}}</td>
                                     <td>{{$kots->remark}}</td>
                                     <td>{{$kots->date}}</td>

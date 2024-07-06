@@ -573,7 +573,7 @@ class OperatorController extends Controller
             $complete = $order_kot_item_new->complete;
             $price_new = $order_kot_item_new->price * $qty_new;
 
-            $kot_items_selects_new = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
+            $kot_items_selects_new = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID_new)->get();
 //            $kot_items_selects_new = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID_new)->get();
             foreach ($kot_items_selects_new as $kot_items_select_new) {
                 $repname_new = $kot_items_select_new->repname;
@@ -685,9 +685,9 @@ class OperatorController extends Controller
 
             $date_time = array( 'date' => $date.' '.$time, 'timezone_type' => '3', 'timezone' => 'Asia/Dhaka' );
 
-//            if(DB::connection('sqlsrv')->insert('insert into tblSales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
+            if(DB::connection('sqlsrv')->insert('insert into tblSales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
 //            DB::enableQueryLog();
-            if(DB::connection('mysql')->insert('insert into rest_fortis.tblsales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
+//            if(DB::connection('mysql')->insert('insert into rest_fortis.tblsales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
                 $order_kot_sent_cash = DB::table('order_kot')->where('billNo', $billNo)->update(['status' => '2']);
             }
 //            dd(DB::getQueryLog());

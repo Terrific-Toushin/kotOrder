@@ -189,7 +189,7 @@ class KitchenController extends Controller
             $qty_new = $order_kot_item_new->qty;
             $price_new = $order_kot_item_new->price * $qty_new;
 
-            $kot_items_selects_new = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
+            $kot_items_selects_new = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID_new)->get();
 //            $kot_items_selects_new = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID_new)->get();
             foreach ($kot_items_selects_new as $kot_items_select_new) {
                 $repname_new = $kot_items_select_new->repname;
