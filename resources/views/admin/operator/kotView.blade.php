@@ -185,14 +185,14 @@
                         <div class="card-body" id="printButton">
                             <div class="row">
                                 @if($cancel == 'N' and $status!='2')
-                                    <div class="col-md-3">
-                                        {{-- <a href="{{ route('operator.qtyPrintPriview', ['billNo' => $billNo]) }}" class="btnprn"> --}}
-                                        <button type="button" class=" btn btn-info btn-block" onclick="printContent('printQTY')" >Print</button>
-                                        {{-- </a> --}}
-                                    </div>
+{{--                                    <div class="col-md-3">--}}
+{{--                                        --}}{{-- <a href="{{ route('operator.qtyPrintPriview', ['billNo' => $billNo]) }}" class="btnprn"> --}}
+{{--                                        <button type="button" class=" btn btn-info btn-block" onclick="printContent('printQTY')" >Print KOT</button>--}}
+{{--                                        --}}{{-- </a> --}}
+{{--                                    </div>--}}
                                     @if($showVoid)
                                         <div class="col-md-3">
-                                            <a href="#" onclick="return confirm('Are you sure to cancel KOT?')">
+                                            <a href="{{ route('orderCancle', ['billNo' => $billNo]) }}" onclick="return confirm('Are you sure to cancel KOT?')">
                                                 <button type="button" class="btn btn-danger btn-block" >KOT Void</button>
                                             </a>
                                         </div>

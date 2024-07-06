@@ -126,7 +126,7 @@
                                 Pending KOT
                             </div>
                         </div>
-                        <a class="more" href="{{ route('pendingKOT') }}">
+                        <a class="more" href="{{ route('pendingKOTAll') }}">
                             View more <i class="m-icon-swapright m-icon-white"></i>
                         </a>
                     </div>
@@ -144,7 +144,7 @@
                                 Kitchen Complete KOT
                             </div>
                         </div>
-                        <a class="more" href="{{ route('operatorCompleteKOTHistory') }}">
+                        <a class="more" href="{{ route('operatorCompleteKOTHistoryAll') }}">
                             View more <i class="m-icon-swapright m-icon-white"></i>
                         </a>
                     </div>

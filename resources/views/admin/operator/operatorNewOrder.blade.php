@@ -85,12 +85,9 @@
                             <i class="fa fa-gift"></i> New Order
                         </div>
                         <div class="tools">
-                            <a href="" class="collapse">
-                            </a>
-                            <a href="" class="reload">
-                            </a>
-                            <a href="" class="remove">
-                            </a>
+                            <a href="" class="collapse"></a>
+{{--                            <a href="" class="reload"></a>--}}
+{{--                            <a href="" class="remove"></a>--}}
                         </div>
                     </div>
                     <div class="portlet-body form">
@@ -99,6 +96,24 @@
                         <form class="form-horizontal" role="form" method="POST" action="{{ route('newOrderItemSave') }}">
                             @csrf
                             <div class="form-body">
+                                @if(!empty($bookedTables) && count($bookedTables) > 0)
+                                    <div class="clearfix" style="margin-bottom: 10px; margin-left: 15px">
+                                        Running Table =>
+                                        @foreach($bookedTables as $bookedTable)
+                                            <a href="javascript:;" class="btn btn-icon-only btn-circle red"><b>{{$bookedTable->tableNo}}</b></a>
+                                        @endforeach
+                                    </div>
+                                @endif
+
+                                @if(!empty($bookedRooms) && count($bookedRooms) > 0)
+                                    <div class="clearfix" style="margin-bottom: 10px; margin-left: 15px">
+                                        Occupied Room =>
+                                        @foreach($bookedRooms as $bookedRoom)
+                                            <a href="javascript:;" class="btn btn-icon-only btn-circle red"><b>{{$bookedRoom->roomNo}}</b></a>
+                                        @endforeach
+                                    </div>
+                                @endif
+
                                 <div class="form-group">
                                     <label class="col-md-1 control-label">Bill NO (<span>{{$bill_No}}</span>)</label>
                                     <div class="col-md-2">
@@ -122,7 +137,7 @@
                                 <div class="form-group">
                                     <label class="col-md-1 control-label">Serve Time</label>
                                     <div class="col-md-2">
-                                        <select class="form-control" name="serveTime">
+                                        <select class="form-control" name="serveTime" required>
                                             <option value="Breakfast">Breakfast</option>
                                             <option value="Lunch">Lunch</option>
                                             <option value="Dinner">Dinner</option>
@@ -130,7 +145,7 @@
                                     </div>
                                     <label class="col-md-1 control-label">PAX</label>
                                     <div class="col-md-2">
-                                        <input id="pax" type="number" name="pax" min="1" class="form-control" placeholder="Number Of Guest" onchange="showItemList()">
+                                        <input id="pax" type="number" name="pax" min="1" class="form-control" placeholder="Number Of Guest" onkeyup="showItemList()" onchange="showItemList()" required autocomplete="off">
                                     </div>
                                     <label class="col-md-1 control-label">Guest Name</label>
                                     <div class="col-md-2">
@@ -144,7 +159,7 @@
 
                             </div>
                             <div id="orderItemList" class="row" style="display: none">
-                                <div class="col-sm-6" style="padding-right: 2px">
+                                <div class="col-md-6" style="padding-right: 2px">
                                     <!-- Begin: life time stats -->
                                     <div class="portlet box blue-steel">
                                         <div class="portlet-title">
@@ -154,7 +169,7 @@
                                             <div class="tools">
                                                 <a href="javascript:;" class="collapse"></a>
 {{--                                                <a href="javascript:;" class="reload"></a>--}}
-                                                <a href="javascript:;" class="remove"></a>
+{{--                                                <a href="javascript:;" class="remove"></a>--}}
                                             </div>
                                         </div>
                                         <div class="portlet-body">
@@ -243,8 +258,7 @@
                                             <div class="tools">
                                                 <a href="javascript:;" class="collapse">
                                                 </a>
-                                                <a href="javascript:;" class="remove">
-                                                </a>
+{{--                                                <a href="javascript:;" class="remove"></a>--}}
                                             </div>
                                         </div>
                                         <div class="portlet-body">
@@ -277,7 +291,7 @@
                                                 </table>
                                                 <div id="modalItem"></div>
                                                 <div id="formSubmit" class="form-actions right" style="display: none">
-                                                    <button type="submit" class="btn green">Send New KOT</button>
+                                                    <button type="submit" class="btn green">Submit KOT</button>
                                                 </div>
                                             </div>
                                         </div>

@@ -76,8 +76,26 @@
                             </tr>
                             </thead>
                             <tbody>
+                            @php
+                                $tr1='active';
+                                $tr2='success';
+                                $tr3='warning';
+                                $billState = 1;
+                                $pevBillNo = 0;
+                            @endphp
                             @foreach($pending_kots as $kots)
-                                <tr>
+                                @if($loop->iteration == 1)
+                                    @php
+                                        $pevBillNo = $kots->billNo;
+                                    @endphp
+                                @endif
+                                @if($pevBillNo != $kots->billNo)
+                                    @php
+                                        $pevBillNo = $kots->billNo;
+                                        $billState++;
+                                    @endphp
+                                @endif
+                                <tr class="{{$billState == 1 ? 'active' : ($billState == 2 ? 'success' : 'warning')}}">
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$kots->date}}</td>
                                     <td>{{$kots->billNo}}</td>
@@ -98,6 +116,11 @@
                                         @endif
                                     </td>
                                 </tr>
+                                @if($billState == 3)
+                                    @php
+                                        $billState = 1;
+                                    @endphp
+                                @endif
                             @endforeach
                         </table>
                         <!-- responsive -->

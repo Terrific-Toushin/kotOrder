@@ -70,7 +70,9 @@ Route::middleware(['auth','checkprivilege:OPT'])->group(function(){
     Route::get('/operator-orderHistry', [OperatorController::class, 'OperatorOrderHistry'])->name ('orderHistry');
     Route::get('/operator-sendToKOT', [OperatorController::class, 'OperatorSendToKOT'])->name ('sendToKOT');
     Route::get('/operator-pendingKOT', [OperatorController::class, 'OperatorPendingKOT'])->name ('pendingKOT');
+    Route::get('/all-pendingKOT', [OperatorController::class, 'allPendingKOT'])->name ('pendingKOTAll');
     Route::get('/operator-kitchenCompleteKOTHistory', [OperatorController::class, 'KitchenCompleteKOTHistory'])->name ('operatorCompleteKOTHistory');
+    Route::get('/all-kitchenCompleteKOTHistory', [OperatorController::class, 'KitchenCompleteKOTHistoryAll'])->name ('operatorCompleteKOTHistoryAll');
     Route::get('/operator-totalKOT', [OperatorController::class, 'OperatorTotalKOT'])->name ('totalKOT');
     Route::get('/operator-cashPrint', [OperatorController::class, 'OperatorCashPrint'])->name ('cashPrint');
 }); // End Group Operator Middleware

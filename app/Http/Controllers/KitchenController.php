@@ -108,7 +108,7 @@ class KitchenController extends Controller
         $timestamp = time();
         $date = date("Y-m-d", $timestamp);
 //        DB::enableQueryLog();
-        $pending_kots = DB::table('order_kot_item')->leftJoin('order_kot', 'order_kot.billNo', '=', 'order_kot_item.billNo')->select('order_kot_item.*','order_kot.outlet')->where('order_kot_item.cancel', '=', 'N')->where('order_kot_item.complete', '=', 'N')->where(function ($q) {$q->where('order_kot_item.status', '=', '1')->orWhere('order_kot_item.status', '=', '2');})->orderBy('id')->get()->toArray();
+        $pending_kots = DB::table('order_kot_item')->leftJoin('order_kot', 'order_kot.billNo', '=', 'order_kot_item.billNo')->select('order_kot_item.*','order_kot.outlet')->where('order_kot_item.cancel', '=', 'N')->where('order_kot_item.complete', '=', 'N')->where(function ($q) {$q->where('order_kot_item.status', '=', '1')->orWhere('order_kot_item.status', '=', '2');})->orderBy('billNo')->get()->toArray();
 //        dump($pending_kots);
 //        dump(DB::getQueryLog());
 //        die();
@@ -246,6 +246,7 @@ class KitchenController extends Controller
         if (count($checkOrderStatus) == 0){
 //            dump($billNo);
             $updateOrderKot = DB::table('order_kot')->where('billNo', $billNo)->update(['status' => '3']);
+            DB::connection('sqlsrv')->table('tblBillPending')->where('billNo', '=', $billNo)->update(['flug'=>'3']);
         }
 //        die();
 

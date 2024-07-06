@@ -167,6 +167,8 @@ class OperatorController extends Controller
 //        $tblWaiter_data = DB::connection('mysql')->table('rest_fortis.tblwaiter')->where($uotletID, '1')->orderBy('Name')->get();
 
 //        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
+        $bookedTables = DB::table('order_kot')->select('tableNo')->where('tableNo', '!=', '')->where('cancel', '=', 'N')->where('ResSL', '=', $uotletID)->where(function ($q) {$q->where('status', '=', '1')->orWhere('status', '=', '4');})->get();
+        $bookedRooms = DB::table('order_kot')->select('roomNo')->where('roomNo', '!=', '')->where('cancel', '=', 'N')->where('ResSL', '=', $uotletID)->where(function ($q) {$q->where('status', '=', '1')->orWhere('status', '=', '4');})->get();
         $uotlet = DB::connection('sqlsrv')->table('tblrestname')->where('ResSL', '=', $uotletID)->get();
 
         $uotletName = "";
@@ -183,7 +185,7 @@ class OperatorController extends Controller
         }
         $kitchen = array_unique($kitchen);
 
-        return view('admin.operator.operatorNewOrder',compact('profileData','bill_No', 'billauto','userOperator','tblMenu_data', 'kitchen'));
+        return view('admin.operator.operatorNewOrder',compact('profileData','bill_No','userOperator','tblMenu_data', 'kitchen','bookedRooms','bookedTables'));
     } // End OperatorNewOrder Method
 
 
@@ -318,8 +320,11 @@ class OperatorController extends Controller
         }elseif($billNo==0){
             $billNo=1;
         }
+        $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
+        $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10)." ".date("H:i:s");
+        $dbDateTime = date("Y-m-d H:i:s", strtotime($dbDateOnly));
 
-        $InsertOrderKot = DB::insert('insert into order_kot (billNo, tableNo, roomNo, terminal, serveTime, pax, waterName, gustName, companyName, email, contactNo, outlet, ResSL, userID) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$billNo, $tableNo, $roomNo, $terminal, $serveTime, $pax, $waterName, $gustName, $companyName, $email, $contactNo, $uotletName, $uotletID, $username]);
+        $InsertOrderKot = DB::insert('insert into order_kot (billNo, tableNo, roomNo, terminal, serveTime, pax, waterName, gustName, companyName, email, contactNo, outlet, ResSL, userID, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)', [$billNo, $tableNo, $roomNo, $terminal, $serveTime, $pax, $waterName, $gustName, $companyName, $email, $contactNo, $uotletName, $uotletID, $username, $dbDateTime]);
 
         for($count=1;$count<=$itemCount;$count++){
             if(request('repid'.$count)!=""){
@@ -330,10 +335,11 @@ class OperatorController extends Controller
                 $kitchen = request('kitchen'.$count);
                 $remark = request('remark'.$count);
                 if($InsertOrderKot){
-                    DB::insert('insert into order_kot_item (billNo, repID, price, qty, remark, kitchen) values (?, ?, ?, ?, ?, ?)', [$billNo, $repid, $price, $qty,$remark, $kitchen]);
+                    DB::insert('insert into order_kot_item (billNo, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?)', [$billNo, $repid, $price, $qty,$remark, $kitchen, $dbDateTime]);
                 }
             }
         }
+        DB::connection('sqlsrv')->insert('insert into tblBillPending (date, PropertyID, ResName, billNo, tableNo, flug) values (?, ?, ?, ?, ?, ?)',[$dbDateTime,$uotletID,$uotletName,$billNo,$tableNo,"1"]);
 
         return redirect()->route('kotView',compact('billNo'));
 
@@ -345,6 +351,7 @@ class OperatorController extends Controller
         }
 //        dump($request);
 //        die();
+        $username = Auth::user()->username;
         $uotletID = session()->get('uotlet');
         $uotlet = DB::connection('sqlsrv')->table('tblRestName')->where('ResSL', '=', $uotletID)->get();
 //        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
@@ -367,7 +374,9 @@ class OperatorController extends Controller
         $contactNo = request('contactNo');
         $itemCount = request('itemCount');
 
-
+        $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
+        $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10)." ".date("H:i:s");
+        $dbDateTime = date("Y-m-d H:i:s", strtotime($dbDateOnly));
         // $InsertOrderKot = DB::insert('insert into order_kot (billNo, tableNo, roomNo, terminal, serveTime, pax, waterName, gustName, companyName, email, contactNo, userID) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$billNo, $tableNo, $roomNo, $terminal, $serveTime, $pax, $waterName, $gustName, $companyName, $email, $contactNo, $username]);
         $billState = DB::table('order_kot_item')->select('billState')->orderBy('date','DESC')->first();
         $nextBillState = $billState->billState;
@@ -376,20 +385,19 @@ class OperatorController extends Controller
         $updateOrderKotItem = DB::table('order_kot_item')->where('billNo', $billNo)->update(['cancel' => 'Y']);
         for($count=1;$count<=$itemCount;$count++){
             if(request('repid'.$count)!=""){
-
                 $repid = request('repid'.$count);
                 $qty = request('qty'.$count);
                 $price = request('price'.$count);
                 $kitchen = request('kitchen'.$count);
                 $remark = request('remark'.$count);
-                DB::insert('insert into order_kot_item (billNo, billState, repID, price, qty, remark, kitchen) values (?, ?, ?, ?, ?, ?, ?)', [$billNo, $nextBillState, $repid, $price, $qty, $remark, $kitchen]);
+                DB::insert('insert into order_kot_item (billNo, billState, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?)', [$billNo, $nextBillState, $repid, $price, $qty, $remark, $kitchen, $dbDateTime]);
 
             }
         }
 
-
         if($itemCount>0){
-            $updateOrderKot = DB::table('order_kot')->where('billNo', $billNo)->update(['billState' => $nextBillState,'status' => '4']);
+            $updateOrderKot = DB::table('order_kot')->where('billNo', $billNo)->update(['billState' => $nextBillState,'tableNo'=>$tableNo, 'roomNo'=>$roomNo, 'terminal'=>$terminal, 'serveTime'=>$serveTime, 'pax'=>$pax, 'waterName'=>$waterName, 'gustName'=>$gustName, 'companyName'=>$companyName, 'email'=>$email, 'contactNo'=>$contactNo, 'outlet'=>$uotletName, 'ResSL'=>$uotletID, 'userID'=>$username,'status' => '4', 'date'=>$dbDateTime]);
+            DB::connection('sqlsrv')->table('tblBillPending')->where('billNo', '=', $billNo)->update(['flug'=>'4']);
         }
 
         return redirect()->route('kotView',compact('billNo'));
@@ -485,8 +493,9 @@ class OperatorController extends Controller
 
 
         $updateOrderKot = DB::table('order_kot')->where('billNo', $billNo)->update(['cancel' => 'Y']);
-
-        return redirect()->route('operator.kotView',compact('billNo'));
+        $updateOrderItemKot = DB::table('order_kot_item')->where('billNo', $billNo)->update(['cancel' => 'Y']);
+        DB::connection('sqlsrv')->table('tblBillPending')->where('billNo', '=', $billNo)->update(['flug'=>'3']);
+        return redirect()->route('kotView',compact('billNo'));
 
     } // End OrderCancle Method
 
@@ -689,6 +698,7 @@ class OperatorController extends Controller
 //            DB::enableQueryLog();
 //            if(DB::connection('mysql')->insert('insert into rest_fortis.tblsales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
                 $order_kot_sent_cash = DB::table('order_kot')->where('billNo', $billNo)->update(['status' => '2']);
+                DB::connection('sqlsrv')->table('tblBillPending')->where('billNo', '=', $billNo)->update(['flug'=>'2']);
             }
 //            dd(DB::getQueryLog());
         }
@@ -713,8 +723,9 @@ class OperatorController extends Controller
             $date = date("Y-m-d",$timestamp);
             // echo $date;
         }else{
-            $timestamp = time();
-            $date = date("Y-m-d", $timestamp);
+            $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
+            $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10);
+            $date = date("d-m-Y", strtotime($dbDateOnly));
         }
 
         $order_kots = DB::table('order_kot')->whereDate('date', '=', $date)->get();
@@ -724,9 +735,6 @@ class OperatorController extends Controller
     } // End OperatorOrderHistry Method
 
     public function OperatorPendingKOT(){
-        if (empty(session()->get('uotlet'))){
-            return redirect()->route('outlets');
-        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
         if (empty(session()->get('uotlet'))){
@@ -737,6 +745,19 @@ class OperatorController extends Controller
 
         $pending_kots = DB::table('order_kot')->where('cancel', '=', 'N')->where('ResSL',$outlet)
             ->where('userID',Auth::user()->username)
+            ->where(static function ($query) {
+                $query->where('status', '=', '1')
+                    ->orWhere('status', '=', '4');
+            })->orderBy('date', 'DESC')->get();
+
+        return view('admin.operator.operatorPendingKOT',compact('profileData', 'pending_kots'));
+    } // End OperatorPandingKOT Method
+
+    public function allPendingKOT(){
+        $id = Auth::user()->id;
+        $profileData = User::find($id);
+
+        $pending_kots = DB::table('order_kot')->where('cancel', '=', 'N')
             ->where(static function ($query) {
                 $query->where('status', '=', '1')
                     ->orWhere('status', '=', '4');
@@ -758,27 +779,31 @@ class OperatorController extends Controller
         return view('admin.operator.operatorKitchenCompleteKOTHistory',compact('profileData', 'kitchen_complete_kots'));
     } // End KitchenCompleteKot Method
 
-    public function OperatorTotalKOT(){
-        if (empty(session()->get('uotlet'))){
-            return redirect()->route('outlets');
-        }
+    public function KitchenCompleteKOTHistoryAll(){
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
-        date_default_timezone_set('Asia/Dhaka');
 
-        $timestamp = time();
-        $date = date("Y-m-d", $timestamp);
+        $kitchen_complete_kots = DB::table('order_kot')->where('cancel', '=', 'N')->where('status', '=', '3')->get();
 
-        $total_kots = DB::table('order_kot')->where('cancel', '=', 'N')->whereDate('date', '=', $date)->get();
+        return view('admin.operator.operatorKitchenCompleteKOTHistory',compact('profileData', 'kitchen_complete_kots'));
+    } // End KitchenCompleteKot Method
+
+    public function OperatorTotalKOT(){
+        $id = Auth::user()->id;
+        $profileData = User::find($id);
+
+        $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
+        $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10);
+        $date = date("d-m-Y", strtotime($dbDateOnly));
+
+        $total_kots = DB::table('order_kot')->where('cancel', '=', 'N')->get();
 
         return view('admin.operator.operatorTotalKOT',compact('profileData', 'total_kots'));
     } // End OperatorTotalKOT Method
 
     public function OperatorCashPrint(){
-        if (empty(session()->get('uotlet'))){
-            return redirect()->route('outlets');
-        }
+
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
@@ -790,7 +815,7 @@ class OperatorController extends Controller
 
 
 
-        $cashPrint = DB::table('order_kot')->where('cancel', '=', 'N')->where('status', '=', '2')->whereDate('date', '=', $date)->get();
+        $cashPrint = DB::table('order_kot')->where('cancel', '=', 'N')->where('status', '=', '2')->get();
 
         return view('admin.operator.operatorCashPrint',compact('profileData', 'cashPrint'));
     } // End OperatorCashPrint Method
