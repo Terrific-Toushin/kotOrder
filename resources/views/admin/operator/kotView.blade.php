@@ -52,7 +52,7 @@
                                     <td><strong>PAX :</strong></td><td> {{$pax}} </td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Water Name :</strong></td><td> {{$waterName}} </td>
+                                    <td><strong>Waiter Name :</strong></td><td> {{$waterName}} </td>
                                     <td><strong>Gust Name :</strong></td><td  colspan="3"> {{$gustName}} </td>
                                 </tr>
                                 <tr>
