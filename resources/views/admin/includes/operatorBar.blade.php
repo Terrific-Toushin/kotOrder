@@ -6,10 +6,12 @@
         </li>
         <li style="margin-left: 30vw">current Data: {{$dbDate}}</li>
     </ul>
+    @if(Session::has('uotletName'))
     <div class="page-toolbar">
         <div class="btn-group clearfix pull-right">
             <a href="{{ route('newOrder') }}" class="btn btn-circle green" style="margin-right: 10px">Take New Order <i class="fa fa-plus"></i></a>
             <a href="{{route('orderHistry')}}" class="btn btn-circle blue-hoki ml-5">Order History <i class="fa fa-link"></i></a>
         </div>
     </div>
+    @endif
 </div>
