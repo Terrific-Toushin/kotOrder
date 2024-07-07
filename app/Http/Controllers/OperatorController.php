@@ -517,9 +517,9 @@ class OperatorController extends Controller
     } // End  Cancle Item Method
 
     public function OperatorKotView(){
-        if (empty(session()->get('uotlet'))){
-            return redirect()->route('outlets');
-        }
+//        if (empty(session()->get('uotlet'))){
+//            return redirect()->route('outlets');
+//        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
@@ -708,9 +708,9 @@ class OperatorController extends Controller
     } // End OperatorSendToKOT Method
 
     public function OperatorOrderHistry(){
-        if (empty(session()->get('uotlet'))){
-            return redirect()->route('outlets');
-        }
+//        if (empty(session()->get('uotlet'))){
+//            return redirect()->route('outlets');
+//        }
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
