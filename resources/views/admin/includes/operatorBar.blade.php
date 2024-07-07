@@ -2,7 +2,7 @@
     <ul class="page-breadcrumb">
         <li>
             <i class="fa fa-home"></i>
-            <a href="{{route('operatorDashboard')}}">Operator Dashboard @if(Session::has('uotletName')) <b>{{ Session::get('uotletName')}}</b> @endif</a>
+            <a href="{{route('home')}}">Dashboard @if(Session::has('uotletName')) <b>{{ Session::get('uotletName')}}</b> @endif</a>
         </li>
         <li style="margin-left: 30vw">Current Date: {{$dbDate}}</li>
     </ul>
