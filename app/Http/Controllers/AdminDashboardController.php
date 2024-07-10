@@ -29,6 +29,13 @@ class AdminDashboardController extends Controller
         $total_kots_count = DB::table('order_kot')->where('cancel', '=', 'N')->count();
         $cash_print_count = DB::table('order_kot')->where('status', '=', '2')->where('cancel', '=', 'N')->count();
         $kot_cancel_count = DB::table('order_kot')->where('cancel', '=', 'Y')->count();
+
+        $tblRestName_data = DB::connection('sqlsrv')->table('tblRestName')->orderBy('ResName')->get();
+        $outlets_count=[];
+        foreach ($tblRestName_data as $key => $outlets) {
+            # code...
+        }
+
         return view('admin.dashboard.dashboard')->with(compact('users','panding_kots_count','kitchen_complete_kot_count','total_kots_count','cash_print_count'));
     }
 

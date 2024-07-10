@@ -589,7 +589,7 @@
     <!-- END CONTENT -->
 
 
-    <script>
+    <!-- <script>
         var initChart1 = function () {
 
             var data = <?php echo $studentGraphResult ?>;
@@ -689,7 +689,7 @@
             });
 
         }
-    </script>
+    </script> -->
 @endsection
 @section('customJs')
     <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/fuelux/js/spinner.min.js"></script>
