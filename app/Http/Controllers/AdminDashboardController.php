@@ -24,17 +24,12 @@ class AdminDashboardController extends Controller
                             SUM(CASE WHEN user_type = "MU" THEN 1 ELSE 0 END) as manager_count,
                             SUM(CASE WHEN user_type = "EU" THEN 1 ELSE 0 END) as executive_count')
             ->first();
-        $startDate = now()->subDays(30); // Calculate the start date (15 days ago)
-        $studentCourses = [];
-        $studentGraphResult = '';
-        $studentPrograms = [];
-        $paymentStatus = config("dashboard_constant.PAYMENT_STATUS");
         $panding_kots_count = DB::table('order_kot')->where('status', '=', '1')->where('cancel', '=', 'N')->count();
         $kitchen_complete_kot_count = DB::table('order_kot')->where('status', '=', '3')->where('cancel', '=', 'N')->count();
         $total_kots_count = DB::table('order_kot')->where('cancel', '=', 'N')->count();
         $cash_print_count = DB::table('order_kot')->where('status', '=', '2')->where('cancel', '=', 'N')->count();
         $kot_cancel_count = DB::table('order_kot')->where('cancel', '=', 'Y')->count();
-        return view('admin.dashboard.dashboard')->with(compact('studentCourses','paymentStatus','studentPrograms','users','studentGraphResult','panding_kots_count','kitchen_complete_kot_count','total_kots_count','cash_print_count'));
+        return view('admin.dashboard.dashboard')->with(compact('users','panding_kots_count','kitchen_complete_kot_count','total_kots_count','cash_print_count'));
     }
 
     public function redirects(){
