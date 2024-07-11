@@ -12,6 +12,9 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/typeahead/typeahead.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/bootstrap-select/bootstrap-select.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/select2/select2.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/jquery-multi-select/css/multi-select.css"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css"/>
     <!-- END PAGE LEVEL STYLES -->
@@ -19,19 +22,12 @@
 @section('content')
 
     <div class="page-content-wrapper">
-        <div class="page-content">
-            <div class="page-bar">
-                <ul class="page-breadcrumb">
-                    <li>
-                        <i class="fa fa-home"></i>
-                        <a href="{{route('home')}}">Dashboard</a>
-                        <i class="fa fa-angle-right"></i>
-                    </li>
-                    <li>
-                        <a href="{{route('researchList')}}">Research List</a>
-                    </li>
-                </ul>
-            </div>
+        <div class="page-content" style="min-height:224px">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- /.modal -->
+            <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- END STYLE CUSTOMIZER -->
+            @include('admin.includes.adminBar')
             <!-- END PAGE HEADER-->
             @if(session('message'))
                 <div class="alert alert-success alert-dismissible show" role="alert">
@@ -51,79 +47,52 @@
                 </div>
             @endif
             <!-- BEGIN PORTLET-->
-            <div class="portlet box yellow">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="fa fa-gift"></i>Research Info
+            <div class="row">
+                <div class="portlet box yellow">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-gift"></i>Pending Order Details
+                        </div>
+                        <div class="tools">
+                            <a href="javascript:;" class="collapse">
+                            </a>
+                            <a href="javascript:;" class="reload">
+                            </a>
+                        </div>
                     </div>
-                    <div class="tools">
-                        <a href="javascript:;" class="collapse">
-                        </a>
-                        <a href="javascript:;" class="reload">
-                        </a>
-                    </div>
-                </div>
-                <div class="portlet-body">
-                    <table class="table table-hover table-striped table-bordered">
-                        <thead>
+                    <div class="portlet-body">
+                        <table class="table table-hover table-striped table-bordered" id="sample_user">
+                            <thead>
                             <tr role="row" class="heading">
-                                <th width="15%">
-                                    Date&Time
-                                </th>
-                                <th width="8%">
-                                    Student ID
-                                </th>
-                                <th width="15%">
-                                    Name
-                                </th>
-                                <th width="7%">
-                                    Contact
-                                </th>
-                                <th width="7%">
-                                    Email
-                                </th>
-                                <th width="20%">
-                                    Action
-                                </th>
+                                <th>SL</th>
+                                <th>Date</th>
+                                <th>Bill NO</th>
+                                <th >Terminal</th>
+                                <th >Serve Time</th>
+                                <th>Table/Room No</th>
+                                <th >PAX</th>
+                                <th >Action</th>
                             </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($allResearch as $research)
-                            <tr>
-                                <td>
-                                    {{$research->created_at}}
-                                </td>
-                                <td>
-                                    {{$research->reasearch_id}}
-                                </td>
-                                <td>
-                                    {{$research->researchers_name}}
-                                </td>
-                                <td>
-                                    {{$research->researchers_number}}
-                                </td>
-                                <td>
-                                    {{$research->researchers_email}}
-                                </td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col-md-3" style="margin-right: 5%;"><a href="{{ route('researchDetails',['id'=>$research->reasearch_id]) }}" class="btn default btn-sm"><i class="fa fa-edit"></i> View </a></div>
-                                        <div class="col-md-3" style="margin-right: 5%;"><a href="{{ route('downloadCSV',['id'=>$research->reasearch_id]) }}" class="btn default btn-sm"><i class="fa fa-download"></i> CSV </a></div>
-{{--                                        <div class="col-md-3" style="margin-right: 5%;"><a href="{{ route('addStudent',['id'=>$research->id]) }}" class="btn default btn-sm"><i class="fa fa-edit"></i> Edit </a></div>--}}
-{{--                                        <div class="col-md-5">--}}
-{{--                                            <form action="{{ route('deleteStudent', ['id' => $research->id]) }}" method="POST">--}}
-{{--                                                @csrf--}}
-{{--                                                @method('DELETE')--}}
-{{--                                                <button type="submit" class="btn default btn-sm" onclick="return confirm('Are you sure you want to delete this student?')"><i class="fa fa-trash"></i> Delete</button>--}}
-{{--                                            </form>--}}
-{{--                                        </div>--}}
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </table>
-                    <!-- responsive -->
+                            </thead>
+                            <tbody>
+                            @foreach($pending_kots as $kots)
+                                <tr>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$kots->date}}</td>
+                                    <td>{{$kots->billNo}}</td>
+                                    <td>{{$kots->terminal}}</td>
+                                    <td>{{$kots->serveTime}}</td>
+                                    <td>{{$kots->tableNo!=''?'Table-':($kots->roomNo!=''?'Room-':'')}}{{$kots->tableNo}}{{$kots->roomNo}}</td>
+                                    <td>{{$kots->pax}} Person</td>
+                                    <td>
+                                        <a href="{{ route('kotView', ['billNo' => $kots->billNo]) }}" class="btn btn-sm green"><i class="fa fa-file-o"></i> Details </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                        <!-- responsive -->
 
+                    </div>
                 </div>
             </div>
             <!-- END PORTLET-->
@@ -161,11 +130,19 @@
     <script type="text/javascript"
             src="{{ asset('/') }}assets/global/plugins/bootstrap-select/bootstrap-select.min.js"></script>
     <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/select2/select2.min.js"></script>
+
+    <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+    <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
+    <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
+    <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+
     <script type="text/javascript"
             src="{{ asset('/') }}assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
     <script src="{{ asset('/') }}assets/admin/pages/scripts/components-dropdowns.js"></script>
     <script type="text/javascript"
             src="{{ asset('/') }}assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js"></script>
+    <script src="{{ asset('/') }}assets/admin/pages/scripts/table-advanced.js"></script>
     @if(Session::has('success'))
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript">
@@ -187,6 +164,6 @@
 @endsection
 @section('documentJquery')
     {{--    <script>--}}
-
+    TableAdvanced.init();
     {{--    </script>--}}
 @endsection

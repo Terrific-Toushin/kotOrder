@@ -108,5 +108,116 @@ class ReportController extends Controller
         return view('admin.reportPage.paymentDetails')->with(compact('paymentList','paymentStatus'));
     }
 
+    public function adminKotView(){
+//        if (empty(session()->get('uotlet'))){
+//            return redirect()->route('outlets');
+//        }
+        $id = Auth::user()->id;
+        $profileData = User::find($id);
+
+        $billNo = request('billNo');
+
+
+        $order_kots = DB::table('order_kot')->where('billNo', '=', $billNo)->get();
+
+
+        foreach ($order_kots as $order_kot) {
+            $tableNo = $order_kot->tableNo;
+            $roomNo = $order_kot->roomNo;
+            $terminal = $order_kot->terminal;
+            $serveTime = $order_kot->serveTime;
+            $pax = $order_kot->pax;
+            $waterName = $order_kot->waterName;
+            $gustName = $order_kot->gustName;
+            $companyName = $order_kot->companyName;
+            $email = $order_kot->email;
+            $contactNo = $order_kot->contactNo;
+            $entyDate = $order_kot->date;
+            $cancel = $order_kot->cancel;
+            $status = $order_kot->status;
+
+            $date = date('Y-m-d',strtotime($entyDate));
+            $time = date('H:m:s',strtotime($entyDate));
+        }
+
+        $order_kot_items = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('billState', '=', 'A')->get();
+
+        $allMenuItems = array();
+
+        foreach ($order_kot_items as $order_kot_item) {
+
+            $repID = $order_kot_item->repID;
+            $qty = $order_kot_item->qty;
+            $complete = $order_kot_item->complete;
+            $price = $order_kot_item->price * $qty;
+
+            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
+//            $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID)->get();
+            foreach ($kot_items_selects as $kot_items_select) {
+                $repname = $kot_items_select->repname;
+                $kitchen = $kot_items_select->kitchen;
+            }
+
+            array_push($allMenuItems, array("repID"=>$repID, "repname"=>$repname, "price"=>$price, "qty"=>$qty, "kitchen"=>$kitchen, "complete"=>$complete));
+        }
+
+        $order_kot_items_new = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('billState', '!=', 'A')->get();
+//        dump($order_kot_items_new);
+//        die();
+
+        $allMenuItems_new = array();
+
+        foreach ($order_kot_items_new as $order_kot_item_new) {
+
+            $repID_new = $order_kot_item_new->repID;
+            $qty_new = $order_kot_item_new->qty;
+            $complete = $order_kot_item_new->complete;
+            $price_new = $order_kot_item_new->price * $qty_new;
+
+            $kot_items_selects_new = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID_new)->get();
+//            $kot_items_selects_new = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID_new)->get();
+            foreach ($kot_items_selects_new as $kot_items_select_new) {
+                $repname_new = $kot_items_select_new->repname;
+                $kitchen_new = $kot_items_select_new->kitchen;
+            }
+
+            array_push($allMenuItems_new, array("repID"=>$repID_new, "repname"=>$repname_new, "price"=>$price_new, "qty"=>$qty_new, "kitchen"=>$kitchen_new, "complete"=>$complete));
+        }
+
+        $cancel_order_kot_items = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'Y')->get();
+
+        $cancel_allMenuItems = array();
+
+        foreach ($cancel_order_kot_items as $cancel_order_kot_item) {
+
+            $cancel_repID = $cancel_order_kot_item->repID;
+            $cancel_qty = $cancel_order_kot_item->qty;
+            $cancel_price = $cancel_order_kot_item->price * $cancel_qty;
+
+            $cancel_kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $cancel_repID)->get();
+//            $cancel_kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $cancel_repID)->get();
+            foreach ($cancel_kot_items_selects as $cancel_kot_items_select) {
+                $cancel_repname = $cancel_kot_items_select->repname;
+                $cancel_kitchen = $cancel_kot_items_select->kitchen;
+            }
+
+            array_push($cancel_allMenuItems, array("repID"=>$cancel_repID, "repname"=>$cancel_repname, "price"=>$cancel_price, "qty"=>$cancel_qty, "kitchen"=>$cancel_kitchen));
+        }
+
+        $itencount=1;
+        $itencount_new=1;
+        $cancel_itencount=1;
+
+        return view('admin.reportPage.kotView',compact('billNo','tableNo','roomNo','terminal','serveTime','pax','waterName','gustName','companyName','email','contactNo', 'itencount', 'itencount_new', 'cancel_itencount', 'cancel', 'status', 'date', 'time', ['allMenuItems'], ['allMenuItems_new'], ['cancel_allMenuItems']));
+    } // End OperatorKOTView Method
+
+
+    public function cashPrint(){
+
+        $cashPrint = DB::table('order_kot')->where('cancel', '=', 'N')->where('status', '=', '2')->get();
+
+        return view('admin.reportPage.cashPrint.blade',compact('cashPrint'));
+    } // End OperatorCashPrint Method
+
 
 }

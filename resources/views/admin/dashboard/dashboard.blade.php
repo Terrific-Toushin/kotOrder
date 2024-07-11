@@ -39,7 +39,7 @@
 {{--            @dump($studentCounts)--}}
             <!-- BEGIN PAGE CONTENT-->
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 margin-bottom-10">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="dashboard-stat blue-madison">
                         <div class="visual">
                             <i class="fa fa-briefcase fa-icon-medium"></i>
@@ -113,7 +113,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 margin-bottom-10">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="dashboard-stat yellow-crusta">
                         <div class="visual">
                             <i class="fa fa-briefcase fa-icon-medium"></i>
