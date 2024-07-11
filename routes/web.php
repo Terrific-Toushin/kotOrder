@@ -49,7 +49,7 @@ Route::group(['middleware' => 'auth'],function (){
     Route::get('/report-payment-log', [ReportController::class, 'getPaymentDetails'])->name('getPaymentDetails')->middleware('checkprivilege:RA');
 
     Route::get('/admin-kotView/{billNo}', [ReportController::class, 'adminKotView'])->name ('kotViewAdmin');
-    Route::get('/admin-cashPrint', [ReportController::class, 'cashPrint'])->name ('cashPrint');
+    Route::get('/admin-cashPrint', [ReportController::class, 'cashPrint'])->name ('adminCashPrint');
 });
 
 // Start Group Operator Middleware

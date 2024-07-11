@@ -1,8 +1,7 @@
 @extends('admin.master')
-<link rel="stylesheet" type="text/css"
-      href="{{ asset('/') }}assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css"/>
 @section('styleSheet')
     <!-- BEGIN PAGE LEVEL STYLES -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css"/>
@@ -191,7 +190,7 @@
                                                     Cash Print
                                                 </div>
                                             </div>
-                                            <a class="more" href="{{ route('cashPrint') }}">
+                                            <a class="more" href="{{ route('adminCashPrint') }}">
                                                 View more <i class="m-icon-swapright m-icon-white"></i>
                                             </a>
                                         </div>
@@ -353,6 +352,6 @@
     <script src="{{ asset('/') }}assets/admin/pages/scripts/table-advanced.js"></script>
 @endsection
 @section('documentJquery')
-    EcommerceIndex.init();
+{{--    EcommerceIndex.init();--}}
     TableAdvanced.init();
 @endsection

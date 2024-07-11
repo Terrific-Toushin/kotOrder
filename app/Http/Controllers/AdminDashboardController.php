@@ -21,7 +21,7 @@ class AdminDashboardController extends Controller
 
         $users = UserPrivileges::selectRaw('count(user_id) as total, SUM(CASE WHEN user_type = "operator" THEN 1 ELSE 0 END) as operator_count,
                             SUM(CASE WHEN user_type = "AU" THEN 1 ELSE 0 END) as admins_count,
-                            SUM(CASE WHEN user_type = "kitchen" THEN 1 ELSE 0 END) as kitchen_count')
+                            SUM(CASE WHEN user_type = "kitchen" THEN 1 ELSE 0 END) as kitchen_count')->leftJoin('users', 'user_privileges.user_id', '=', 'users.id')->where('users.email','!=','toushin.java@gmail.com')
             ->first();
         $panding_kots_count = DB::table('order_kot')->where('cancel', '=', 'N')->where(function ($q) {$q->where('status', '=', '1')->orWhere('status', '=', '4');})->count();
         $kitchen_complete_kot_count = DB::table('order_kot')->where('status', '=', '3')->where('cancel', '=', 'N')->count();

@@ -109,11 +109,6 @@ class ReportController extends Controller
     }
 
     public function adminKotView(){
-//        if (empty(session()->get('uotlet'))){
-//            return redirect()->route('outlets');
-//        }
-        $id = Auth::user()->id;
-        $profileData = User::find($id);
 
         $billNo = request('billNo');
 
@@ -216,7 +211,7 @@ class ReportController extends Controller
 
         $cashPrint = DB::table('order_kot')->where('cancel', '=', 'N')->where('status', '=', '2')->get();
 
-        return view('admin.reportPage.cashPrint.blade',compact('cashPrint'));
+        return view('admin.reportPage.cashPrint',compact('cashPrint'));
     } // End OperatorCashPrint Method
 
 
