@@ -19,7 +19,7 @@ class AdminDashboardController extends Controller
 {
     public function index(){
 
-        $users = UserPrivileges::selectRaw('count(user_id) as total, SUM(CASE WHEN user_type = "operator" THEN 1 ELSE 0 END) as operator_operator,
+        $users = UserPrivileges::selectRaw('count(user_id) as total, SUM(CASE WHEN user_type = "operator" THEN 1 ELSE 0 END) as operator_count,
                             SUM(CASE WHEN user_type = "AU" THEN 1 ELSE 0 END) as admins_count,
                             SUM(CASE WHEN user_type = "kitchen" THEN 1 ELSE 0 END) as kitchen_count')
             ->first();

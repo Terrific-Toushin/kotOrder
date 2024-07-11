@@ -82,7 +82,7 @@
                         </div>
                         <div class="details">
                             <div class="number">
-                                {{$users->supervisors_count}}
+                                {{$users->operator_count}}
                             </div>
                             <div class="desc">
                                 Total Operator
@@ -100,7 +100,7 @@
                         </div>
                         <div class="details">
                             <div class="number">
-                                {{$users->manager_count}}
+                                {{$users->kitchen_count}}
                             </div>
                             <div class="desc">
                                 Total Kitchen
