@@ -32,7 +32,7 @@ class AdminDashboardController extends Controller
                                      SUM(CASE WHEN cancel = "N" AND status = "3" THEN 1 ELSE 0 END) as kitchen_complete_kot_count,
                                      SUM(CASE WHEN cancel = "N" THEN 1 ELSE 0 END) as total_kots_count,
                                      SUM(CASE WHEN cancel = "N" AND status = "2" THEN 1 ELSE 0 END) as cash_print_count,
-                                     SUM(CASE WHEN cancel = "Y" THEN 1 ELSE 0 END) as kot_cancel_count')->groupBy('outlet')->first();
+                                     SUM(CASE WHEN cancel = "Y" THEN 1 ELSE 0 END) as kot_cancel_count')->groupBy('outlet')->get();
 
         return view('admin.dashboard.dashboard')->with(compact('users','panding_kots_count','kitchen_complete_kot_count','total_kots_count','cash_print_count','outlets_count'));
     }

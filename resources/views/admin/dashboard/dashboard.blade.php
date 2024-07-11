@@ -113,414 +113,165 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="dashboard-stat yellow-crusta">
-                        <div class="visual">
-                            <i class="fa fa-briefcase fa-icon-medium"></i>
-                        </div>
-                        <div class="details">
-                            <div class="number">
-                                {{$panding_kots_count}}
-                            </div>
-                            <div class="desc">
-                                Pending KOT
-                            </div>
-                        </div>
-                        <a class="more" href="{{ route('pendingKOTAll') }}">
-                            View more <i class="m-icon-swapright m-icon-white"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="dashboard-stat grey-salsa">
-                        <div class="visual">
-                            <i class="fa fa-shopping-cart"></i>
-                        </div>
-                        <div class="details">
-                            <div class="number">
-                                {{$kitchen_complete_kot_count}}
-                            </div>
-                            <div class="desc">
-                                Kitchen Complete KOT
-                            </div>
-                        </div>
-                        <a class="more" href="{{ route('operatorCompleteKOTHistoryAll') }}">
-                            View more <i class="m-icon-swapright m-icon-white"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="dashboard-stat purple-intense">
-                        <div class="visual">
-                            <i class="fa fa-comments"></i>
-                        </div>
-                        <div class="details">
-                            <div class="number">
-                                {{$total_kots_count}}
-                            </div>
-                            <div class="desc">
-                                Total KOT
-                            </div>
-                        </div>
-                        <a class="more" href="{{ route('totalKOT') }}">
-                            View more <i class="m-icon-swapright m-icon-white"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="dashboard-stat green-haze">
-                        <div class="visual">
-                            <i class="fa fa-group fa-icon-medium"></i>
-                        </div>
-                        <div class="details">
-                            <div class="number">
-                                {{$cash_print_count}}
-                            </div>
-                            <div class="desc">
-                                Cash Print
-                            </div>
-                        </div>
-                        <a class="more" href="{{ route('cashPrint') }}">
-                            View more <i class="m-icon-swapright m-icon-white"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                @php
-                    $loginUserPrivileges = session('loginUserPrivileges');
-                    $currentUser = str_replace(['[', ']','"'], '', $loginUserPrivileges);
-                    $userPrivileges = explode(",",$currentUser);
-                @endphp
-                @if(in_array("tt",$userPrivileges) || in_array("tt",$userPrivileges))
-                    <div class="col-md-12">
-                        <!-- Begin: life time stats -->
-                        <div class="portlet box blue-steel">
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    <i class="fa fa-thumb-tack"></i>Overview
-                                </div>
-                                <div class="tools">
-                                    <a href="javascript:;" class="collapse">
-                                    </a>
-                                    <a href="javascript:;" class="reload">
-                                    </a>
-                                    <a href="javascript:;" class="remove">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="portlet-body">
-                                <div class="tabbable-line">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active">
-                                            <a href="#overview_1" data-toggle="tab">
-                                                All Courses</a>
-                                        </li>
-                                        <li>
-                                            <a href="#overview_2" data-toggle="tab">
-                                                MAFCM</a>
-                                        </li>
-                                        <li>
-                                            <a href="#overview_3" data-toggle="tab">
-                                                PGDCM </a>
-                                        </li>
-                                        <li>
-                                            <a href="#overview_4" data-toggle="tab">
-                                                Certificate Course </a>
-                                        </li>
-                                        <li>
-                                            <a href="#overview_5" data-toggle="tab">
-                                                Certification Program </a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="overview_1">
-                                            <div class="btn-group pull-right" style="position: absolute;left: 200px;z-index: 999;">
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i>
-                                                </button>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li>
-                                                        <a href="{{ route('allCourseDownload.csv', ['type' => 'all']) }}">
-                                                            Export to CSV </a>
-                                                    </li>
-                                                </ul>
+                <div class="portlet-body">
+                    <div class="tabbable-line">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#overview_a" data-toggle="tab">All</a></li>
+                            @foreach($outlets_count as $key=>$outlets)
+                                <li><a href="#overview_{{$key}}" data-toggle="tab">{{$outlets->outlet}}</a></li>
+                            @endforeach
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="overview_a">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="dashboard-stat yellow-crusta">
+                                            <div class="visual">
+                                                <i class="fa fa-briefcase fa-icon-medium"></i>
                                             </div>
-                                            <div class="table-responsive">
-                                                <table  class="table table-striped table-bordered table-hover" id="sample_latest">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>
-                                                            SL.
-                                                        </th>
-                                                        <th>
-                                                            Student Name
-                                                        </th>
-                                                        <th>
-                                                            Course Type
-                                                        </th>
-                                                        <th>
-                                                            Course Name
-                                                        </th>
-                                                        <th>
-                                                            Amount
-                                                        </th>
-                                                        <th>
-                                                            Applied
-                                                        </th>
-                                                        <th>
-                                                            Status
-                                                        </th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @foreach($studentCourses as $key=>$studentCourse)
-                                                        <tr>
-                                                            <td>{{$key + 1}}</td>
-                                                            <td>{{$studentCourse->first_name}}</td>
-                                                            <td>{{$studentCourse->page_name}}</td>
-                                                            <td>{{!empty($studentPrograms) && isset($studentPrograms[$studentCourse->program_id]) ? $studentPrograms[$studentCourse->program_id]->tittle : ""}}</td>
-                                                            <td>{{!empty($studentPrograms) && isset($studentPrograms[$studentCourse->program_id]) ? $studentPrograms[$studentCourse->program_id]->amount : "0"}}</td>
-                                                            <td>{{$studentCourse->created_at}}</td>
-                                                            <td>{{isset($paymentStatus[$studentCourse->paid_status]) ? $paymentStatus[$studentCourse->paid_status] : $studentCourse->paid_status}} </td>
-                                                            {{--                                                        <td><a href="javascript:;" class="btn default btn-xs green-stripe">--}}
-                                                            {{--                                                                View </a></td>--}}
-                                                        </tr>
-                                                    @endforeach
-                                                    </tbody>
-                                                </table>
+                                            <div class="details">
+                                                <div class="number">
+                                                    {{$panding_kots_count}}
+                                                </div>
+                                                <div class="desc">
+                                                    Pending KOT
+                                                </div>
                                             </div>
+                                            <a class="more" href="{{ route('pendingKOTAll') }}">
+                                                View more <i class="m-icon-swapright m-icon-white"></i>
+                                            </a>
                                         </div>
-                                        <div class="tab-pane" id="overview_2">
-                                            <div class="btn-group pull-right" style="position: absolute;left: 200px;z-index: 998;">
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i>
-                                                </button>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li>
-                                                        <a href="{{ route('allCourseDownload.csv', ['type' => 'master']) }}">
-                                                            Export to CSV </a>
-                                                    </li>
-                                                </ul>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="dashboard-stat grey-salsa">
+                                            <div class="visual">
+                                                <i class="fa fa-shopping-cart"></i>
                                             </div>
-                                            <div class="table-responsive">
-                                                <table  class="table table-striped table-bordered table-hover" id="sample_Master">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>
-                                                            SL.
-                                                        </th>
-                                                        <th>
-                                                            Student Name
-                                                        </th>
-                                                        <th>
-                                                            Course Name
-                                                        </th>
-                                                        <th>
-                                                            Amount
-                                                        </th>
-                                                        <th>
-                                                            Applied
-                                                        </th>
-                                                        <th>
-                                                            Status
-                                                        </th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @php $serialMaster = 1 @endphp
-                                                    @foreach($studentCourses as $key=>$studentCourse)
-                                                        @if($studentCourse->page_name == "Master's Program")
-                                                            <tr>
-                                                                <td>{{$serialMaster}}</td>
-                                                                <td>{{$studentCourse->first_name}}</td>
-                                                                <td>{{!empty($studentPrograms) && isset($studentPrograms[$studentCourse->program_id]) ? $studentPrograms[$studentCourse->program_id]->tittle : ""}}</td>
-                                                                <td>{{!empty($studentPrograms) && isset($studentPrograms[$studentCourse->program_id]) ? $studentPrograms[$studentCourse->program_id]->amount : "0"}}</td>
-                                                                <td>{{$studentCourse->created_at}}</td>
-                                                                <td>{{isset($paymentStatus[$studentCourse->paid_status]) ? $paymentStatus[$studentCourse->paid_status] : $studentCourse->paid_status}} </td>
-                                                                {{--                                                        <td><a href="javascript:;" class="btn default btn-xs green-stripe">--}}
-                                                                {{--                                                                View </a></td>--}}
-                                                            </tr>
-                                                            @php $serialMaster++ @endphp
-                                                        @endif
-                                                    @endforeach
-                                                    </tbody>
-                                                </table>
+                                            <div class="details">
+                                                <div class="number">
+                                                    {{$kitchen_complete_kot_count}}
+                                                </div>
+                                                <div class="desc">
+                                                    Kitchen Complete KOT
+                                                </div>
                                             </div>
+                                            <a class="more" href="{{ route('operatorCompleteKOTHistoryAll') }}">
+                                                View more <i class="m-icon-swapright m-icon-white"></i>
+                                            </a>
                                         </div>
-                                        <div class="tab-pane" id="overview_3">
-                                            <div class="btn-group pull-right" style="position: absolute;left: 200px;z-index: 997;">
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i>
-                                                </button>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li>
-                                                        <a href="{{ route('allCourseDownload.csv', ['type' => 'diploma']) }}">
-                                                            Export to CSV </a>
-                                                    </li>
-                                                </ul>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="dashboard-stat purple-intense">
+                                            <div class="visual">
+                                                <i class="fa fa-comments"></i>
                                             </div>
-                                            <div class="table-responsive">
-                                                <table  class="table table-striped table-bordered table-hover" id="sample_Diploma">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>
-                                                            SL.
-                                                        </th>
-                                                        <th>
-                                                            Student Name
-                                                        </th>
-                                                        <th>
-                                                            Course Name
-                                                        </th>
-                                                        <th>
-                                                            Amount
-                                                        </th>
-                                                        <th>
-                                                            Applied
-                                                        </th>
-                                                        <th>
-                                                            Status
-                                                        </th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @php $serialdiploma = 1 @endphp
-                                                    @foreach($studentCourses as $key=>$studentCourse)
-                                                        @if($studentCourse->page_name == "Post Graduate Diploma")
-                                                            <tr>
-                                                                <td>{{$serialdiploma}}</td>
-                                                                <td>{{$studentCourse->first_name}}</td>
-                                                                <td>{{!empty($studentPrograms) && isset($studentPrograms[$studentCourse->program_id]) ? $studentPrograms[$studentCourse->program_id]->tittle : ""}}</td>
-                                                                <td>{{!empty($studentPrograms) && isset($studentPrograms[$studentCourse->program_id]) ? $studentPrograms[$studentCourse->program_id]->amount : "0"}}</td>
-                                                                <td>{{$studentCourse->created_at}}</td>
-                                                                <td>{{isset($paymentStatus[$studentCourse->paid_status]) ? $paymentStatus[$studentCourse->paid_status] : $studentCourse->paid_status}} </td>
-                                                                {{--                                                        <td><a href="javascript:;" class="btn default btn-xs green-stripe">--}}
-                                                                {{--                                                                View </a></td>--}}
-                                                            </tr>
-                                                            @php $serialCourse++ @endphp
-                                                        @endif
-                                                    @endforeach
-                                                    </tbody>
-                                                </table>
+                                            <div class="details">
+                                                <div class="number">
+                                                    {{$total_kots_count}}
+                                                </div>
+                                                <div class="desc">
+                                                    Total KOT
+                                                </div>
                                             </div>
+                                            <a class="more" href="{{ route('totalKOT') }}">
+                                                View more <i class="m-icon-swapright m-icon-white"></i>
+                                            </a>
                                         </div>
-                                        <div class="tab-pane" id="overview_4">
-                                            <div class="btn-group pull-right" style="position: absolute;left: 200px;z-index: 996;">
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i>
-                                                </button>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li>
-                                                        <a href="{{ route('allCourseDownload.csv', ['type' => 'certificate']) }}">
-                                                            Export to CSV </a>
-                                                    </li>
-                                                </ul>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="dashboard-stat green-haze">
+                                            <div class="visual">
+                                                <i class="fa fa-group fa-icon-medium"></i>
                                             </div>
-                                            <div class="table-responsive">
-                                                <table  class="table table-striped table-bordered table-hover" id="sample_Certificate">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>
-                                                            SL.
-                                                        </th>
-                                                        <th>
-                                                            Student Name
-                                                        </th>
-                                                        <th>
-                                                            Course Name
-                                                        </th>
-                                                        <th>
-                                                            Amount
-                                                        </th>
-                                                        <th>
-                                                            Applied
-                                                        </th>
-                                                        <th>
-                                                            Status
-                                                        </th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @php $serialCourse = 1 @endphp
-                                                    @foreach($studentCourses as $key=>$studentCourse)
-                                                        @if($studentCourse->page_name == "Certificate Course")
-                                                            <tr>
-                                                                <td>{{$serialCourse}}</td>
-                                                                <td>{{$studentCourse->first_name}}</td>
-                                                                <td>{{!empty($studentPrograms) && isset($studentPrograms[$studentCourse->program_id]) ? $studentPrograms[$studentCourse->program_id]->tittle : ""}}</td>
-                                                                <td>{{!empty($studentPrograms) && isset($studentPrograms[$studentCourse->program_id]) ? $studentPrograms[$studentCourse->program_id]->amount : "0"}}</td>
-                                                                <td>{{$studentCourse->created_at}}</td>
-                                                                <td>{{isset($paymentStatus[$studentCourse->paid_status]) ? $paymentStatus[$studentCourse->paid_status] : $studentCourse->paid_status}} </td>
-                                                                {{--                                                        <td><a href="javascript:;" class="btn default btn-xs green-stripe">--}}
-                                                                {{--                                                                View </a></td>--}}
-                                                            </tr>
-                                                            @php $serialCourse++ @endphp
-                                                        @endif
-                                                    @endforeach
-                                                    </tbody>
-                                                </table>
+                                            <div class="details">
+                                                <div class="number">
+                                                    {{$cash_print_count}}
+                                                </div>
+                                                <div class="desc">
+                                                    Cash Print
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="tab-pane" id="overview_5">
-                                            <div class="btn-group pull-right" style="position: absolute;left: 200px;z-index: 996;">
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="fa fa-angle-down"></i>
-                                                </button>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li>
-                                                        <a href="{{ route('allCourseDownload.csv', ['type' => 'certification']) }}">
-                                                            Export to CSV </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="table-responsive">
-                                                <table  class="table table-striped table-bordered table-hover" id="sample_Certification">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>
-                                                            SL.
-                                                        </th>
-                                                        <th>
-                                                            Student Name
-                                                        </th>
-                                                        <th>
-                                                            Course Name
-                                                        </th>
-                                                        <th>
-                                                            Amount
-                                                        </th>
-                                                        <th>
-                                                            Applied
-                                                        </th>
-                                                        <th>
-                                                            Status
-                                                        </th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @php $serialCourse = 1 @endphp
-                                                    @foreach($studentCourses as $key=>$studentCourse)
-                                                        @if($studentCourse->page_name == "Certification Program")
-                                                            <tr>
-                                                                <td>{{$serialCourse}}</td>
-                                                                <td>{{$studentCourse->first_name}}</td>
-                                                                <td>{{!empty($studentPrograms) && isset($studentPrograms[$studentCourse->program_id]) ? $studentPrograms[$studentCourse->program_id]->tittle : ""}}</td>
-                                                                <td>{{!empty($studentPrograms) && isset($studentPrograms[$studentCourse->program_id]) ? $studentPrograms[$studentCourse->program_id]->amount : "0"}}</td>
-                                                                <td>{{$studentCourse->created_at}}</td>
-                                                                <td>{{isset($paymentStatus[$studentCourse->paid_status]) ? $paymentStatus[$studentCourse->paid_status] : $studentCourse->paid_status}} </td>
-                                                                {{--                                                        <td><a href="javascript:;" class="btn default btn-xs green-stripe">--}}
-                                                                {{--                                                                View </a></td>--}}
-                                                            </tr>
-                                                            @php $serialCourse++ @endphp
-                                                        @endif
-                                                    @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                            <a class="more" href="{{ route('cashPrint') }}">
+                                                View more <i class="m-icon-swapright m-icon-white"></i>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            @foreach($outlets_count as $key=>$outlets)
+                                <div class="tab-pane" id="overview_{{$key}}">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div class="dashboard-stat yellow-crusta">
+                                                <div class="visual">
+                                                    <i class="fa fa-briefcase fa-icon-medium"></i>
+                                                </div>
+                                                <div class="details">
+                                                    <div class="number">
+                                                        {{$outlets->panding_kots_count}}
+                                                    </div>
+                                                    <div class="desc">
+                                                        Pending KOT
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div class="dashboard-stat grey-salsa">
+                                                <div class="visual">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                </div>
+                                                <div class="details">
+                                                    <div class="number">
+                                                        {{$outlets->kitchen_complete_kot_count}}
+                                                    </div>
+                                                    <div class="desc">
+                                                        Kitchen Complete KOT
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div class="dashboard-stat purple-intense">
+                                                <div class="visual">
+                                                    <i class="fa fa-comments"></i>
+                                                </div>
+                                                <div class="details">
+                                                    <div class="number">
+                                                        {{$outlets->total_kots_count}}
+                                                    </div>
+                                                    <div class="desc">
+                                                        Total KOT
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                            <div class="dashboard-stat green-haze">
+                                                <div class="visual">
+                                                    <i class="fa fa-group fa-icon-medium"></i>
+                                                </div>
+                                                <div class="details">
+                                                    <div class="number">
+                                                        {{$outlets->cash_print_count}}
+                                                    </div>
+                                                    <div class="desc">
+                                                        Cash Print
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            <div class="tab-pane" id="overview_2">
+
+                            </div>
                         </div>
-                        <!-- End: life time stats -->
                     </div>
-                @endif
+                </div>
+
                 <div class="col-md-12" style="display: none">
                     <!-- Begin: life time stats -->
                     <div class="portlet box red-sunglo">
@@ -537,10 +288,6 @@
                                     <a href="#portlet_tab2" data-toggle="tab" id="statistics_amounts_tab">
                                         Students </a>
                                 </li>
-{{--                                <li class="active">--}}
-{{--                                    <a href="#portlet_tab1" data-toggle="tab">--}}
-{{--                                        Orders </a>--}}
-{{--                                </li>--}}
                             </ul>
                         </div>
                         <div class="portlet-body">
@@ -549,35 +296,7 @@
                                     <div id="statistics_1" class="chart">
                                     </div>
                                 </div>
-{{--                                <div class="tab-pane" id="portlet_tab2">--}}
-{{--                                    <div id="statistics_2" class="chart">--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
                             </div>
-{{--                            <div class="well no-margin no-border">--}}
-{{--                                <div class="row">--}}
-{{--                                    <div class="col-md-3 col-sm-3 col-xs-6 text-stat">--}}
-{{--										<span class="label label-success">--}}
-{{--										Revenue: </span>--}}
-{{--                                        <h3>$1,234,112.20</h3>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="col-md-3 col-sm-3 col-xs-6 text-stat">--}}
-{{--										<span class="label label-info">--}}
-{{--										Tax: </span>--}}
-{{--                                        <h3>$134,90.10</h3>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="col-md-3 col-sm-3 col-xs-6 text-stat">--}}
-{{--										<span class="label label-danger">--}}
-{{--										Shipment: </span>--}}
-{{--                                        <h3>$1,134,90.10</h3>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="col-md-3 col-sm-3 col-xs-6 text-stat">--}}
-{{--										<span class="label label-warning">--}}
-{{--										Orders: </span>--}}
-{{--                                        <h3>235090</h3>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
                         </div>
                     </div>
                     <!-- End: life time stats -->
