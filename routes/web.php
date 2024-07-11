@@ -47,6 +47,9 @@ Route::group(['middleware' => 'auth'],function (){
     Route::get('/download-csv/{id}', [ReportController::class, 'downloadCSV'])->name('downloadCSV')->middleware('checkprivilege:RA');
     Route::get('/report-audit-log', [ReportController::class, 'getLogData'])->name('getAuditLogData')->middleware('checkprivilege:RA');
     Route::get('/report-payment-log', [ReportController::class, 'getPaymentDetails'])->name('getPaymentDetails')->middleware('checkprivilege:RA');
+
+    Route::get('/admin-kotView/{billNo}', [ReportController::class, 'adminKotView'])->name ('kotViewAdmin');
+    Route::get('/admin-cashPrint', [ReportController::class, 'cashPrint'])->name ('cashPrint');
 });
 
 // Start Group Operator Middleware

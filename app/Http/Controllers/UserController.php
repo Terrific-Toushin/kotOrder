@@ -104,8 +104,8 @@ class UserController extends Controller
                 unlink($user->photo);
             }
             $imageName = $request->id.'_'.$image->getClientOriginalName();
-            $directory = 'assets/frontend/images/user/';
-            $image->move('public/'.$directory, $imageName);
+            $directory = 'public/assets/frontend/images/user/';
+            $image->move($directory, $imageName);
             $imgUrl = $directory . $imageName;
             $user->photo = $imgUrl;
         }

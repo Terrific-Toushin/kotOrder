@@ -39,7 +39,7 @@
 {{--            @dump($studentCounts)--}}
             <!-- BEGIN PAGE CONTENT-->
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 margin-bottom-10">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="dashboard-stat blue-madison">
                         <div class="visual">
                             <i class="fa fa-briefcase fa-icon-medium"></i>
@@ -82,7 +82,7 @@
                         </div>
                         <div class="details">
                             <div class="number">
-                                {{$users->supervisors_count}}
+                                {{$users->operator_count}}
                             </div>
                             <div class="desc">
                                 Total Operator
@@ -100,7 +100,7 @@
                         </div>
                         <div class="details">
                             <div class="number">
-                                {{$users->manager_count}}
+                                {{$users->kitchen_count}}
                             </div>
                             <div class="desc">
                                 Total Kitchen
@@ -113,7 +113,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 margin-bottom-10">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="dashboard-stat yellow-crusta">
                         <div class="visual">
                             <i class="fa fa-briefcase fa-icon-medium"></i>
@@ -587,109 +587,6 @@
         </div>
     </div>
     <!-- END CONTENT -->
-
-
-    <script>
-        var initChart1 = function () {
-
-            var data = <?php echo $studentGraphResult ?>;
-            {{--[["2023-09-14",1],["2023-09-24",2]]--}}
-            // var data = [
-            //     ['14-09-2023', 4],
-            //     ['15-09-2023', 8],
-            // ];
-
-            var plot_statistics = $.plot(
-                $("#statistics_1"),
-                [
-                    {
-                        data:data,
-                        lines: {
-                            fill: 0.6,
-                            lineWidth: 0.1
-                        },
-                        color: ['#f89f9f']
-                    },
-                    {
-                        data: data,
-                        points: {
-                            show: true,
-                            fill: true,
-                            radius: 5,
-                            fillColor: "#f89f9f",
-                            lineWidth: 3
-                        },
-                        color: '#fff',
-                        shadowSize: 0
-                    }
-                ],
-                {
-
-                    xaxis: {
-                        tickLength: 0,
-                        tickDecimals: 0,
-                        mode: "categories",
-                        min: 0,
-                        font: {
-                            lineHeight: 15,
-                            style: "normal",
-                            variant: "small-caps",
-                            color: "#6F7B8A"
-                        }
-                    },
-                    yaxis: {
-                        ticks: 10,
-                        tickDecimals: 0,
-                        tickColor: "#f0f0f0",
-                        font: {
-                            lineHeight: 25,
-                            style: "normal",
-                            variant: "small-caps",
-                            color: "#6F7B8A"
-                        }
-                    },
-                    grid: {
-                        backgroundColor: {
-                            colors: ["#fff", "#fff"]
-                        },
-                        borderWidth: 1,
-                        borderColor: "#f0f0f0",
-                        margin: 0,
-                        minBorderMargin: 0,
-                        labelMargin: 20,
-                        hoverable: true,
-                        clickable: true,
-                        mouseActiveRadius: 6
-                    },
-                    legend: {
-                        show: false
-                    }
-                }
-            );
-
-            var previousPoint = null;
-
-            $("#statistics_1").bind("plothover", function (event, pos, item) {
-                $("#x").text(pos.x.toFixed(2));
-                $("#y").text(pos.y.toFixed(2));
-                if (item) {
-                    if (previousPoint != item.dataIndex) {
-                        previousPoint = item.dataIndex;
-
-                        $("#tooltip").remove();
-                        var x = item.datapoint[0].toFixed(2),
-                            y = item.datapoint[1].toFixed(2);
-
-                        showTooltip(item.pageX, item.pageY, item.datapoint[0], item.datapoint[1]);
-                    }
-                } else {
-                    $("#tooltip").remove();
-                    previousPoint = null;
-                }
-            });
-
-        }
-    </script>
 @endsection
 @section('customJs')
     <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/fuelux/js/spinner.min.js"></script>

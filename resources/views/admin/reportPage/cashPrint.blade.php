@@ -22,19 +22,12 @@
 @section('content')
 
     <div class="page-content-wrapper">
-        <div class="page-content">
-            <div class="page-bar">
-                <ul class="page-breadcrumb">
-                    <li>
-                        <i class="fa fa-home"></i>
-                        <a href="{{route('home')}}">Dashboard</a>
-                        <i class="fa fa-angle-right"></i>
-                    </li>
-                    <li>
-                        <a href="{{route('getAuditLogData')}}">Payment Details List</a>
-                    </li>
-                </ul>
-            </div>
+        <div class="page-content" style="min-height:224px">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- /.modal -->
+            <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- END STYLE CUSTOMIZER -->
+            @include('admin.includes.adminBar')
             <!-- END PAGE HEADER-->
             @if(session('message'))
                 <div class="alert alert-success alert-dismissible show" role="alert">
@@ -54,155 +47,62 @@
                 </div>
             @endif
             <!-- BEGIN PORTLET-->
-            <div class="portlet box blue-hoki">
-                <div class="portlet-title">
-                    <div class="caption">
-                        <i class="fa fa-globe"></i>Payment Details Info
+            <div class="row">
+                <div class="portlet box yellow">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-gift"></i>Cash Print History
+                        </div>
+                        <div class="tools">
+                            <a href="javascript:;" class="collapse">
+                            </a>
+                            <a href="javascript:;" class="reload">
+                            </a>
+                        </div>
                     </div>
-                    <div class="tools">
-                    </div>
-                </div>
-                <div class="portlet-body">
-                    <table class="table table-striped table-bordered table-hover" id="sample_1">
-                        <thead>
-                        <tr>
-                            <th>
-                                Date
-                            </th>
-                            <th>
-                                Transaction ID
-                            </th>
-                            <th>
-                                Student ID
-                            </th>
-                            <th>
-                                Program Type
-                            </th>
-                            <th>
-                                Program Name
-                            </th>
-                            <th>
-                                Program Amount
-                            </th>
-                            <th>
-                                Payable Amount
-                            </th>
-                            <th>
-                                Paid Status
-                            </th>
-                            <th>
-                                Remarks
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($paymentList as $payment)
-                            <tr>
-                                <td>
-                                    {{$payment->updated_at}}
-                                </td>
-                                <td>
-                                    {{$payment->pay_txid}}
-                                </td>
-                                <td>
-                                    {{$payment->student_id}}
-                                </td>
-                                <td>
-                                    {{$payment->page_type}}
-                                </td>
-                                <td>
-                                    {{$payment->course_name}}
-                                </td>
-                                <td>
-                                    {{$payment->amount}}
-                                </td>
-                                <td>
-                                    {{$payment->custom_amount == "0" ? $payment->amount : $payment->custom_amount}}
-                                </td>
-                                <td>
-                                    {{$paymentStatus[$payment->paid_status]}}
-                                </td>
-                                <td>
-                                    {{$payment->Remarks != "" ? $payment->Remarks : "N/A"}}
-                                </td>
+                    <div class="portlet-body">
+                        <table class="table table-hover table-striped table-bordered" id="sample_user">
+                            <thead>
+                            <tr role="row" class="heading">
+                                <th>Bill No.</th>
+                                <th>T/R</th>
+                                <th>Terminal</th>
+                                <th>Serve Time</th>
+                                <th>PAX</th>
+                                <th>Water Name</th>
+                                <th>Gust Name</th>
+                                <th>Company Name</th>
+                                <th>E-mail</th>
+                                <th>Contact No</th>
+                                <th></th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            @foreach($cashPrint as $kots)
+                                <tr>
+                                    <td>{{$kots->billNo}}</td>
+                                    <td>{{$kots->tableNo}}{{$kots->roomNo}}</td>
+                                    <td>{{$kots->terminal}}</td>
+                                    <td>{{$kots->serveTime}}</td>
+                                    <td>{{$kots->pax}}</td>
+                                    <td>{{$kots->waterName}}</td>
+                                    <td>{{$kots->gustName}}</td>
+                                    <td>{{$kots->companyName}}</td>
+                                    <td>{{$kots->email}}</td>
+                                    <td>{{$kots->contactNo}}</td>
+                                    <td>
+                                        <a href="{{ route('kotViewAdmin', ['billNo' => $kots->billNo]) }}" class="btnprn">
+                                            <button type="button" class=" btn btn-info" >Details</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                        <!-- responsive -->
+
+                    </div>
                 </div>
             </div>
-{{--            <div class="portlet box yellow">--}}
-{{--                <div class="portlet-title">--}}
-{{--                    <div class="caption">--}}
-{{--                        <i class="fa fa-gift"></i>Payment Info--}}
-{{--                    </div>--}}
-{{--                    <div class="tools">--}}
-{{--                        <a href="javascript:;" class="collapse">--}}
-{{--                        </a>--}}
-{{--                        <a href="javascript:;" class="reload">--}}
-{{--                        </a>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                <div class="portlet-body">--}}
-{{--                    <table class="table table-hover table-striped table-bordered" style="border-collapse: collapse;table-layout: fixed;width: 100%;">--}}
-{{--                        <thead>--}}
-{{--                            <tr role="row" class="heading">--}}
-{{--                                <th width="11%">--}}
-{{--                                    ID--}}
-{{--                                </th>--}}
-{{--                                <th width="7%">--}}
-{{--                                    Student ID--}}
-{{--                                </th>--}}
-{{--                                <th width="11%">--}}
-{{--                                    Course Type--}}
-{{--                                </th>--}}
-{{--                                <th width="15%">--}}
-{{--                                    Amount--}}
-{{--                                </th>--}}
-{{--                                <th width="15%">--}}
-{{--                                    Custom Payment--}}
-{{--                                </th>--}}
-{{--                                <th width="15%">--}}
-{{--                                    Remarks--}}
-{{--                                </th>--}}
-{{--                                <th width="30%">--}}
-{{--                                    Payment Status--}}
-{{--                                </th>--}}
-{{--                                <th width="30%">--}}
-{{--                                    Details--}}
-{{--                                </th>--}}
-{{--                            </tr>--}}
-{{--                        </thead>--}}
-{{--                        <tbody>--}}
-{{--                        @dump($paymentList)--}}
-{{--                        @foreach($allAuditLog as $auditLog)--}}
-{{--                            <tr>--}}
-{{--                                <td>--}}
-{{--                                    {{$auditLog->date_time}}--}}
-{{--                                </td>--}}
-{{--                                <td>--}}
-{{--                                    {{$auditLog->ip}}--}}
-{{--                                </td>--}}
-{{--                                <td>--}}
-{{--                                    {{$auditLog->name}}--}}
-{{--                                </td>--}}
-{{--                                <td style="border:solid 1px #ddd; width:100px; word-wrap:break-word;">--}}
-{{--                                    {{$auditLog->page_URL}}--}}
-{{--                                </td>--}}
-{{--                                <td style="border:solid 1px #ddd; width:100px; word-wrap:break-word;">--}}
-{{--                                    <span class="text-wrap">{!! $auditLog->log_text !!}</span>--}}
-{{--                                </td>--}}
-{{--                            </tr>--}}
-{{--                        @endforeach--}}
-{{--                    </table>--}}
-                    <!-- responsive -->
-
-{{--                </div>--}}
-{{--                @dump($allAuditLog)--}}
-{{--                <div style="float: right">{!! $allAuditLog->withQueryString()->links('pagination::bootstrap-4') !!}</div>--}}
-{{--                <div style="float: right">{!! $allAuditLog->withQueryString()->links('pagination::bootstrap-5') !!}</div>--}}
-{{--                {!! $allAuditLog->appends(['sort' => 'votes'])->links() !!}--}}
-{{--            </div>--}}
             <!-- END PORTLET-->
         </div>
     </div>
