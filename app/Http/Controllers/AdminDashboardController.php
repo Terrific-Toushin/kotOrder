@@ -28,13 +28,13 @@ class AdminDashboardController extends Controller
         $total_kots_count = DB::table('order_kot')->where('cancel', '=', 'N')->count();
         $cash_print_count = DB::table('order_kot')->where('status', '=', '2')->where('cancel', '=', 'N')->count();
         $kot_cancel_count = DB::table('order_kot')->where('cancel', '=', 'Y')->count();
-        $outlets_count=DB::table('order_kot')->selectRaw('outlet, SUM(CASE WHEN cancel = "N" AND (status = "1" OR status = "4") THEN 1 ELSE 0 END) as panding_kots_count,
-                                    SUM(CASE WHEN cancel = "N" AND status = "3" THEN 1 ELSE 0 END) as kitchen_complete_kot_count,
-                                    SUM(CASE WHEN cancel = "N" THEN 1 ELSE 0 END) as total_kots_count,
-                                    SUM(CASE WHEN cancel = "N" AND status = "2" THEN 1 ELSE 0 END) as cash_print_count,
-                                    SUM(CASE WHEN cancel = "Y" THEN 1 ELSE 0 END) as kot_cancel_count')
-            ->first();
-
+        // $outlets_count=DB::table('order_kot')->selectRaw('outlet, SUM(CASE WHEN cancel = "N" AND (status = "1" OR status = "4") THEN 1 ELSE 0 END) as panding_kots_count,
+        //                             SUM(CASE WHEN cancel = "N" AND status = "3" THEN 1 ELSE 0 END) as kitchen_complete_kot_count,
+        //                             SUM(CASE WHEN cancel = "N" THEN 1 ELSE 0 END) as total_kots_count,
+        //                             SUM(CASE WHEN cancel = "N" AND status = "2" THEN 1 ELSE 0 END) as cash_print_count,
+        //                             SUM(CASE WHEN cancel = "Y" THEN 1 ELSE 0 END) as kot_cancel_count')
+        //     ->first();
+        $outlets_count=[];
         return view('admin.dashboard.dashboard')->with(compact('users','panding_kots_count','kitchen_complete_kot_count','total_kots_count','cash_print_count','outlets_count'));
     }
 
