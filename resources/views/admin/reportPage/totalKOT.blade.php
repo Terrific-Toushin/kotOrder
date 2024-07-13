@@ -281,7 +281,7 @@
                                 kots.waterName,
                                 kots.gustName,
                                 kots.contactNo,
-                                `<a href="/kotOrder/admin-kotView/${kots.billNo}" class="btnprn">
+                                `<a href="/admin-kotView/${kots.billNo}" class="btnprn">
                                             <button type="button" class="btn btn-info">Details</button>
                                         </a>`
                             ]);
