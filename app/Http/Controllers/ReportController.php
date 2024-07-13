@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\AuditLog;
 use App\Models\ResearchForm;
 use App\Models\StudentInfo;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -210,8 +212,155 @@ class ReportController extends Controller
     public function cashPrint(){
 
         $cashPrint = DB::table('order_kot')->where('cancel', '=', 'N')->where('status', '=', '2')->get();
+        $outletList = DB::connection('sqlsrv')->table('tblRestName')->orderBy('ResName')->get();
+        $userList = User::select('username','name')->where('role','operator')->get();
+        return view('admin.reportPage.cashPrint',compact('cashPrint','outletList','userList'));
+    } // End OperatorCashPrint Method
 
-        return view('admin.reportPage.cashPrint',compact('cashPrint'));
+
+    public function filterCashPrint(Request $request){
+//        DB::enableQueryLog();
+        $query = DB::table('order_kot');
+        $stdate = isset($request->start_time) ? \DateTime::createFromFormat('Y-m-d', $request->start_time) : false;
+        $endate = isset($request->end_time) ? \DateTime::createFromFormat('Y-m-d', $request->end_time): false;
+        if($stdate !== false && $endate !== false){
+            $startTime = $request->start_time;
+            $endTime = $request->end_time;
+            $query->whereBetween("date",[$startTime,$endTime]);
+        }
+
+        if(Auth::user()->role != 'admin'){
+            $query->where("userID",Auth::user()->username);
+        }
+        elseif(isset($request->user_id) && !empty($request->user_id) ){
+            $query->where("userID",$request->user_id);
+        }
+        if(isset($request->outlet_id) && !empty($request->outlet_id) ){
+            $query->where("ResSL",$request->outlet_id);
+        }
+
+        $cashPrint = $query->where('cancel', '=', 'N')->where('status', '=', '2')->get();
+//        dd(DB::getQueryLog());
+//        dump($cashPrint);
+
+        return response()->json($cashPrint);
+    } // End OperatorCashPrint Method
+
+
+    public function KitchenCompleteKOTHistoryAll(){
+
+        $kitchenCompleteKOT = DB::table('order_kot')->where('cancel', '=', 'N')->where('status', '=', '3')->get();
+        $outletList = DB::connection('sqlsrv')->table('tblRestName')->orderBy('ResName')->get();
+        $userList = User::select('username','name')->where('role','operator')->get();
+        return view('admin.reportPage.kitchenCompleteKOTHistory',compact('kitchenCompleteKOT','outletList','userList'));
+    } // End OperatorCashPrint Method
+
+
+    public function filterKitchenCompleteKOTHistory(Request $request){
+//        DB::enableQueryLog();
+        $query = DB::table('order_kot');
+        $stdate = isset($request->start_time) ? \DateTime::createFromFormat('Y-m-d', $request->start_time) : false;
+        $endate = isset($request->end_time) ? \DateTime::createFromFormat('Y-m-d', $request->end_time): false;
+        if($stdate !== false && $endate !== false){
+            $startTime = $request->start_time;
+            $endTime = $request->end_time;
+            $query->whereBetween("date",[$startTime,$endTime]);
+        }
+
+        if(Auth::user()->role != 'admin'){
+            $query->where("userID",Auth::user()->username);
+        }
+        elseif(isset($request->user_id) && !empty($request->user_id) ){
+            $query->where("userID",$request->user_id);
+        }
+        if(isset($request->outlet_id) && !empty($request->outlet_id) ){
+            $query->where("ResSL",$request->outlet_id);
+        }
+
+        $kitchenCompleteKOT = $query->where('cancel', '=', 'N')->where('status', '=', '3')->get();
+//        dd(DB::getQueryLog());
+//        dump($cashPrint);
+
+        return response()->json($kitchenCompleteKOT);
+    } // End OperatorCashPrint Method
+
+    public function allPendingKOT(){
+
+        $pending_kots = DB::table('order_kot')->where('cancel', '=', 'N')
+            ->where(static function ($query) {
+                $query->where('status', '=', '1')
+                    ->orWhere('status', '=', '4');
+            })->orderBy('date', 'DESC')->get();
+        $outletList = DB::connection('sqlsrv')->table('tblRestName')->orderBy('ResName')->get();
+        $userList = User::select('username','name')->where('role','operator')->get();
+
+        return view('admin.reportPage.pendingKOT',compact( 'pending_kots','outletList','userList'));
+    } // End OperatorPandingKOT Method
+
+    public function filterAllPendingKOT(Request $request){
+//        DB::enableQueryLog();
+        $query = DB::table('order_kot');
+        $stdate = isset($request->start_time) ? \DateTime::createFromFormat('Y-m-d', $request->start_time) : false;
+        $endate = isset($request->end_time) ? \DateTime::createFromFormat('Y-m-d', $request->end_time): false;
+        if($stdate !== false && $endate !== false){
+            $startTime = $request->start_time;
+            $endTime = $request->end_time;
+            $query->whereBetween("date",[$startTime,$endTime]);
+        }
+
+        if(Auth::user()->role != 'admin'){
+            $query->where("userID",Auth::user()->username);
+        }
+        elseif(isset($request->user_id) && !empty($request->user_id) ){
+            $query->where("userID",$request->user_id);
+        }
+        if(isset($request->outlet_id) && !empty($request->outlet_id) ){
+            $query->where("ResSL",$request->outlet_id);
+        }
+
+        $pendingKot = $query->where('cancel', '=', 'N')->where(static function ($querys) {
+            $querys->where('status', '=', '1')
+                ->orWhere('status', '=', '4');
+        })->orderBy('date', 'DESC')->get();
+//        dd(DB::getQueryLog());
+//        dump($cashPrint);
+
+        return response()->json($pendingKot);
+    } // End OperatorCashPrint Method
+
+    public function adminTotalKOT(Request $request){
+        $total_kots = DB::table('order_kot')->where('cancel', '=', 'N')->get();
+        $outletList = DB::connection('sqlsrv')->table('tblRestName')->orderBy('ResName')->get();
+        $userList = User::select('username','name')->where('role','operator')->get();
+        return view('admin.reportPage.totalKOT',compact('total_kots','outletList','userList'));
+    } // End OperatorTotalKOT Method
+
+    public function filterTotalKot(Request $request){
+//        DB::enableQueryLog();
+        $query = DB::table('order_kot');
+        $stdate = isset($request->start_time) ? \DateTime::createFromFormat('Y-m-d', $request->start_time) : false;
+        $endate = isset($request->end_time) ? \DateTime::createFromFormat('Y-m-d', $request->end_time): false;
+        if($stdate !== false && $endate !== false){
+            $startTime = $request->start_time;
+            $endTime = $request->end_time;
+            $query->whereBetween("date",[$startTime,$endTime]);
+        }
+
+        if(Auth::user()->role != 'admin'){
+            $query->where("userID",Auth::user()->username);
+        }
+        elseif(isset($request->user_id) && !empty($request->user_id) ){
+            $query->where("userID",$request->user_id);
+        }
+        if(isset($request->outlet_id) && !empty($request->outlet_id) ){
+            $query->where("ResSL",$request->outlet_id);
+        }
+
+        $kitchenCompleteKOT = $query->where('cancel', '=', 'N')->get();
+//        dd(DB::getQueryLog());
+//        dump($cashPrint);
+
+        return response()->json($kitchenCompleteKOT);
     } // End OperatorCashPrint Method
 
 
