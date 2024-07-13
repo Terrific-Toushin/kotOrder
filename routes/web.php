@@ -50,6 +50,13 @@ Route::group(['middleware' => 'auth'],function (){
 
     Route::get('/admin-kotView/{billNo}', [ReportController::class, 'adminKotView'])->name ('kotViewAdmin');
     Route::get('/admin-cashPrint', [ReportController::class, 'cashPrint'])->name ('adminCashPrint');
+    Route::post('/admin-cashPrint-filter', [ReportController::class, 'filterCashPrint'])->name ('filterCashPrint');
+    Route::get('/admin-totalKOT', [ReportController::class, 'adminTotalKOT'])->name ('adminTotalKOT');
+    Route::post('/admin-totalKOT-filter', [ReportController::class, 'filterTotalKot'])->name ('filterTotalKot');
+    Route::get('/all-pendingKOT', [ReportController::class, 'allPendingKOT'])->name ('pendingKOTAll');
+    Route::post('/all-pendingKOT-filter', [ReportController::class, 'filterAllPendingKOT'])->name ('filterPendingKOTAll');
+    Route::get('/all-kitchenCompleteKOTHistory', [ReportController::class, 'KitchenCompleteKOTHistoryAll'])->name ('KitchenCompleteKOTHistoryAll');
+    Route::post('/all-kitchenCompleteKOTHistory-filter', [ReportController::class, 'filterKitchenCompleteKOTHistory'])->name ('filterKitchenCompleteKOTHistory');
 });
 
 // Start Group Operator Middleware
@@ -73,9 +80,7 @@ Route::middleware(['auth','checkprivilege:OPT'])->group(function(){
     Route::get('/operator-orderHistry', [OperatorController::class, 'OperatorOrderHistry'])->name ('orderHistry');
     Route::get('/operator-sendToKOT', [OperatorController::class, 'OperatorSendToKOT'])->name ('sendToKOT');
     Route::get('/operator-pendingKOT', [OperatorController::class, 'OperatorPendingKOT'])->name ('pendingKOT');
-    Route::get('/all-pendingKOT', [OperatorController::class, 'allPendingKOT'])->name ('pendingKOTAll');
     Route::get('/operator-kitchenCompleteKOTHistory', [OperatorController::class, 'KitchenCompleteKOTHistory'])->name ('operatorCompleteKOTHistory');
-    Route::get('/all-kitchenCompleteKOTHistory', [OperatorController::class, 'KitchenCompleteKOTHistoryAll'])->name ('operatorCompleteKOTHistoryAll');
     Route::get('/operator-totalKOT', [OperatorController::class, 'OperatorTotalKOT'])->name ('totalKOT');
     Route::get('/operator-cashPrint', [OperatorController::class, 'OperatorCashPrint'])->name ('cashPrint');
 }); // End Group Operator Middleware

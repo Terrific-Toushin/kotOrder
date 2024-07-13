@@ -58,26 +58,32 @@
                         <span class="title">Report</span>
                         <span class="arrow "></span>
                     </a>
-{{--                    <ul class="sub-menu">--}}
-{{--                        <li class="{{ (request()->is('/report-research-application*')) ? 'active' : '' }}">--}}
-{{--                            <a href="{{route('researchList')}}">--}}
-{{--                                <i class="icon-speech"></i>--}}
-{{--                                <span class="title">Research Application</span>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                        <li class="{{ (request()->is('/report-audit-log*')) ? 'active' : '' }}">--}}
-{{--                            <a href="{{route('getAuditLogData')}}">--}}
-{{--                                <i class="icon-speech"></i>--}}
-{{--                                <span class="title">Audit Log</span>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                        <li class="{{ (request()->is('/report-payment-log*')) ? 'active' : '' }}">--}}
-{{--                            <a href="{{route('getPaymentDetails')}}">--}}
-{{--                                <i class="icon-speech"></i>--}}
-{{--                                <span class="title">Payment Details</span>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                    </ul>--}}
+                    <ul class="sub-menu">
+                        <li class="{{ (request()->is('/all-pendingKOT*')) ? 'active' : '' }}">
+                            <a href="{{route('pendingKOTAll')}}">
+                                <i class="icon-speech"></i>
+                                <span class="title">Pending KOT</span>
+                            </a>
+                        </li>
+                        <li class="{{ (request()->is('/all-kitchenCompleteKOTHistory*')) ? 'active' : '' }}">
+                            <a href="{{route('KitchenCompleteKOTHistoryAll')}}">
+                                <i class="icon-speech"></i>
+                                <span class="title">Kitchen Complete Kot</span>
+                            </a>
+                        </li>
+                        <li class="{{ (request()->is('/admin-totalKOT*')) ? 'active' : '' }}">
+                            <a href="{{route('adminTotalKOT')}}">
+                                <i class="icon-speech"></i>
+                                <span class="title">All KOT</span>
+                            </a>
+                        </li>
+                        <li class="{{ (request()->is('/admin-cashPrint*')) ? 'active' : '' }}">
+                            <a href="{{route('adminCashPrint')}}">
+                                <i class="icon-speech"></i>
+                                <span class="title">Cash KOT</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             @endif
 

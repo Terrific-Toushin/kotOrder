@@ -154,7 +154,7 @@
                                                     Kitchen Complete KOT
                                                 </div>
                                             </div>
-                                            <a class="more" href="{{ route('operatorCompleteKOTHistoryAll') }}">
+                                            <a class="more" href="{{ route('KitchenCompleteKOTHistoryAll') }}">
                                                 View more <i class="m-icon-swapright m-icon-white"></i>
                                             </a>
                                         </div>
@@ -172,7 +172,7 @@
                                                     Total KOT
                                                 </div>
                                             </div>
-                                            <a class="more" href="{{ route('totalKOT') }}">
+                                            <a class="more" href="{{ route('adminTotalKOT') }}">
                                                 View more <i class="m-icon-swapright m-icon-white"></i>
                                             </a>
                                         </div>

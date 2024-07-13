@@ -753,19 +753,6 @@ class OperatorController extends Controller
         return view('admin.operator.operatorPendingKOT',compact('profileData', 'pending_kots'));
     } // End OperatorPandingKOT Method
 
-    public function allPendingKOT(){
-        $id = Auth::user()->id;
-        $profileData = User::find($id);
-
-        $pending_kots = DB::table('order_kot')->where('cancel', '=', 'N')
-            ->where(static function ($query) {
-                $query->where('status', '=', '1')
-                    ->orWhere('status', '=', '4');
-            })->orderBy('date', 'DESC')->get();
-
-        return view('admin.operator.operatorPendingKOT',compact('profileData', 'pending_kots'));
-    } // End OperatorPandingKOT Method
-
     public function KitchenCompleteKotHistory(){
         if (empty(session()->get('uotlet'))){
             return redirect()->route('outlets');
