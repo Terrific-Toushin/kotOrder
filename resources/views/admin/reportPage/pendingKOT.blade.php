@@ -274,7 +274,7 @@
                                 (kots.tableNo ? kots.tableNo : '') + (kots.roomNo ? kots.roomNo : ''),
                                 kots.pax + 'Person',
                                 kots.waterName,
-                                `<a href="/kotOrder/admin-kotView/${kots.billNo}" class="btnprn">
+                                `<a href="/admin-kotView/${kots.billNo}" class="btnprn">
                                     <button type="button" class="btn btn-info">Details</button>
                                 </a>`
                             ]);
