@@ -75,12 +75,12 @@
                             <div class="form-body">
                                 <div class="form-group">
                                     <label class="control-label col-md-1">Date</label>
-                                    <div class="col-md-4">
-                                        <div class="input-group input-large date-picker input-daterange">
-                                            <input id="start_time" type="date" class="form-control" data-date-format="dd/mm/yyyy" name="start_time" autocomplete="off" required>
+                                    <div class="col-md-5">
+                                        <div class="input-group date-picker input-daterange">
+                                            <input id="start_time" type="date" class="form-control flatpicker" data-date-format="dd/mm/yyyy" name="start_time" autocomplete="off" required>
                                             <span class="input-group-addon">
 												to </span>
-                                            <input id="end_time" type="date" class="form-control" data-date-format="dd/mm/yyyy" name="end_time"  autocomplete="off" required>
+                                            <input id="end_time" type="date" class="form-control flatpicker" data-date-format="dd/mm/yyyy" name="end_time"  autocomplete="off" required>
                                         </div>
                                         <!-- /input-group -->
                                     </div>
@@ -233,7 +233,7 @@
 @section('documentJquery')
 {{--        <script>--}}
 {{--    TableAdvanced.init();--}}
-    flatpickr("#start_time", {
+    flatpickr(".flatpicker", {
         enableTime: true,
         dateFormat: "Y-m-d H:i",
     });
