@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/typeahead/typeahead.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/bootstrap-select/bootstrap-select.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/select2/select2.css"/>
+    <link  href="{{ asset('/') }}assets/admin/pages/css/invoice.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
@@ -257,6 +258,135 @@
                 </div>
             </div>
             <!-- END PAGE CONTENT-->
+            <div class="invoice" id="printQTY" style="display: none">
+                <div class="row invoice-logo">
+                    <div class="col-xs-6 invoice-logo-space">
+                        <img src="{{ asset('/') }}assets/admin/layout/img/nice-removebg-preview.png" alt="logo" class="img-responsive" alt=""/>
+                    </div>
+                    <div class="col-xs-6">
+                        <p>
+                            #5652256 / 28 Feb 2013 <span class="muted"> </span>
+                        </p>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3>:</h3>
+                        <ul class="list-unstyled">
+                            <li>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4">
+                        <h3>:</h3>
+                        <ul class="list-unstyled">
+                            <li>
+
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 invoice-payment">
+                        <h3>:</h3>
+                        <ul class="list-unstyled">
+                            <li>
+                                <strong></strong>
+                            </li>
+                            <li>
+                                <strong></strong>
+                            </li>
+                            <li>
+                                <strong></strong>
+                            </li>
+                            <li>
+                                <strong></strong>
+                            </li>
+                            <li>
+                                <strong></strong>
+                            </li>
+                            <li>
+                                <strong></strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>
+                                    #
+                                </th>
+                                <th>
+                                    Item
+                                </th>
+                                <th class="hidden-480">
+                                    Quantity
+                                </th>
+                                <th class="hidden-480">
+                                    Unit Cost
+                                </th>
+                                <th>
+                                    Total
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    1
+                                </td>
+                                <td>
+                                    Hardware
+                                </td>
+                                <td class="hidden-480">
+                                    32
+                                </td>
+                                <td class="hidden-480">
+                                    $75
+                                </td>
+                                <td>
+                                    $2152
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="well">
+                            <address>
+                                <strong></strong><br/>
+                                <br/>
+                                <br/>
+                                <abbr title="Phone"></abbr></address>
+                            <address>
+                                <strong></strong><br/>
+                                <a href="mailto:#"></a>
+                            </address>
+                        </div>
+                    </div>
+                    <div class="col-xs-8 invoice-block">
+                        <ul class="list-unstyled amounts">
+                            <li>
+                                <strong>Sub - Total amount:</strong> 9265
+                            </li>
+                            <li>
+                                <strong>Discount:</strong> 0.0%
+                            </li>
+                            <li>
+                                <strong>VAT:</strong> -----
+                            </li>
+                            <li>
+                                <strong>Grand Total:</strong> 000
+                            </li>
+                        </ul>
+                        <br/>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- END CONTENT -->

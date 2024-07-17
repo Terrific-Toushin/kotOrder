@@ -25,6 +25,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/datatables/media/css/buttons.dataTables.css"/>
 {{--    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.css"/>--}}
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/jquery-multi-select/css/multi-select.css"/>
+    <link  href="{{ asset('/') }}assets/admin/pages/css/invoice.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/css/components.css" id="style_components"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/css/flatpickr.min.css" id="style_components"/>
     <!-- END PAGE LEVEL STYLES -->
@@ -75,7 +76,7 @@
                             <div class="form-body">
                                 <div class="form-group">
                                     <label class="control-label col-md-1">Date</label>
-                                    <div class="col-md-5">
+                                    <div class="col-md-4">
                                         <div class="input-group date-picker input-daterange">
                                             <input id="start_time" type="date" class="form-control flatpicker" data-date-format="dd/mm/yyyy" name="start_time" autocomplete="off" required>
                                             <span class="input-group-addon">
@@ -94,7 +95,7 @@
                                         </select>
                                     </div>
                                     <label class="col-md-1 control-label">Operator</label>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <select id="user_id" class="select2_category form-control" data-placeholder="Choose a Operator" tabindex="1" name="user_id" autocomplete="off">
                                             <option value="">Choose a Operator</option>
                                             @foreach($userList as $user)
@@ -168,8 +169,10 @@
                         <!-- responsive -->
 
                     </div>
+
                 </div>
             </div>
+
             <!-- END PORTLET-->
         </div>
     </div>
@@ -216,6 +219,7 @@
     <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/datatables/buttons.dataTables.js"></script>
     <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/datatables/jszip.min.js"></script>
     <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/datatables/pdfmake.min.js"></script>
+    <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/datatables/vfs_fonts.js"></script>
     <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/datatables/buttons.html5.min.js"></script>
     <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/datatables/buttons.print.min.js"></script>
 
@@ -228,14 +232,27 @@
     <script src="{{ asset('/') }}assets/global/scripts/axios.min.js"></script>
     <script src="{{ asset('/') }}assets/global/scripts/flatpickr.js"></script>
     <script src="{{ asset('/') }}assets/admin/pages/scripts/form-samples.js"></script>
+    <script>
+        function printContent(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+        }
+    </script>
 {{--    <script src="{{ asset('/') }}assets/admin/pages/scripts/components-pickers.js"></script>--}}
 @endsection
 @section('documentJquery')
 {{--        <script>--}}
 {{--    TableAdvanced.init();--}}
-    flatpickr(".flatpicker", {
+    flatpickr("input[type=date]", {
         enableTime: true,
-        dateFormat: "Y-m-d H:i",
+        dateFormat: "d-m-Y H:i",
+        disableMobile: "true"
     });
     FormSamples.init();
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

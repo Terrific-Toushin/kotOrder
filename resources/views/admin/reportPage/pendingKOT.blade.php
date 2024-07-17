@@ -26,6 +26,8 @@
     {{--    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.css"/>--}}
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/plugins/jquery-multi-select/css/multi-select.css"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/css/components.css" id="style_components"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('/') }}assets/global/css/flatpickr.min.css" id="style_components"/>
+
     <!-- END PAGE LEVEL STYLES -->
 @endsection
 @section('content')
@@ -219,6 +221,7 @@
     <script type="text/javascript" src="{{ asset('/') }}assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js"></script>
     <script src="{{ asset('/') }}assets/admin/pages/scripts/table-advanced.js"></script>
     <script src="{{ asset('/') }}assets/global/scripts/axios.min.js"></script>
+    <script src="{{ asset('/') }}assets/global/scripts/flatpickr.js"></script>
     <script src="{{ asset('/') }}assets/admin/pages/scripts/form-samples.js"></script>
     {{--    <script src="{{ asset('/') }}assets/admin/pages/scripts/components-pickers.js"></script>--}}
 
@@ -226,6 +229,11 @@
 @section('documentJquery')
 {{--        <script>--}}
 {{--    TableAdvanced.init();--}}
+        flatpickr("input[type=date]", {
+            enableTime: true,
+            dateFormat: "d-m-Y H:i",
+            disableMobile: "true"
+        });
         FormSamples.init();
         axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         var table = $('#sample_pending').DataTable({
