@@ -42,7 +42,11 @@ class OperatorController extends Controller
         }
         $id = Auth::user()->id;
         $profileData = User::find($id);
-        $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
+//        dump(Auth::user()->PropertyID);
+//        die();
+        $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->where('PropertyID','=',Auth::user()->PropertyID)->first();
+//        dump($dbDateGet);
+//        die();
         $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10);
         $dbDate = date("d-m-Y", strtotime($dbDateOnly));
 
@@ -320,11 +324,11 @@ class OperatorController extends Controller
         }elseif($billNo==0){
             $billNo=1;
         }
-        $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
+        $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->where('PropertyID','=',Auth::user()->PropertyID)->first();
         $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10)." ".date("H:i:s");
         $dbDateTime = date("Y-m-d H:i:s", strtotime($dbDateOnly));
 
-        $InsertOrderKot = DB::insert('insert into order_kot (billNo, tableNo, roomNo, terminal, serveTime, pax, waterName, gustName, companyName, email, contactNo, outlet, ResSL, userID, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)', [$billNo, $tableNo, $roomNo, $terminal, $serveTime, $pax, $waterName, $gustName, $companyName, $email, $contactNo, $uotletName, $uotletID, $username, $dbDateTime]);
+        $InsertOrderKot = DB::insert('insert into order_kot (PropertyID,billNo, tableNo, roomNo, terminal, serveTime, pax, waterName, gustName, companyName, email, contactNo, outlet, ResSL, userID, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)', [Auth::user()->PropertyID,$billNo, $tableNo, $roomNo, $terminal, $serveTime, $pax, $waterName, $gustName, $companyName, $email, $contactNo, $uotletName, $uotletID, $username, $dbDateTime]);
 
         for($count=1;$count<=$itemCount;$count++){
             if(request('repid'.$count)!=""){
@@ -335,11 +339,11 @@ class OperatorController extends Controller
                 $kitchen = request('kitchen'.$count);
                 $remark = request('remark'.$count);
                 if($InsertOrderKot){
-                    DB::insert('insert into order_kot_item (billNo, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?)', [$billNo, $repid, $price, $qty,$remark, $kitchen, $dbDateTime]);
+                    DB::insert('insert into order_kot_item (PropertyID,billNo, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $repid, $price, $qty,$remark, $kitchen, $dbDateTime]);
                 }
             }
         }
-        DB::connection('sqlsrv')->insert('insert into tblBillPending (date, PropertyID, ResName, billNo, tableNo, flug) values (?, ?, ?, ?, ?, ?)',[$dbDateTime,$uotletID,$uotletName,$billNo,$tableNo,"1"]);
+        DB::connection('sqlsrv')->insert('insert into tblBillPending (PropertyID, date, PropertyID, ResName, billNo, tableNo, flug) values (?, ?, ?, ?, ?, ?, ?)',[Auth::user()->PropertyID,$dbDateTime,$uotletID,$uotletName,$billNo,$tableNo,"1"]);
 
         return redirect()->route('kotView',compact('billNo'));
 
@@ -374,7 +378,7 @@ class OperatorController extends Controller
         $contactNo = request('contactNo');
         $itemCount = request('itemCount');
 
-        $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
+        $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->where('PropertyID','=',Auth::user()->PropertyID)->first();
         $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10)." ".date("H:i:s");
         $dbDateTime = date("Y-m-d H:i:s", strtotime($dbDateOnly));
         // $InsertOrderKot = DB::insert('insert into order_kot (billNo, tableNo, roomNo, terminal, serveTime, pax, waterName, gustName, companyName, email, contactNo, userID) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$billNo, $tableNo, $roomNo, $terminal, $serveTime, $pax, $waterName, $gustName, $companyName, $email, $contactNo, $username]);
@@ -390,7 +394,7 @@ class OperatorController extends Controller
                 $price = request('price'.$count);
                 $kitchen = request('kitchen'.$count);
                 $remark = request('remark'.$count);
-                DB::insert('insert into order_kot_item (billNo, billState, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?)', [$billNo, $nextBillState, $repid, $price, $qty, $remark, $kitchen, $dbDateTime]);
+                DB::insert('insert into order_kot_item (PropertyID, billNo, billState, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID, $billNo, $nextBillState, $repid, $price, $qty, $remark, $kitchen, $dbDateTime]);
 
             }
         }
@@ -694,7 +698,7 @@ class OperatorController extends Controller
 
             $date_time = array( 'date' => $date.' '.$time, 'timezone_type' => '3', 'timezone' => 'Asia/Dhaka' );
 
-            if(DB::connection('sqlsrv')->insert('insert into tblSales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
+            if(DB::connection('sqlsrv')->insert('insert into tblSales (PropertyID, itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID, $repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
 //            DB::enableQueryLog();
 //            if(DB::connection('mysql')->insert('insert into rest_fortis.tblsales (itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
                 $order_kot_sent_cash = DB::table('order_kot')->where('billNo', $billNo)->update(['status' => '2']);
@@ -723,7 +727,7 @@ class OperatorController extends Controller
             $date = date("Y-m-d",$timestamp);
             // echo $date;
         }else{
-            $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
+            $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->where('PropertyID','=',Auth::user()->PropertyID)->first();
             $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10);
             $date = date("d-m-Y", strtotime($dbDateOnly));
         }
@@ -780,7 +784,7 @@ class OperatorController extends Controller
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
-        $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
+        $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->where('PropertyID','=',Auth::user()->PropertyID)->first();
         $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10);
         $date = date("d-m-Y", strtotime($dbDateOnly));
 

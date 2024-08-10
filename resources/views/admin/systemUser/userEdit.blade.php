@@ -135,6 +135,22 @@
                                         <input type="text" class="form-control" name="address" value="{{!empty($userInfo) ? $userInfo->address : ''}}" placeholder="Mail Address" autocomplete="off">
                                     </div>
                                 </div>
+                                @if(Auth::user()->role == 'root')
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Property: <span class="required"> * </span>
+                                        </label>
+                                        <div class="col-md-2">
+                                            <select id="property" class="form-control input-medium select2me"
+                                                    data-placeholder="Role Type..." name="PropertyID">
+                                                <option value=""></option>
+                                                @foreach($companyList as $key => $type)
+                                                    <option value="{{$type->PropertyID}}" {{!empty($userInfo->PropertyID) && $userInfo->PropertyID == $type->PropertyID ? 'selected' : ''}}>{{$type->PropertyName}}</option>
+                                                @endforeach
+                                            </select>
+                                            <span class="help-block help-block-error" style="color: red;">@if($errors->has('PropertyID')) {{$errors->first('PropertyID')}} @endif</span>
+                                        </div>
+                                    </div>
+                                @endif
                                 @if(empty($userInfo) || Auth::user()->role == 'admin')
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">User Role: <span class="required"> * </span>

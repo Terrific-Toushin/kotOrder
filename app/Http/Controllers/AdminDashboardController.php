@@ -21,18 +21,18 @@ class AdminDashboardController extends Controller
 
         $users = UserPrivileges::selectRaw('count(user_id) as total, SUM(CASE WHEN user_type = "operator" THEN 1 ELSE 0 END) as operator_count,
                             SUM(CASE WHEN user_type = "AU" THEN 1 ELSE 0 END) as admins_count,
-                            SUM(CASE WHEN user_type = "kitchen" THEN 1 ELSE 0 END) as kitchen_count')->leftJoin('users', 'user_privileges.user_id', '=', 'users.id')->where('users.email','!=','toushin.java@gmail.com')
+                            SUM(CASE WHEN user_type = "kitchen" THEN 1 ELSE 0 END) as kitchen_count')->leftJoin('users', 'user_privileges.user_id', '=', 'users.id')->where('users.email','!=','toushin.java@gmail.com')->where('users.PropertyID','!=', Auth::user()->PropertyID)
             ->first();
-        $panding_kots_count = DB::table('order_kot')->where('cancel', '=', 'N')->where(function ($q) {$q->where('status', '=', '1')->orWhere('status', '=', '4');})->count();
-        $kitchen_complete_kot_count = DB::table('order_kot')->where('status', '=', '3')->where('cancel', '=', 'N')->count();
-        $total_kots_count = DB::table('order_kot')->where('cancel', '=', 'N')->count();
-        $cash_print_count = DB::table('order_kot')->where('status', '=', '2')->where('cancel', '=', 'N')->count();
+        $panding_kots_count = DB::table('order_kot')->where('cancel', '=', 'N')->where('PropertyID','=',Auth::user()->PropertyID)->where(function ($q) {$q->where('status', '=', '1')->orWhere('status', '=', '4');})->count();
+        $kitchen_complete_kot_count = DB::table('order_kot')->where('status', '=', '3')->where('PropertyID','=',Auth::user()->PropertyID)->where('cancel', '=', 'N')->count();
+        $total_kots_count = DB::table('order_kot')->where('cancel', '=', 'N')->where('PropertyID','=',Auth::user()->PropertyID)->count();
+        $cash_print_count = DB::table('order_kot')->where('status', '=', '2')->where('PropertyID','=',Auth::user()->PropertyID)->where('cancel', '=', 'N')->count();
         $kot_cancel_count = DB::table('order_kot')->where('cancel', '=', 'Y')->count();
         $outlets_count=DB::table('order_kot')->selectRaw('outlet, SUM(CASE WHEN cancel = "N" AND (status = "1" OR status = "4") THEN 1 ELSE 0 END) as panding_kots_count,
                                      SUM(CASE WHEN cancel = "N" AND status = "3" THEN 1 ELSE 0 END) as kitchen_complete_kot_count,
                                      SUM(CASE WHEN cancel = "N" THEN 1 ELSE 0 END) as total_kots_count,
                                      SUM(CASE WHEN cancel = "N" AND status = "2" THEN 1 ELSE 0 END) as cash_print_count,
-                                     SUM(CASE WHEN cancel = "Y" THEN 1 ELSE 0 END) as kot_cancel_count')->groupBy('outlet')->get();
+                                     SUM(CASE WHEN cancel = "Y" THEN 1 ELSE 0 END) as kot_cancel_count')->where('PropertyID','=',Auth::user()->PropertyID)->groupBy('outlet')->get();
 
         return view('admin.dashboard.dashboard')->with(compact('users','panding_kots_count','kitchen_complete_kot_count','total_kots_count','cash_print_count','outlets_count'));
     }
@@ -45,6 +45,8 @@ class AdminDashboardController extends Controller
             return redirect()->route('operatorDashboard');
         }elseif ($role == 'kitchen'){
             return redirect()->route('kitchenDashboard');
+        }elseif ($role == 'root'){
+            return redirect()->route('addUser','new');
         }
     }
 

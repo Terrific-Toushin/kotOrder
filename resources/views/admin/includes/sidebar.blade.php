@@ -18,7 +18,7 @@
                 $currentUser = str_replace(['[', ']','"'], '', $loginUserPrivileges);
                 $userPrivileges = explode(",",$currentUser);
             @endphp
-            @if(in_array("*",$userPrivileges) || in_array("DR",$userPrivileges))
+            @if((in_array("*",$userPrivileges) || in_array("DR",$userPrivileges)) && Auth::user()->role != 'root')
                 <li class="start {{ (request()->is('admin-dashboard')) ? 'active' : '' }}">
                     <a href="{{route('adminDashboard')}}">
                         <i class="icon-bar-chart"></i>
@@ -27,7 +27,7 @@
                 </li>
             @endif
 
-            @if(in_array("*",$userPrivileges) || in_array("UL",$userPrivileges))
+            @if((in_array("*",$userPrivileges) || in_array("UL",$userPrivileges)))
                 <li class="{{ (request()->is('user*')) ? 'active' : '' }}">
                     <a href="javascript:;">
                         <i class="icon-anchor"></i>
@@ -51,7 +51,7 @@
                 </li>
             @endif
 
-            @if(in_array("*",$userPrivileges) || in_array("RA",$userPrivileges))
+            @if((in_array("*",$userPrivileges) || in_array("RA",$userPrivileges)) && Auth::user()->role != 'root')
                 <li class="{{ (request()->is('report*')) ? 'active' : '' }}">
                     <a href="javascript:;">
                         <i class="icon-anchor"></i>

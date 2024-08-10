@@ -82,7 +82,7 @@ return [
             'driver' => 'sqlsrv',
             'host' => env('DB_SQLSRV_HOST', '103.191.178.238\NICOF_BA'),
             'port' => env('DB_SQLSRV_PORT', '1433'),
-            'database' => env('DB_SQLSRV_DATABASE', 'REST_FORTIS'),
+            'database' => env('DB_SQLSRV_DATABASE', 'REST_KOT'),
             'username' => env('DB_SQLSRV_USERNAME', 'NICKOT'),
             'password' => env('DB_SQLSRV_PASSWORD', 'cN@A64?4FDQuiLaX'),
             'charset' => 'utf8',

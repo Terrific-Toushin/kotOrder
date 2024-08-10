@@ -216,74 +216,118 @@
 
                 <!-- /.card -->
 
-                <div class="card mx-auto" id="printQTY" style="display: none">
-                    <div class="card-header">
-                        <center>
-                            <h4>Kitchen Order Token</h4>
-                            {{$terminal}}
-                        </center>
+                <div class="invoice" id="printQTY" style="display: none">
+                    <div class="row invoice-logo">
+                        <div class="col-xs-6 invoice-logo-space">
+                            <img src="{{ asset('/') }}assets/admin/layout/img/nice-removebg-preview.png" alt="logo" class="img-responsive" alt=""/>
+                        </div>
+                        <div class="col-xs-6">
+                            <p>
+                                #{{str_pad($billNo, 7, '0', STR_PAD_LEFT)}} / {{$date}} {{$time}} <span class="muted"> </span>
+                            </p>
+                        </div>
                     </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <table class="table ">
-                            <tr>
-                                <td><strong>Date:</strong></td><td> {{$date}} </td>
-                                <td><strong>Time:</strong></td><td> {{$time}} </td>
-                            </tr>
-                            <tr>
-                                <td><strong>Bill No:</strong></td><td> {{$billNo}} </td>
-                                <td><strong>T/R:</strong></td><td> {{$tableNo}}/{{$roomNo}} </td>
-                            </tr>
-
-                            @if(!empty($allMenuItems))
-                                @foreach($allMenuItems as $allMenuItem)
-                                    <tr>
-                                        <td colspan="3"><strong>{{$allMenuItem['repname']}}</strong></td>
-                                        <td>{{$allMenuItem['qty']}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Remarks:</td>
-                                        <td colspan="3"> </td>
-                                    </tr>
-                                @endforeach
-                            @endif
-
-                            @if(!empty($allMenuItems_new))
+                    <div class="row justify-content-end">
+                        <div class="col-xs-3 invoice-payment" style="float: right">
+                            <h3>Payment Details:</h3>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <strong>V.A.T Reg #:</strong> **************
+                                </li>
+                                <li>
+                                    <strong>Account Name:</strong> *************
+                                </li>
+                                <li>
+                                    <strong>Branch:</strong> ************
+                                </li>
+                                <li>
+                                    <strong>Served By:</strong> {{$waterName}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <table class="table table-striped table-hover">
+                                <thead>
                                 <tr>
-                                    <td colspan="4">Add Item</td>
+                                    <th>
+                                        #
+                                    </th>
+                                    <th>
+                                        Item
+                                    </th>
+                                    <th class="hidden-480">
+                                        Quantity
+                                    </th>
+                                    <th class="hidden-480">
+                                        Unit Cost
+                                    </th>
+                                    <th>
+                                        Total
+                                    </th>
                                 </tr>
-
+                                </thead>
+                                <tbody>
+                                @php
+                                    $totalAmount = 0;
+                                @endphp
                                 @foreach($allMenuItems_new as $allMenuItem_new)
                                     <tr>
-                                        <td colspan="3"><strong>{{$allMenuItem_new['repname']}}</strong></td>
-                                        <td>{{$allMenuItem_new['qty']}}</td>
+                                        <td>
+                                            {{$loop->iteration}}
+                                        </td>
+                                        <td>
+                                            {{$allMenuItem_new['repname']}}
+                                        </td>
+                                        <td class="hidden-480">
+                                            {{$allMenuItem_new['qty']}}
+                                        </td>
+                                        <td class="hidden-480">
+                                            {{$allMenuItem_new['price']/$allMenuItem_new['qty']}}
+                                        </td>
+                                        <td>
+                                            {{$allMenuItem_new['price']}}
+                                        </td>
                                     </tr>
-                                    <tr>
-                                        <td>Remarks:</td>
-                                        <td colspan="3"> </td>
-                                    </tr>
+                                    @php $totalAmount = $totalAmount+$allMenuItem_new['price'] @endphp
                                 @endforeach
-                            @endif
-
-                            @if(!empty($cancel_allMenuItems))
-                                <tr>
-                                    <td colspan="4">Cancelled Item</td>
-                                </tr>
-
-                                @foreach($cancel_allMenuItems as $cancel_allMenuItem)
-                                    <tr>
-                                        <td colspan="3"><strong>{{$cancel_allMenuItem['repname']}}</strong></td>
-                                        <td>{{$cancel_allMenuItem['qty']}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Remarks:</td>
-                                        <td colspan="3"> </td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <!-- /.card-body -->
+                    <div class="row">
+                        <div class="col-xs-4">
+                            {{--                        <div class="well">--}}
+                            {{--                            <address>--}}
+                            {{--                                <strong></strong><br/>--}}
+                            {{--                                <br/>--}}
+                            {{--                                <br/>--}}
+                            {{--                                <abbr title="Phone"></abbr></address>--}}
+                            {{--                            <address>--}}
+                            {{--                                <strong></strong><br/>--}}
+                            {{--                                <a href="mailto:#"></a>--}}
+                            {{--                            </address>--}}
+                            {{--                        </div>--}}
+                        </div>
+                        <div class="col-xs-8 invoice-block">
+                            <ul class="list-unstyled amounts">
+                                <li>
+                                    <strong>Sub - Total amount:</strong> {{$totalAmount}}
+                                </li>
+                                <li>
+                                    <strong>Discount:</strong> 0.0%
+                                </li>
+                                <li>
+                                    <strong>VAT:</strong> -----
+                                </li>
+                                <li>
+                                    <strong>Grand Total:</strong> {{$totalAmount}}
+                                </li>
+                            </ul>
+                            <br/>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- END PAGE CONTENT-->
@@ -336,6 +380,18 @@
     <script type="text/javascript"
             src="{{ asset('/') }}assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js"></script>
     <script src="{{ asset('/') }}assets/admin/pages/scripts/table-advanced.js"></script>
+    <script>
+        function printContent(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+        }
+    </script>
 @endsection
 @section('documentJquery')
 @endsection

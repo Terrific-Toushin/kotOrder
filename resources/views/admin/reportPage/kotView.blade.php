@@ -215,7 +215,7 @@
                                 <strong>Account Name:</strong> *************
                             </li>
                             <li>
-                                <strong>SWIFT code:</strong> ************
+                                <strong>branch:</strong> ************
                             </li>
                             <li>
                                 <strong>Served By:</strong> {{$waterName}}

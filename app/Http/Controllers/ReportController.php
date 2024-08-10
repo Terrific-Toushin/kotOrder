@@ -210,10 +210,9 @@ class ReportController extends Controller
 
 
     public function cashPrint(){
-
-        $cashPrint = DB::table('order_kot')->where('cancel', '=', 'N')->where('status', '=', '2')->get();
-        $outletList = DB::connection('sqlsrv')->table('tblRestName')->orderBy('ResName')->get();
-        $userList = User::select('username','name')->where('role','operator')->get();
+        $cashPrint = DB::table('order_kot')->where('PropertyID','=',Auth::user()->PropertyID)->where('cancel', '=', 'N')->where('status', '=', '2')->get();
+        $outletList = DB::connection('sqlsrv')->table('tblRestName')->where('PropertyID','=',Auth::user()->PropertyID)->orderBy('ResName')->get();
+        $userList = User::select('username','name')->where('PropertyID','=',Auth::user()->PropertyID)->where('role','operator')->get();
         return view('admin.reportPage.cashPrint',compact('cashPrint','outletList','userList'));
     } // End OperatorCashPrint Method
 
@@ -239,7 +238,7 @@ class ReportController extends Controller
             $query->where("ResSL",$request->outlet_id);
         }
 
-        $cashPrint = $query->where('cancel', '=', 'N')->where('status', '=', '2')->get();
+        $cashPrint = $query->where('cancel', '=', 'N')->where('PropertyID','=',Auth::user()->PropertyID)->where('status', '=', '2')->get();
 //        dd(DB::getQueryLog());
 //        dump($cashPrint);
 
@@ -249,9 +248,9 @@ class ReportController extends Controller
 
     public function KitchenCompleteKOTHistoryAll(){
 
-        $kitchenCompleteKOT = DB::table('order_kot')->where('cancel', '=', 'N')->where('status', '=', '3')->get();
-        $outletList = DB::connection('sqlsrv')->table('tblRestName')->orderBy('ResName')->get();
-        $userList = User::select('username','name')->where('role','operator')->get();
+        $kitchenCompleteKOT = DB::table('order_kot')->where('PropertyID','=',Auth::user()->PropertyID)->where('cancel', '=', 'N')->where('status', '=', '3')->get();
+        $outletList = DB::connection('sqlsrv')->table('tblRestName')->where('PropertyID','=',Auth::user()->PropertyID)->orderBy('ResName')->get();
+        $userList = User::select('username','name')->where('PropertyID','=',Auth::user()->PropertyID)->where('role','operator')->get();
         return view('admin.reportPage.kitchenCompleteKOTHistory',compact('kitchenCompleteKOT','outletList','userList'));
     } // End OperatorCashPrint Method
 
@@ -277,7 +276,7 @@ class ReportController extends Controller
             $query->where("ResSL",$request->outlet_id);
         }
 
-        $kitchenCompleteKOT = $query->where('cancel', '=', 'N')->where('status', '=', '3')->get();
+        $kitchenCompleteKOT = $query->where('cancel', '=', 'N')->where('PropertyID','=',Auth::user()->PropertyID)->where('status', '=', '3')->get();
 //        dd(DB::getQueryLog());
 //        dump($cashPrint);
 
@@ -291,8 +290,8 @@ class ReportController extends Controller
                 $query->where('status', '=', '1')
                     ->orWhere('status', '=', '4');
             })->orderBy('date', 'DESC')->get();
-        $outletList = DB::connection('sqlsrv')->table('tblRestName')->orderBy('ResName')->get();
-        $userList = User::select('username','name')->where('role','operator')->get();
+        $outletList = DB::connection('sqlsrv')->table('tblRestName')->where('PropertyID','=',Auth::user()->PropertyID)->orderBy('ResName')->get();
+        $userList = User::select('username','name')->where('PropertyID','=',Auth::user()->PropertyID)->where('role','operator')->get();
 
         return view('admin.reportPage.pendingKOT',compact( 'pending_kots','outletList','userList'));
     } // End OperatorPandingKOT Method
@@ -318,7 +317,7 @@ class ReportController extends Controller
             $query->where("ResSL",$request->outlet_id);
         }
 
-        $pendingKot = $query->where('cancel', '=', 'N')->where(static function ($querys) {
+        $pendingKot = $query->where('PropertyID','=',Auth::user()->PropertyID)->where('cancel', '=', 'N')->where(static function ($querys) {
             $querys->where('status', '=', '1')
                 ->orWhere('status', '=', '4');
         })->orderBy('date', 'DESC')->get();
@@ -329,9 +328,9 @@ class ReportController extends Controller
     } // End OperatorCashPrint Method
 
     public function adminTotalKOT(Request $request){
-        $total_kots = DB::table('order_kot')->where('cancel', '=', 'N')->get();
-        $outletList = DB::connection('sqlsrv')->table('tblRestName')->orderBy('ResName')->get();
-        $userList = User::select('username','name')->where('role','operator')->get();
+        $total_kots = DB::table('order_kot')->where('PropertyID','=',Auth::user()->PropertyID)->where('cancel', '=', 'N')->get();
+        $outletList = DB::connection('sqlsrv')->table('tblRestName')->where('PropertyID','=',Auth::user()->PropertyID)->orderBy('ResName')->get();
+        $userList = User::select('username','name')->where('PropertyID','=',Auth::user()->PropertyID)->where('role','operator')->get();
         return view('admin.reportPage.totalKOT',compact('total_kots','outletList','userList'));
     } // End OperatorTotalKOT Method
 
@@ -356,7 +355,7 @@ class ReportController extends Controller
             $query->where("ResSL",$request->outlet_id);
         }
 
-        $kitchenCompleteKOT = $query->where('cancel', '=', 'N')->get();
+        $kitchenCompleteKOT = $query->where('PropertyID','=',Auth::user()->PropertyID)->where('cancel', '=', 'N')->get();
 //        dd(DB::getQueryLog());
 //        dump($cashPrint);
 

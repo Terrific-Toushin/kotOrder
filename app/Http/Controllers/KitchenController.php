@@ -118,7 +118,7 @@ class KitchenController extends Controller
                 return $item->repID;
             }, $pending_kots);
 
-            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $alreadyOrderItem)->get();
+            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('PropertyID','=',Auth::user()->PropertyID)->where('repid', '=', $alreadyOrderItem)->get();
 //        $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->select('repid','repname')->whereIn('repid', $alreadyOrderItem)->get()->toArray();
 
             foreach ($kot_items_selects as $kot_items_select){

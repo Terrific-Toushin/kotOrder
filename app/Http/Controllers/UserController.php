@@ -16,7 +16,11 @@ class UserController extends Controller
     use PasswordValidationRules;
     public function index()
     {
-        $allUsers = User::select('users.id','users.name','users.photo','users.username','users.email','users.role','users.phone','users.address','users.createby','users.created_at','users.status')->leftJoin('user_privileges', 'users.id', '=', 'user_privileges.user_id')->where('users.email','!=','toushin.java@gmail.com')->orderBy('id','DESC')->get();
+        if (Auth::user()->role == 'root'){
+            $allUsers = User::select('users.id','users.name','users.photo','users.username','users.email','users.role','users.phone','users.address','users.createby','users.created_at','users.status')->leftJoin('user_privileges', 'users.id', '=', 'user_privileges.user_id')->where('users.email','!=','toushin.java@gmail.com')->where('users.role','!=','root')->orderBy('id','DESC')->get();
+        }else{
+            $allUsers = User::select('users.id','users.name','users.photo','users.username','users.email','users.role','users.phone','users.address','users.createby','users.created_at','users.status')->leftJoin('user_privileges', 'users.id', '=', 'user_privileges.user_id')->where('users.email','!=','toushin.java@gmail.com')->where('users.PropertyID','!=',Auth::user()->PropertyID)->orderBy('id','DESC')->get();
+        }
         $userType = config('dashboard_constant.USER_TYPE');
 //        $userPrivileges = config('dashboard_constant.USER_PRIVILEGE');
 //        foreach ($allUsers as &$users){
@@ -37,18 +41,30 @@ class UserController extends Controller
         }else{
             $userInfo = null;
         }
-        $userType = config('dashboard_constant.USER_TYPE');
-        $userPrivileges = config('dashboard_constant.USER_PRIVILEGE');
-        $outlets = DB::connection('sqlsrv')->table('tblRestName')->orderBy('ResName')->get();
-//        $outlets = DB::connection('mysql')->table('rest_fortis.tblrestname')->orderBy('ResName')->get();
-        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->orderBy('repname')->get();
+        if (Auth::user()->role == 'root'){
+            $companyList = DB::connection('sqlsrv')->table('tblProperty')->select('PropertyID','PropertyName')->where('isActive','1')->get();
+            $userType = ['admin' => 'Admin'];
+            $outlets = [];
+            $kitchen = [];
+        }else{
+            $userType = config('dashboard_constant.USER_TYPE');
+            $companyList = [];
+            $outlets = DB::connection('sqlsrv')->table('tblRestName')->where('PropertyID','=',Auth::user()->PropertyID)->orderBy('ResName')->get();
+            $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('PropertyID','=',Auth::user()->PropertyID)->orderBy('repname')->get();
 //        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->orderBy('repname')->get();
-        $kitchen = array();
-        foreach($tblMenu_data as $kitchen_items){
-            array_push($kitchen, $kitchen_items->kitchen);
+            $kitchen = array();
+            foreach($tblMenu_data as $kitchen_items){
+                array_push($kitchen, $kitchen_items->kitchen);
+            }
+            $kitchen = array_unique($kitchen);
         }
-        $kitchen = array_unique($kitchen);
-        return view('admin.systemUser.userEdit')->with(compact('userInfo','userType','userPrivileges','outlets','kitchen'));
+
+        $userPrivileges = config('dashboard_constant.USER_PRIVILEGE');
+//        dump($outlets);
+//        die();
+//        $outlets = DB::connection('mysql')->table('rest_fortis.tblrestname')->orderBy('ResName')->get();
+
+        return view('admin.systemUser.userEdit')->with(compact('userInfo','userType','userPrivileges','outlets','kitchen','companyList'));
     }
 
     public function destroy($id)
@@ -116,6 +132,7 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->address = $request->address;
         $user->role = $request->role;
+        $user->PropertyID = Auth::user()->role == 'root' ? $request->PropertyID : Auth::user()->PropertyID;
         $privileged = $request->privileges;
         if ($request->role == 'operator'){
             $outlets = json_encode($request->outlets);
