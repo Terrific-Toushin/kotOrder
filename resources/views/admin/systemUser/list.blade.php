@@ -70,6 +70,11 @@
                     <table class="table table-hover table-striped table-bordered" id="sample_user">
                         <thead>
                             <tr role="row" class="heading">
+                                @if(Auth::user()->role == 'root')
+                                <th width="15%">
+                                    Property ID
+                                </th>
+                                @endif
                                 <th width="15%">
                                     Name
                                 </th>
@@ -96,6 +101,11 @@
                         <tbody>
                         @foreach($allUsers as $user)
                             <tr>
+                                @if(Auth::user()->role == 'root')
+                                <td>
+                                    {{$user->PropertyID}}
+                                </td>
+                                @endif
                                 <td>
                                     {{$user->name}}
                                 </td>

@@ -17,7 +17,7 @@ class UserController extends Controller
     public function index()
     {
         if (Auth::user()->role == 'root'){
-            $allUsers = User::select('users.id','users.name','users.photo','users.username','users.email','users.role','users.phone','users.address','users.createby','users.created_at','users.status')->leftJoin('user_privileges', 'users.id', '=', 'user_privileges.user_id')->where('users.email','!=','toushin.java@gmail.com')->where('users.role','!=','root')->orderBy('id','DESC')->get();
+            $allUsers = User::select('users.id','users.PropertyID','users.name','users.photo','users.username','users.email','users.role','users.phone','users.address','users.createby','users.created_at','users.status')->leftJoin('user_privileges', 'users.id', '=', 'user_privileges.user_id')->where('users.email','!=','toushin.java@gmail.com')->where('users.role','!=','root')->orderBy('id','DESC')->get();
         }else{
             $allUsers = User::select('users.id','users.name','users.photo','users.username','users.email','users.role','users.phone','users.address','users.createby','users.created_at','users.status')->leftJoin('user_privileges', 'users.id', '=', 'user_privileges.user_id')->where('users.email','!=','toushin.java@gmail.com')->where('users.PropertyID','!=',Auth::user()->PropertyID)->orderBy('id','DESC')->get();
         }
