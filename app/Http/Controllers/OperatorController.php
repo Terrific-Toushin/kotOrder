@@ -343,7 +343,7 @@ class OperatorController extends Controller
                 }
             }
         }
-        DB::connection('sqlsrv')->insert('insert into tblBillPending (PropertyID, date, PropertyID, ResName, billNo, tableNo, flug) values (?, ?, ?, ?, ?, ?, ?)',[Auth::user()->PropertyID,$dbDateTime,$uotletID,$uotletName,$billNo,$tableNo,"1"]);
+        DB::connection('sqlsrv')->insert('insert into tblBillPending (date, PropertyID, ResName, billNo, tableNo, flug, ResSL) values (?, ?, ?, ?, ?, ?, ?)',[$dbDateTime,Auth::user()->PropertyID,$uotletName,$billNo,$tableNo,"1",$uotletID]);
 
         return redirect()->route('kotView',compact('billNo'));
 
