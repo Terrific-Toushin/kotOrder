@@ -648,7 +648,11 @@ class OperatorController extends Controller
             $roomNo = $order_kot->roomNo;
             if($roomNo==""){$roomNo='0';}
             $terminal = $order_kot->terminal;
-            $serveTime = $order_kot->serveTime;
+            if(!empty($order_kot->serveTime) && $order_kot->serveTime != ''){
+                $serveTime = $order_kot->terminal.'('.$order_kot->serveTime.')';
+            }else{
+                $serveTime = $order_kot->terminal;
+            }
             $pax = $order_kot->pax;
             $waterName = $order_kot->waterName;
             $gustName = $order_kot->gustName;
