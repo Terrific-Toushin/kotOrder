@@ -128,19 +128,23 @@
                                         <input id="roomNo" type="text" name="room" class="form-control" placeholder="Room Number" onkeypress="onRoomNo()" onclick="onRoomNo()" >
                                     </div>
                                     <label class="col-md-1 control-label">Terminal</label>
+{{--                                    @dump($resturentTerminal)--}}
                                     <div class="col-md-2">
                                         <select class="form-control" name="terminal">
-                                            <option value="Restaurant">Restaurant</option>
+                                            @foreach($resturentTerminal as $terminal)
+                                                <option value="{{$terminal}}">{{$terminal}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-1 control-label">Serve Time</label>
+{{--                                    @dump($resturentServeTime)--}}
                                     <div class="col-md-2">
                                         <select class="form-control" name="serveTime" required>
-                                            <option value="Breakfast">Breakfast</option>
-                                            <option value="Lunch">Lunch</option>
-                                            <option value="Dinner">Dinner</option>
+                                            @foreach($resturentServeTime as $serveTime)
+                                                <option value="{{$serveTime}}">{{$serveTime}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <label class="col-md-1 control-label">PAX</label>

@@ -174,6 +174,9 @@ class OperatorController extends Controller
         $bookedTables = DB::table('order_kot')->select('tableNo')->where('tableNo', '!=', '')->where('cancel', '=', 'N')->where('ResSL', '=', $uotletID)->where(function ($q) {$q->where('status', '=', '1')->orWhere('status', '=', '4');})->get();
         $bookedRooms = DB::table('order_kot')->select('roomNo')->where('roomNo', '!=', '')->where('cancel', '=', 'N')->where('ResSL', '=', $uotletID)->where(function ($q) {$q->where('status', '=', '1')->orWhere('status', '=', '4');})->get();
         $uotlet = DB::connection('sqlsrv')->table('tblrestname')->where('ResSL', '=', $uotletID)->get();
+        $resturentDetails = DB::connection('sqlsrv')->table('tblRestDetails')->where('ResSL', '=', $uotletID)->first();
+        $resturentTerminal = explode(',', $resturentDetails->Terminal);
+        $resturentServeTime = explode(',', $resturentDetails->ServeTime);
 
         $uotletName = "";
         foreach($uotlet as $uotletData){
@@ -189,7 +192,7 @@ class OperatorController extends Controller
         }
         $kitchen = array_unique($kitchen);
 
-        return view('admin.operator.operatorNewOrder',compact('profileData','bill_No','userOperator','tblMenu_data', 'kitchen','bookedRooms','bookedTables'));
+        return view('admin.operator.operatorNewOrder',compact('profileData','bill_No','userOperator','tblMenu_data', 'kitchen','bookedRooms','bookedTables','resturentTerminal','resturentServeTime'));
     } // End OperatorNewOrder Method
 
 
@@ -420,6 +423,9 @@ class OperatorController extends Controller
         $uotletID = session()->get('uotlet');
         $uotlet = DB::connection('sqlsrv')->table('tblRestName')->where('ResSL', '=', $uotletID)->get();
 //        $uotlet = DB::connection('mysql')->table('rest_fortis.tblrestname')->where('ResSL', '=', $uotletID)->get();
+        $resturentDetails = DB::connection('sqlsrv')->table('tblRestDetails')->where('ResSL', '=', $uotletID)->first();
+        $resturentTerminal = explode(',', $resturentDetails->Terminal);
+        $resturentServeTime = explode(',', $resturentDetails->ServeTime);
 
         $uotletName = "";
         foreach($uotlet as $uotletData){
@@ -480,7 +486,7 @@ class OperatorController extends Controller
 
         $itemcount=1;
 
-        return view('admin.operator.operatorEditOrderItem',compact('tblMenu_data', 'kitchen','billNo','tableNo','room','terminal','serveTime','pax','waterName','gustName','companyName','email','contactNo', 'itemcount', ['allMenuItems']));
+        return view('admin.operator.operatorEditOrderItem',compact('tblMenu_data', 'kitchen','billNo','tableNo','room','terminal','serveTime','pax','waterName','gustName','companyName','email','contactNo', 'resturentTerminal', 'resturentServeTime', 'itemcount', ['allMenuItems']));
 
 
     } // End EditOrderItem Method
@@ -629,7 +635,6 @@ class OperatorController extends Controller
         }
         $id = Auth::user()->id;
         $username = Auth::user()->username;
-        $profileData = User::find($id);
 
         $billNo = request('billNo');
 
@@ -688,15 +693,11 @@ class OperatorController extends Controller
 
             $waiter_selects = DB::connection('sqlsrv')->table('tblWaiter')->where('Name', '=', $waterName)->get();
 //            $waiter_selects = DB::connection('mysql')->table('rest_fortis.tblwaiter')->where('Name', '=', $waterName)->get();
-            $waiterno = 0;
+            $waiterno = $username;
             foreach ($waiter_selects as $waiter_select) {
                 $waiterno = $waiter_select->waiterno;
             }
 
-
-
-
-            $date_time = array( 'date' => $date.' '.$time, 'timezone_type' => '3', 'timezone' => 'Asia/Dhaka' );
 
             if(DB::connection('sqlsrv')->insert('insert into tblSales (PropertyID, itemcode, kotno, itemname, quentity, unitprice, totalprice, date, tableno, roomno, waiterno, time, cancel, paid, Closer, staffno, billprint, entrytime, itementryuser, printuser, KotMain, person, foodtype, kitchen, discount, disAmt, Flug, Course, Fire, Remarks, outlet, paymode, billno, ResSL) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID, $repID, $billNo, $repname, $qty, $price, $total_price, $date , $tableNo, $roomNo, $waiterno, $serveTime, 'N',  'N', 'N', '1', 'N', $time, $waterName, 'RES', '11', $pax, $foodtype, $kitchen, '0', '.00', '0', 'N/A', '0', 'spicy', $uotletName, 'N/A', '3', $uotletID])){
 //            DB::enableQueryLog();

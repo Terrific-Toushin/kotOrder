@@ -116,7 +116,9 @@
                                     <div class="col-md-2">
                                         <select class="form-control" name="terminal" required>
                                             <option value="">Select</option>
-                                            <option value="Restaurant" @selected($terminal == 'Restaurant')>Restaurant</option>
+                                            @foreach($resturentTerminal as $terminals)
+                                                <option value="{{$terminals}}" @selected($terminal == $terminals)>{{$terminals}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -125,9 +127,9 @@
                                     <div class="col-md-2">
                                         <select class="form-control" name="serveTime" required>
                                             <option value="" >Select</option>
-                                            <option value="Breakfast" @selected($serveTime == 'Breakfast')>Breakfast</option>
-                                            <option value="Lunch" @selected($serveTime == 'Lunch')>Lunch</option>
-                                            <option value="Dinner" @selected($serveTime == 'Dinner')>Dinner</option>
+                                            @foreach($resturentServeTime as $serveTimes)
+                                                <option value="{{$serveTimes}}" @selected($serveTime == $serveTimes)>{{$serveTimes}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <label class="col-md-1 control-label">PAX</label>
