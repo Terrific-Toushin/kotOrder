@@ -183,6 +183,38 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    @if($kotVoid == 'Yes')
+                                        <div class="form-group form-md-line-input">
+                                            <label id="kotVoidLabel" class="col-md-2 control-label" style="display: {{!empty($userInfo) && $userInfo->role == 'operator' ? 'block' : 'none'}}">Kot Void<span class="required"> * </span></label>
+                                            <div id="kotVoidDiv" class="col-md-10" style="display: {{!empty($userInfo) && $userInfo->role == 'operator' ? 'block' : 'none'}}">
+                                                <div class="md-radio-inline">
+                                                    <div class="md-radio">
+                                                        <input type="radio" id="radio53" name="kot_void" value="Y" class="md-radiobtn" {{!empty($userInfo->kot_void) && $userInfo->kot_void == 'Y' ? 'checked' : ''}} />
+                                                        <label for="radio53"><span></span><span class="check"></span><span class="box"></span>Yes </label>
+                                                    </div>
+                                                    <div class="md-radio has-error">
+                                                        <input type="radio" id="radio54" name="kot_void" value="N" class="md-radiobtn" {{!empty($userInfo->kot_void) && $userInfo->kot_void == 'N' ? 'checked' : ''}} />
+                                                        <label for="radio54"><span></span><span class="check"></span><span class="box"></span>No </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group form-md-line-input">
+                                            <label id="ItemRemoveLabel" class="col-md-2 control-label" style="display: {{!empty($userInfo) && $userInfo->role == 'operator' ? 'block' : 'none'}}">Order Item Delete<span class="required"> * </span></label>
+                                            <div id="ItemRemoveDiv" class="col-md-10" style="display: {{!empty($userInfo) && $userInfo->role == 'operator' ? 'block' : 'none'}}">
+                                                <div class="md-radio-inline">
+                                                    <div class="md-radio">
+                                                        <input type="radio" id="radio55" name="Item_remove" value="Y" class="md-radiobtn" {{!empty($userInfo->Item_remove) && $userInfo->Item_remove == 'Y' ? 'checked' : ''}} />
+                                                        <label for="radio55"><span></span><span class="check"></span><span class="box"></span>Yes </label>
+                                                    </div>
+                                                    <div class="md-radio has-error">
+                                                        <input type="radio" id="radio56" name="Item_remove" value="N" class="md-radiobtn" {{!empty($userInfo->Item_remove) && $userInfo->Item_remove == 'N' ? 'checked' : ''}} />
+                                                        <label for="radio56"><span></span><span class="check"></span><span class="box"></span>No </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div id="form-kitchen" class="form-group">
                                         <label  id="kitchenLabel" class="col-md-2 control-label" style="display: {{!empty($userInfo) && $userInfo->role == 'kitchen' ? 'block' : 'none'}}">Kitchen: <span class="required"> * </span></label>
                                         <div id="kitchenDiv" class="col-md-10" style="display: {{!empty($userInfo) && $userInfo->role == 'kitchen' ? 'block' : 'none'}}">
@@ -323,16 +355,30 @@
             if(roleType == 'operator'){
                 document.getElementById('outletsDiv').style.display = 'block';
                 document.getElementById('outletsLabel').style.display = 'block';
+                document.getElementById('kotVoidDiv').style.display = 'block';
+                document.getElementById('kotVoidLabel').style.display = 'block';
+                document.getElementById('ItemRemoveDiv').style.display = 'block';
+                document.getElementById('ItemRemoveLabel').style.display = 'block';
+
                 document.getElementById('kitchenDiv').style.display = 'none';
                 document.getElementById('kitchenLabel').style.display = 'none';
             }else if(roleType == 'kitchen'){
                 document.getElementById('kitchenDiv').style.display = 'block';
                 document.getElementById('kitchenLabel').style.display = 'block';
+
                 document.getElementById('outletsDiv').style.display = 'none';
                 document.getElementById('outletsLabel').style.display = 'none';
+                document.getElementById('kotVoidDiv').style.display = 'none';
+                document.getElementById('kotVoidLabel').style.display = 'none';
+                document.getElementById('ItemRemoveDiv').style.display = 'none';
+                document.getElementById('ItemRemoveLabel').style.display = 'none';
             }else {
                 document.getElementById('outletsDiv').style.display = 'none';
                 document.getElementById('outletsLabel').style.display = 'none';
+                document.getElementById('kotVoidDiv').style.display = 'none';
+                document.getElementById('kotVoidLabel').style.display = 'none';
+                document.getElementById('ItemRemoveDiv').style.display = 'none';
+                document.getElementById('ItemRemoveLabel').style.display = 'none';
                 document.getElementById('kitchenDiv').style.display = 'none';
                 document.getElementById('kitchenLabel').style.display = 'none';
             }

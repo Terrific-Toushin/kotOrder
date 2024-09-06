@@ -19,25 +19,16 @@ class UserController extends Controller
         if (Auth::user()->role == 'root'){
             $allUsers = User::select('users.id','users.PropertyID','users.name','users.photo','users.username','users.email','users.role','users.phone','users.address','users.createby','users.created_at','users.status')->leftJoin('user_privileges', 'users.id', '=', 'user_privileges.user_id')->where('users.email','!=','toushin.java@gmail.com')->where('users.role','!=','root')->orderBy('id','DESC')->get();
         }else{
-            $allUsers = User::select('users.id','users.name','users.photo','users.username','users.email','users.role','users.phone','users.address','users.createby','users.created_at','users.status')->leftJoin('user_privileges', 'users.id', '=', 'user_privileges.user_id')->where('users.email','!=','toushin.java@gmail.com')->where('users.PropertyID','!=',Auth::user()->PropertyID)->orderBy('id','DESC')->get();
+            $allUsers = User::select('users.id','users.name','users.photo','users.username','users.email','users.role','users.kot_void','users.Item_remove','users.phone','users.address','users.createby','users.created_at','users.status')->leftJoin('user_privileges', 'users.id', '=', 'user_privileges.user_id')->where('users.email','!=','toushin.java@gmail.com')->where('users.PropertyID','=',Auth::user()->PropertyID)->orderBy('id','DESC')->get();
         }
         $userType = config('dashboard_constant.USER_TYPE');
-//        $userPrivileges = config('dashboard_constant.USER_PRIVILEGE');
-//        foreach ($allUsers as &$users){
-//            $privileges = json_decode($users->privileges);
-//            $defination = [];
-//            foreach ($privileges as $key=>$privilege){
-//                $defination[]=$userPrivileges[$privilege];
-//            }
-//            $users->privileges = json_encode($defination);
-//        }
         return view('admin.systemUser.list')->with(compact('allUsers','userType'));
     }
 
     public function newUser($id)
     {
         if($id != 'new'){
-            $userInfo = User::select('users.id','users.name','users.photo','users.username','users.email','users.role','users.phone','users.outlets','users.address','users.status')->leftJoin('user_privileges', 'users.id', '=', 'user_privileges.user_id')->find($id);
+            $userInfo = User::select('users.id','users.name','users.photo','users.username','users.email','users.role','users.phone','users.kot_void','users.Item_remove','users.outlets','users.address','users.status')->leftJoin('user_privileges', 'users.id', '=', 'user_privileges.user_id')->find($id);
         }else{
             $userInfo = null;
         }
@@ -46,11 +37,14 @@ class UserController extends Controller
             $userType = ['admin' => 'Admin'];
             $outlets = [];
             $kitchen = [];
+            $kotVoid = 'No';
         }else{
             $userType = config('dashboard_constant.USER_TYPE');
             $companyList = [];
             $outlets = DB::connection('sqlsrv')->table('tblRestName')->where('PropertyID','=',Auth::user()->PropertyID)->orderBy('ResName')->get();
             $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('PropertyID','=',Auth::user()->PropertyID)->orderBy('repname')->get();
+            $kotVoid = DB::connection('sqlsrv')->table('tblProperty')->select('PrintTo')->where('PropertyID','=',Auth::user()->PropertyID)->first();
+            $kotVoid = $kotVoid->PrintTo;
 //        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->orderBy('repname')->get();
             $kitchen = array();
             foreach($tblMenu_data as $kitchen_items){
@@ -60,11 +54,13 @@ class UserController extends Controller
         }
 
         $userPrivileges = config('dashboard_constant.USER_PRIVILEGE');
+//        dump($kotVoid);
+//        die();
 //        dump($outlets);
 //        die();
 //        $outlets = DB::connection('mysql')->table('rest_fortis.tblrestname')->orderBy('ResName')->get();
 
-        return view('admin.systemUser.userEdit')->with(compact('userInfo','userType','userPrivileges','outlets','kitchen','companyList'));
+        return view('admin.systemUser.userEdit')->with(compact('userInfo','userType','userPrivileges','outlets','kitchen','companyList','kotVoid'));
     }
 
     public function destroy($id)
@@ -144,6 +140,8 @@ class UserController extends Controller
             $outlets = '';
         }
         $user->outlets = $outlets;
+        $user->kot_void = isset($request->kot_void) && !empty($request->kot_void) ? $request->kot_void : 'Y';
+        $user->Item_remove = isset($request->Item_remove) && !empty($request->Item_remove) ? $request->Item_remove : 'Y';
         $user->status = $request->status;
         $user->createby = Auth::user()->username;
 

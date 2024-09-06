@@ -80,6 +80,7 @@
                                 <th >Serve Time</th>
                                 <th>Table/Room No</th>
                                 <th >PAX</th>
+                                <th >Served BY</th>
                                 <th >Action</th>
                             </tr>
                             </thead>
@@ -93,6 +94,7 @@
                                     <td>{{$kots->serveTime}}</td>
                                     <td>{{$kots->tableNo!=''?'Table-':($kots->roomNo!=''?'Room-':'')}}{{$kots->tableNo}}{{$kots->roomNo}}</td>
                                     <td>{{$kots->pax}} Person</td>
+                                    <td>{{$kots->userID}}</td>
                                     <td>
                                         <a href="{{ route('kotView', ['billNo' => $kots->billNo]) }}" class="btn btn-sm green"><i class="fa fa-file-o"></i> Details </a>
                                     </td>

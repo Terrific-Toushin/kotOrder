@@ -751,13 +751,25 @@ class OperatorController extends Controller
         }else{
             $outlet = session()->get('uotlet');
         }
+        $kotVoid = DB::connection('sqlsrv')->table('tblProperty')->select('PrintTo')->where('PropertyID','=',Auth::user()->PropertyID)->first();
+        $kotVoid = $kotVoid->PrintTo;
+        if ($kotVoid == 'Yes' && Auth::user()->kot_void == 'Y'){
+            $pending_kots = DB::table('order_kot')->where('cancel', '=', 'N')->where('ResSL',$outlet)
+                ->where(static function ($query) {
+                    $query->where('status', '=', '1')
+                        ->orWhere('status', '=', '4');
+                })->orderBy('date', 'DESC')->get();
 
-        $pending_kots = DB::table('order_kot')->where('cancel', '=', 'N')->where('ResSL',$outlet)
-            ->where('userID',Auth::user()->username)
-            ->where(static function ($query) {
-                $query->where('status', '=', '1')
-                    ->orWhere('status', '=', '4');
-            })->orderBy('date', 'DESC')->get();
+        }else{
+            $pending_kots = DB::table('order_kot')->where('cancel', '=', 'N')->where('ResSL',$outlet)
+                ->where('userID',Auth::user()->username)
+                ->where(static function ($query) {
+                    $query->where('status', '=', '1')
+                        ->orWhere('status', '=', '4');
+                })->orderBy('date', 'DESC')->get();
+        }
+
+
 
         return view('admin.operator.operatorPendingKOT',compact('profileData', 'pending_kots'));
     } // End OperatorPandingKOT Method

@@ -184,13 +184,13 @@
                         @endif
                         <div class="card-body" id="printButton">
                             <div class="row">
-                                @if($cancel == 'N' and $status!='2')
+                                @if($cancel == 'N' && $status!='2')
 {{--                                    <div class="col-md-3">--}}
 {{--                                        --}}{{-- <a href="{{ route('operator.qtyPrintPriview', ['billNo' => $billNo]) }}" class="btnprn"> --}}
 {{--                                        <button type="button" class=" btn btn-info btn-block" onclick="printContent('printQTY')" >Print KOT</button>--}}
 {{--                                        --}}{{-- </a> --}}
 {{--                                    </div>--}}
-                                    @if($showVoid)
+                                    @if($showVoid && Auth::user()->kot_void == 'Y')
                                         <div class="col-md-3">
                                             <a href="{{ route('orderCancle', ['billNo' => $billNo]) }}" onclick="return confirm('Are you sure to cancel KOT?')">
                                                 <button type="button" class="btn btn-danger btn-block" >KOT Void</button>

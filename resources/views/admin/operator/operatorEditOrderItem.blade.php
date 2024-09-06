@@ -345,7 +345,10 @@
                                                                     </div>
                                                                 </td>
                                                                 <td>{{$allMenuItem['kitchen']}}</td>
-                                                                <td><div class="btn btn-danger btn-block remove-table-row"><i class="fa fa-trash-o"></i></div>
+                                                                <td>
+                                                                    @if(Auth::user()->Item_remove == 'Y')
+                                                                        <div class="btn btn-danger btn-block remove-table-row"><i class="fa fa-trash-o"></i></div>
+                                                                    @endif
                                                                     <input type="hidden" id="repid{{$orderNewItem}}" name="repid{{$orderNewItem}}" value="{{$allMenuItem['repID']}}">
                                                                     <input type="hidden" id="kitchen{{$orderNewItem}}" name="kitchen{{$orderNewItem}}" value="{{$allMenuItem['kitchen']}}">
                                                                 </td>
