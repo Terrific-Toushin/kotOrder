@@ -76,7 +76,7 @@ Route::middleware(['auth','checkprivilege:OPT'])->group(function(){
     Route::get('/operator-editOrderItem', [OperatorController::class, 'EditOrderItem'])->name ('editOrderItem');
     Route::get('/operator-orderCancle', [OperatorController::class, 'OrderCancle'])->name ('orderCancle');
     Route::get('/operator-itemCancle', [OperatorController::class, 'ItemCancle'])->name ('itemCancle');
-    Route::get('/operator-kotView', [OperatorController::class, 'OperatorKotView'])->name ('kotView');
+    Route::get('/operator-kotView/{billNo}', [OperatorController::class, 'OperatorKotView'])->name ('kotView');
     Route::get('/operator-orderHistry', [OperatorController::class, 'OperatorOrderHistry'])->name ('orderHistry');
     Route::get('/operator-sendToKOT', [OperatorController::class, 'OperatorSendToKOT'])->name ('sendToKOT');
     Route::get('/operator-pendingKOT', [OperatorController::class, 'OperatorPendingKOT'])->name ('pendingKOT');
