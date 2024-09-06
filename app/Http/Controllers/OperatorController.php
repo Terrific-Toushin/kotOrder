@@ -341,12 +341,20 @@ class OperatorController extends Controller
                 $price = request('price'.$count);
                 $kitchen = request('kitchen'.$count);
                 $remark = request('remark'.$count);
-                if($InsertOrderKot){
+                $checkKitchen = DB::connection('sqlsrv')->table('tblMenu')->select('PrintTo')->where('repid','=',$repid)->first();
+                if($InsertOrderKot && $checkKitchen->PrintTo=='No'){
+                    DB::insert('insert into order_kot_item (PropertyID,billNo, repID, price, qty, remark, status, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $repid, $price, $qty,$remark,'3', $kitchen, $dbDateTime]);
+                }elseif ($InsertOrderKot){
                     DB::insert('insert into order_kot_item (PropertyID,billNo, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $repid, $price, $qty,$remark, $kitchen, $dbDateTime]);
                 }
             }
         }
-        DB::connection('sqlsrv')->insert('insert into tblBillPending (date, PropertyID, ResName, billNo, tableNo, flug, ResSL) values (?, ?, ?, ?, ?, ?, ?)',[$dbDateTime,Auth::user()->PropertyID,$uotletName,$billNo,$tableNo,"1",$uotletID]);
+        if($checkKitchen->PrintTo == 'No'){
+            $flug = '3';
+        }else{
+            $flug = '1';
+        }
+        DB::connection('sqlsrv')->insert('insert into tblBillPending (date, PropertyID, ResName, billNo, tableNo, flug, ResSL) values (?, ?, ?, ?, ?, ?, ?)',[$dbDateTime,Auth::user()->PropertyID,$uotletName,$billNo,$tableNo,$flug,$uotletID]);
 
         return redirect()->route('kotView',compact('billNo'));
 
