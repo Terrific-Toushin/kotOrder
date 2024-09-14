@@ -405,7 +405,13 @@ class OperatorController extends Controller
                 $price = request('price'.$count);
                 $kitchen = request('kitchen'.$count);
                 $remark = request('remark'.$count);
-                DB::insert('insert into order_kot_item (PropertyID, billNo, billState, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID, $billNo, $nextBillState, $repid, $price, $qty, $remark, $kitchen, $dbDateTime]);
+                $checkKitchen = DB::connection('sqlsrv')->table('tblMenu')->select('PrintTo')->where('repid','=',$repid)->first();
+//                DB::insert('insert into order_kot_item (PropertyID, billNo, billState, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID, $billNo, $nextBillState, $repid, $price, $qty, $remark, $kitchen, $dbDateTime]);
+                if($checkKitchen->PrintTo=='No'){
+                    DB::insert('insert into order_kot_item (PropertyID,billNo, billState, repID, price, qty, remark, status, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $nextBillState, $repid, $price, $qty, $remark,'3', $kitchen, $dbDateTime]);
+                }else {
+                    DB::insert('insert into order_kot_item (PropertyID,billNo, billState, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $nextBillState, $repid, $price, $qty,$remark, $kitchen, $dbDateTime]);
+                }
 
             }
         }
