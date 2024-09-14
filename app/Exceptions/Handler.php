@@ -45,6 +45,9 @@ class Handler extends ExceptionHandler
         if ($exception instanceof HttpException && $exception->getStatusCode() == 419) {
             return redirect()->route('login')->with('email', 'Your session has expired. Please log in again.');
         }
+        if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
+            return redirect()->route('login')->with('email', 'Your session has expired. Please log in again.');
+        }
 
         return parent::render($request, $exception);
     }
