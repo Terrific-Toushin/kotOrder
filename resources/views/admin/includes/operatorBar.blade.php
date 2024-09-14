@@ -4,7 +4,7 @@
             <i class="fa fa-home"></i>
             <a href="{{route('home')}}">Dashboard @if(Session::has('uotletName')) <b>{{ Session::get('uotletName')}}</b> @endif</a>
         </li>
-        <li style="margin-left: 30vw">Current Date: {{$dbDate}}</li>
+        <li style="margin-left: 30vw">Current Date: {{Session::get('dbDate')}}</li>
     </ul>
     @if(Session::has('uotletName'))
     <div class="page-toolbar">

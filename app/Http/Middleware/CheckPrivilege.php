@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use DB;
 
 class CheckPrivilege
 {
@@ -21,6 +23,10 @@ class CheckPrivilege
             $currentUser = $request->session()->get('loginUserPrivileges');
             $currentUser = str_replace(['[', ']','"'], '', $currentUser);
             $userPrivileges = explode(",",$currentUser);
+            $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->where('PropertyID','=',Auth::user()->PropertyID)->first();
+            $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10);
+            $dbDate = date("d-m-Y", strtotime($dbDateOnly));
+            session()->put('dbDate',$dbDate);
 //            dump($currentUser);
 //            dump($userPrivileges);
 //            dump(in_array("*",$userPrivileges));
