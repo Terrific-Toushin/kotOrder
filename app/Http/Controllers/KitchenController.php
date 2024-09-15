@@ -14,10 +14,10 @@ class KitchenController extends Controller
         $id = Auth::user()->id;
         $profileData = User::find($id);
 
-        $panding_kots_count = DB::table('order_kot_item')->where('complete', '=', 'N')->where('cancel', '=', 'N')->count();
-        $kitchen_complete_kot_count = DB::table('order_kot_item')->where('complete', '=', 'Y')->where('cancel', '=', 'N')->count();
-        $total_kots_count = DB::table('order_kot')->where('cancel', '=', 'N')->count();
-        $cash_print_count = DB::table('order_kot')->where('status', '=', '2')->where('cancel', '=', 'N')->count();
+        $panding_kots_count = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('complete', '=', 'N')->where('cancel', '=', 'N')->count();
+        $kitchen_complete_kot_count = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('complete', '=', 'Y')->where('cancel', '=', 'N')->count();
+        $total_kots_count = DB::table('order_kot')->where('PropertyID','=',Auth::user()->PropertyID)->where('cancel', '=', 'N')->count();
+        $cash_print_count = DB::table('order_kot')->where('PropertyID','=',Auth::user()->PropertyID)->where('status', '=', '2')->where('cancel', '=', 'N')->count();
 
         return view('admin.kitchen.kitchenDashboard',compact('profileData', 'panding_kots_count', 'kitchen_complete_kot_count', 'total_kots_count', 'cash_print_count'));
     } // End Dashboard Method
