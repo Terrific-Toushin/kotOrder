@@ -183,7 +183,7 @@ class OperatorController extends Controller
             $uotletName = $uotletData->ResName;
         }
 
-        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
+        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('PropertyID','=',Auth::user()->PropertyID)->where('outlet', '=', $uotletName)->orderBy('repname')->get();
 //        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
 
         $kitchen = array();
@@ -260,7 +260,7 @@ class OperatorController extends Controller
             $uotletName = $uotletData->ResName;
         }
 
-        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
+        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('PropertyID','=',Auth::user()->PropertyID)->where('outlet', '=', $uotletName)->orderBy('repname')->get();
 //        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
 
         $kitchen = array();
@@ -446,7 +446,7 @@ class OperatorController extends Controller
             $uotletName = $uotletData->ResName;
         }
 
-        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
+        $tblMenu_data = DB::connection('sqlsrv')->table('tblMenu')->where('PropertyID','=',Auth::user()->PropertyID)->where('outlet', '=', $uotletName)->orderBy('repname')->get();
 //        $tblMenu_data = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('outlet', '=', $uotletName)->orderBy('repname')->get();
 
         $kitchen = array();
@@ -488,7 +488,7 @@ class OperatorController extends Controller
             $qty = $order_kot_item->qty;
             $price = $order_kot_item->price * $qty;
 
-            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
+            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('PropertyID','=',Auth::user()->PropertyID)->where('repid', '=', $repID)->get();
 //            $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID)->get();
             foreach ($kot_items_selects as $kot_items_select) {
                 $repname = $kot_items_select->repname;
