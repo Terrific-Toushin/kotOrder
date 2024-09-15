@@ -108,7 +108,7 @@ class KitchenController extends Controller
         $timestamp = time();
         $date = date("Y-m-d", $timestamp);
 //        DB::enableQueryLog();
-        $pending_kots = DB::table('order_kot_item')->leftJoin('order_kot', 'order_kot.billNo', '=', 'order_kot_item.billNo')->select('order_kot_item.*','order_kot.outlet')->where('order_kot_item.cancel', '=', 'N')->where('order_kot_item.complete', '=', 'N')->where(function ($q) {$q->where('order_kot_item.status', '=', '1')->orWhere('order_kot_item.status', '=', '2');})->orderBy('billNo')->get()->toArray();
+        $pending_kots = DB::table('order_kot_item')->leftJoin('order_kot', 'order_kot.billNo', '=', 'order_kot_item.billNo')->select('order_kot_item.*','order_kot.outlet')->where('PropertyID','=',Auth::user()->PropertyID)->where('order_kot_item.cancel', '=', 'N')->where('order_kot_item.complete', '=', 'N')->where(function ($q) {$q->where('order_kot_item.status', '=', '1')->orWhere('order_kot_item.status', '=', '2');})->orderBy('billNo')->get()->toArray();
 //        dump($pending_kots);
 //        dump(DB::getQueryLog());
 //        die();
@@ -141,7 +141,7 @@ class KitchenController extends Controller
         $billNo = request('billNo');
 
 
-        $order_kots = DB::table('order_kot')->where('billNo', '=', $billNo)->get();
+        $order_kots = DB::table('order_kot')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', '=', $billNo)->get();
 
 
         foreach ($order_kots as $order_kot) {
@@ -163,7 +163,7 @@ class KitchenController extends Controller
             $time = date('H:m:s',strtotime($entyDate));
         }
 
-        $order_kot_items = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('status', '=', '1')->get();
+        $order_kot_items = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('status', '=', '1')->get();
 
         $allMenuItems = array();
 
@@ -183,7 +183,7 @@ class KitchenController extends Controller
             array_push($allMenuItems, array("repID"=>$repID, "repname"=>$repname, "price"=>$price, "qty"=>$qty, "kitchen"=>$kitchen));
         }
 
-        $order_kot_items_new = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('status', '=', '2')->get();
+        $order_kot_items_new = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('status', '=', '2')->get();
 
         $allMenuItems_new = array();
 
@@ -193,7 +193,7 @@ class KitchenController extends Controller
             $qty_new = $order_kot_item_new->qty;
             $price_new = $order_kot_item_new->price * $qty_new;
 
-            $kot_items_selects_new = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID_new)->get();
+            $kot_items_selects_new = DB::connection('sqlsrv')->table('tblMenu')->where('PropertyID','=',Auth::user()->PropertyID)->where('repid', '=', $repID_new)->get();
 //            $kot_items_selects_new = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID_new)->get();
             foreach ($kot_items_selects_new as $kot_items_select_new) {
                 $repname_new = $kot_items_select_new->repname;
@@ -203,7 +203,7 @@ class KitchenController extends Controller
             array_push($allMenuItems_new, array("repID"=>$repID_new, "repname"=>$repname_new, "price"=>$price_new, "qty"=>$qty_new, "kitchen"=>$kitchen_new));
         }
 
-        $cancel_order_kot_items = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'Y')->get();
+        $cancel_order_kot_items = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', '=', $billNo)->where('cancel', '=', 'Y')->get();
 
         $cancel_allMenuItems = array();
 
@@ -213,7 +213,7 @@ class KitchenController extends Controller
             $cancel_qty = $cancel_order_kot_item->qty;
             $cancel_price = $cancel_order_kot_item->price * $cancel_qty;
 
-            $cancel_kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $cancel_repID)->get();
+            $cancel_kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('PropertyID','=',Auth::user()->PropertyID)->where('repid', '=', $cancel_repID)->get();
 //            $cancel_kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $cancel_repID)->get();
             foreach ($cancel_kot_items_selects as $cancel_kot_items_select) {
                 $cancel_repname = $cancel_kot_items_select->repname;
@@ -237,16 +237,16 @@ class KitchenController extends Controller
 
         $billId = request('id');
 
-        $updateOrderKot = DB::table('order_kot_item')->where('id', $billId)->update(['complete' => 'Y']);
-        $order_kot_item = DB::table('order_kot_item')->select('billNo')->where('id', '=', $billId)->first();
+        $updateOrderKot = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('id', $billId)->update(['complete' => 'Y']);
+        $order_kot_item = DB::table('order_kot_item')->select('billNo')->where('PropertyID','=',Auth::user()->PropertyID)->where('id', '=', $billId)->first();
         $billNo = $order_kot_item->billNo;
-        $checkOrderStatus = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('complete', '!=', 'Y')->where('cancel','=','N')->get();
+        $checkOrderStatus = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', '=', $billNo)->where('complete', '!=', 'Y')->where('cancel','=','N')->get();
 //        dump($checkOrderStatus);
 //        dump(count($checkOrderStatus));
         if (count($checkOrderStatus) == 0){
 //            dump($billNo);
-            $updateOrderKot = DB::table('order_kot')->where('billNo', $billNo)->update(['status' => '3']);
-            DB::connection('sqlsrv')->table('tblBillPending')->where('billNo', '=', $billNo)->update(['flug'=>'3']);
+            $updateOrderKot = DB::table('order_kot')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', $billNo)->update(['status' => '3']);
+            DB::connection('sqlsrv')->table('tblBillPending')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', '=', $billNo)->update(['flug'=>'3']);
         }
 //        die();
 
@@ -263,13 +263,13 @@ class KitchenController extends Controller
         $timestamp = time();
         $date = date("Y-m-d", $timestamp);
 
-        $kitchen_complete_kots = DB::table('order_kot_item')->leftJoin('order_kot', 'order_kot.billNo', '=', 'order_kot_item.billNo')->select('order_kot_item.*','order_kot.outlet')->where('order_kot_item.cancel', '=', 'N')->where('order_kot_item.complete', '=', 'Y')->get()->toArray();
+        $kitchen_complete_kots = DB::table('order_kot_item')->leftJoin('order_kot', 'order_kot.billNo', '=', 'order_kot_item.billNo')->select('order_kot_item.*','order_kot.outlet')->where('PropertyID','=',Auth::user()->PropertyID)->where('order_kot_item.cancel', '=', 'N')->where('order_kot_item.complete', '=', 'Y')->get()->toArray();
 
         $alreadyOrderItem = array_map(function($item) {
             return $item->repID;
         }, $kitchen_complete_kots);
 
-            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $alreadyOrderItem)->get()->toArray();
+            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('PropertyID','=',Auth::user()->PropertyID)->where('repid', '=', $alreadyOrderItem)->get()->toArray();
 //        $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->select('repid','repname')->whereIn('repid', $alreadyOrderItem)->get()->toArray();
         $itemName = [];
         foreach ($kot_items_selects as $kot_items_select){

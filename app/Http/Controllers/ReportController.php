@@ -115,7 +115,7 @@ class ReportController extends Controller
         $billNo = request('billNo');
 
 
-        $order_kots = DB::table('order_kot')->where('billNo', '=', $billNo)->get();
+        $order_kots = DB::table('order_kot')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', '=', $billNo)->get();
 
 
         foreach ($order_kots as $order_kot) {
@@ -137,7 +137,7 @@ class ReportController extends Controller
             $time = date('H:m:s',strtotime($entyDate));
         }
 
-        $order_kot_items = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('billState', '=', 'A')->get();
+        $order_kot_items = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('billState', '=', 'A')->get();
 
         $allMenuItems = array();
 
@@ -148,7 +148,7 @@ class ReportController extends Controller
             $complete = $order_kot_item->complete;
             $price = $order_kot_item->price * $qty;
 
-            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
+            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('PropertyID','=',Auth::user()->PropertyID)->where('repid', '=', $repID)->get();
 //            $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID)->get();
             foreach ($kot_items_selects as $kot_items_select) {
                 $repname = $kot_items_select->repname;
@@ -158,7 +158,7 @@ class ReportController extends Controller
             array_push($allMenuItems, array("repID"=>$repID, "repname"=>$repname, "price"=>$price, "qty"=>$qty, "kitchen"=>$kitchen, "complete"=>$complete));
         }
 
-        $order_kot_items_new = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('billState', '!=', 'A')->get();
+        $order_kot_items_new = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('billState', '!=', 'A')->get();
 //        dump($order_kot_items_new);
 //        die();
 
@@ -171,7 +171,7 @@ class ReportController extends Controller
             $complete = $order_kot_item_new->complete;
             $price_new = $order_kot_item_new->price * $qty_new;
 
-            $kot_items_selects_new = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID_new)->get();
+            $kot_items_selects_new = DB::connection('sqlsrv')->table('tblMenu')->where('PropertyID','=',Auth::user()->PropertyID)->where('repid', '=', $repID_new)->get();
 //            $kot_items_selects_new = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID_new)->get();
             foreach ($kot_items_selects_new as $kot_items_select_new) {
                 $repname_new = $kot_items_select_new->repname;
@@ -181,7 +181,7 @@ class ReportController extends Controller
             array_push($allMenuItems_new, array("repID"=>$repID_new, "repname"=>$repname_new, "price"=>$price_new, "qty"=>$qty_new, "kitchen"=>$kitchen_new, "complete"=>$complete));
         }
 
-        $cancel_order_kot_items = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'Y')->get();
+        $cancel_order_kot_items = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', '=', $billNo)->where('cancel', '=', 'Y')->get();
 
         $cancel_allMenuItems = array();
 
@@ -191,7 +191,7 @@ class ReportController extends Controller
             $cancel_qty = $cancel_order_kot_item->qty;
             $cancel_price = $cancel_order_kot_item->price * $cancel_qty;
 
-            $cancel_kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $cancel_repID)->get();
+            $cancel_kot_items_selects = DB::connection('sqlsrv')->where('PropertyID','=',Auth::user()->PropertyID)->table('tblMenu')->where('repid', '=', $cancel_repID)->get();
 //            $cancel_kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $cancel_repID)->get();
             foreach ($cancel_kot_items_selects as $cancel_kot_items_select) {
                 $cancel_repname = $cancel_kot_items_select->repname;

@@ -417,7 +417,7 @@ class OperatorController extends Controller
         }
 
         if($itemCount>0){
-            $updateOrderKot = DB::table('order_kot')->where('billNo', $billNo)->update(['billState' => $nextBillState,'tableNo'=>$tableNo, 'roomNo'=>$roomNo, 'terminal'=>$terminal, 'serveTime'=>$serveTime, 'pax'=>$pax, 'waterName'=>$waterName, 'gustName'=>$gustName, 'companyName'=>$companyName, 'email'=>$email, 'contactNo'=>$contactNo, 'outlet'=>$uotletName, 'ResSL'=>$uotletID, 'userID'=>$username,'status' => '4', 'date'=>$dbDateTime]);
+            $updateOrderKot = DB::table('order_kot')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', $billNo)->update(['billState' => $nextBillState,'tableNo'=>$tableNo, 'roomNo'=>$roomNo, 'terminal'=>$terminal, 'serveTime'=>$serveTime, 'pax'=>$pax, 'waterName'=>$waterName, 'gustName'=>$gustName, 'companyName'=>$companyName, 'email'=>$email, 'contactNo'=>$contactNo, 'outlet'=>$uotletName, 'ResSL'=>$uotletID, 'userID'=>$username,'status' => '4', 'date'=>$dbDateTime]);
             DB::connection('sqlsrv')->table('tblBillPending')->where('billNo', '=', $billNo)->update(['flug'=>'4']);
         }
 
