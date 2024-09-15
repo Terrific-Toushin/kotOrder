@@ -23,7 +23,12 @@ class CheckPrivilege
             $currentUser = $request->session()->get('loginUserPrivileges');
             $currentUser = str_replace(['[', ']','"'], '', $currentUser);
             $userPrivileges = explode(",",$currentUser);
-            $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->where('PropertyID','=',Auth::user()->PropertyID)->first();
+            if(!empty(Auth::user()->PropertyID)){
+                $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->where('PropertyID','=',Auth::user()->PropertyID)->first();
+            }else{
+                $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
+            }
+            
             $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10);
             $dbDate = date("d-m-Y", strtotime($dbDateOnly));
             session()->put('dbDate',$dbDate);
