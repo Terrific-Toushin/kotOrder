@@ -190,7 +190,8 @@
 {{--                                        <button type="button" class=" btn btn-info btn-block" onclick="printContent('printQTY')" >Print KOT</button>--}}
 {{--                                        --}}{{-- </a> --}}
 {{--                                    </div>--}}
-                                    @if($showVoid && Auth::user()->kot_void == 'Y')
+{{--                                    @if($showVoid && Auth::user()->kot_void == 'Y')--}}
+                                    @if(Auth::user()->kot_void == 'Y')
                                         <div class="col-md-3">
                                             <a href="{{ route('orderCancle', ['billNo' => $billNo]) }}" onclick="return confirm('Are you sure to cancel KOT?')">
                                                 <button type="button" class="btn btn-danger btn-block" >KOT Void</button>
