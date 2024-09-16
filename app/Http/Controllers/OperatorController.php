@@ -150,7 +150,7 @@ class OperatorController extends Controller
 
         $bill_No = 0;
         $uotletID =session()->get('uotlet');
-        $bill_No_lst = DB::table('order_kot')->latest('date')->first();
+        $bill_No_lst = DB::table('order_kot')->orderBy('billNo','DESC')->first();
 
         if(!empty($bill_No_lst->billNo)){
             $bill_No = $bill_No_lst->billNo;
@@ -317,7 +317,7 @@ class OperatorController extends Controller
         $itemCount = request('itemCount');
 
         $bill_No_lst_db = 0;
-        $bill_No_lst = DB::table('order_kot')->latest('date')->first();
+        $bill_No_lst = DB::table('order_kot')->orderBy('billNo','DESC')->first();
         if(!empty($bill_No_lst->billNo)){
             $bill_No_lst_db = $bill_No_lst->billNo;
         }
@@ -342,14 +342,14 @@ class OperatorController extends Controller
                 $kitchen = request('kitchen'.$count);
                 $remark = request('remark'.$count);
                 $checkKitchen = DB::connection('sqlsrv')->table('tblMenu')->select('PrintTo')->where('repid','=',$repid)->first();
-                if($InsertOrderKot && $checkKitchen->PrintTo=='No'){
-                    DB::insert('insert into order_kot_item (PropertyID,billNo, repID, price, qty, remark, status, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $repid, $price, $qty,$remark,'3', $kitchen, $dbDateTime]);
+                if($InsertOrderKot && $checkKitchen->PrintTo=='Yes'){
+                    DB::insert('insert into order_kot_item (PropertyID,billNo, repID, price, qty, remark, complete, status, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $repid, $price, $qty,$remark, 'Y', '3', $kitchen, $dbDateTime]);
                 }elseif ($InsertOrderKot){
                     DB::insert('insert into order_kot_item (PropertyID,billNo, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $repid, $price, $qty,$remark, $kitchen, $dbDateTime]);
                 }
             }
         }
-        if($checkKitchen->PrintTo == 'No'){
+        if($checkKitchen->PrintTo == 'Yes'){
             $flug = '3';
         }else{
             $flug = '1';
@@ -407,8 +407,8 @@ class OperatorController extends Controller
                 $remark = request('remark'.$count);
                 $checkKitchen = DB::connection('sqlsrv')->table('tblMenu')->select('PrintTo')->where('repid','=',$repid)->first();
 //                DB::insert('insert into order_kot_item (PropertyID, billNo, billState, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID, $billNo, $nextBillState, $repid, $price, $qty, $remark, $kitchen, $dbDateTime]);
-                if($checkKitchen->PrintTo=='No'){
-                    DB::insert('insert into order_kot_item (PropertyID,billNo, billState, repID, price, qty, remark, status, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $nextBillState, $repid, $price, $qty, $remark,'3', $kitchen, $dbDateTime]);
+                if($checkKitchen->PrintTo=='Yes'){
+                    DB::insert('insert into order_kot_item (PropertyID,billNo, billState, repID, price, qty, remark, complete, status, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $nextBillState, $repid, $price, $qty, $remark,'Y','3', $kitchen, $dbDateTime]);
                 }else {
                     DB::insert('insert into order_kot_item (PropertyID,billNo, billState, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $nextBillState, $repid, $price, $qty,$remark, $kitchen, $dbDateTime]);
                 }
@@ -488,7 +488,7 @@ class OperatorController extends Controller
             $qty = $order_kot_item->qty;
             $price = $order_kot_item->price * $qty;
 
-            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('PropertyID','=',Auth::user()->PropertyID)->where('repid', '=', $repID)->get();
+            $kot_items_selects = DB::connection('sqlsrv')->table('tblMenu')->where('repid', '=', $repID)->get();
 //            $kot_items_selects = DB::connection('mysql')->table('rest_fortis.tblmenu')->where('repid', '=', $repID)->get();
             foreach ($kot_items_selects as $kot_items_select) {
                 $repname = $kot_items_select->repname;
