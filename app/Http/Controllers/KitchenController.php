@@ -108,7 +108,7 @@ class KitchenController extends Controller
         $timestamp = time();
         $date = date("Y-m-d", $timestamp);
 //        DB::enableQueryLog();
-        $pending_kots = DB::table('order_kot_item')->leftJoin('order_kot', 'order_kot.billNo', '=', 'order_kot_item.billNo')->select('order_kot_item.*','order_kot.outlet')->where('PropertyID','=',Auth::user()->PropertyID)->where('order_kot_item.cancel', '=', 'N')->where('order_kot_item.complete', '=', 'N')->where(function ($q) {$q->where('order_kot_item.status', '=', '1')->orWhere('order_kot_item.status', '=', '2');})->orderBy('billNo')->get()->toArray();
+        $pending_kots = DB::table('order_kot_item')->leftJoin('order_kot', 'order_kot.billNo', '=', 'order_kot_item.billNo')->select('order_kot_item.*','order_kot.outlet')->where('order_kot.PropertyID','=',Auth::user()->PropertyID)->where('order_kot_item.cancel', '=', 'N')->where('order_kot_item.complete', '=', 'N')->where(function ($q) {$q->where('order_kot_item.status', '=', '1')->orWhere('order_kot_item.status', '=', '2');})->orderBy('billNo')->get()->toArray();
 //        dump($pending_kots);
 //        dump(DB::getQueryLog());
 //        die();
@@ -263,7 +263,7 @@ class KitchenController extends Controller
         $timestamp = time();
         $date = date("Y-m-d", $timestamp);
 
-        $kitchen_complete_kots = DB::table('order_kot_item')->leftJoin('order_kot', 'order_kot.billNo', '=', 'order_kot_item.billNo')->select('order_kot_item.*','order_kot.outlet')->where('PropertyID','=',Auth::user()->PropertyID)->where('order_kot_item.cancel', '=', 'N')->where('order_kot_item.complete', '=', 'Y')->get()->toArray();
+        $kitchen_complete_kots = DB::table('order_kot_item')->leftJoin('order_kot', 'order_kot.billNo', '=', 'order_kot_item.billNo')->select('order_kot_item.*','order_kot.outlet')->where('order_kot_item.PropertyID','=',Auth::user()->PropertyID)->where('order_kot_item.cancel', '=', 'N')->where('order_kot_item.complete', '=', 'Y')->get()->toArray();
 
         $alreadyOrderItem = array_map(function($item) {
             return $item->repID;
