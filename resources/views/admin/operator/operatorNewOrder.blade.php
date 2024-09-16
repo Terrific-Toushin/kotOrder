@@ -121,11 +121,11 @@
                                     </div>
                                     <label class="col-md-1 control-label">Table NO</label>
                                     <div class="col-md-2">
-                                        <input id="tableNo" type="text" name="tableNo" class="form-control" placeholder="Table Number" onblur="onTableNo()" >
+                                        <input id="tableNo" type="text" name="tableNo" class="form-control" placeholder="Table Number" onblur="onTableNo()" autocomplete="off">
                                     </div>
                                     <label class="col-md-1 control-label">Room NO</label>
                                     <div class="col-md-2">
-                                        <input id="roomNo" type="text" name="room" class="form-control" placeholder="Room Number" onkeypress="onRoomNo()" onclick="onRoomNo()" >
+                                        <input id="roomNo" type="text" name="room" class="form-control" placeholder="Room Number" onkeypress="onRoomNo()" onclick="onRoomNo()" autocomplete="off">
                                     </div>
                                     <label class="col-md-1 control-label">Terminal</label>
 {{--                                    @dump($resturentTerminal)--}}
@@ -153,11 +153,11 @@
                                     </div>
                                     <label class="col-md-1 control-label">Guest Name</label>
                                     <div class="col-md-2">
-                                        <input type="text" name="gustName" class="form-control" placeholder="Guest Name">
+                                        <input type="text" name="gustName" class="form-control" placeholder="Guest Name" autocomplete="off">
                                     </div>
                                     <label class="col-md-1 control-label">Contact No</label>
                                     <div class="col-md-2">
-                                        <input type="text" name="contactNo" class="form-control" placeholder="Contact Number">
+                                        <input type="text" name="contactNo" class="form-control" placeholder="Contact Number" autocomplete="off">
                                     </div>
                                 </div>
 

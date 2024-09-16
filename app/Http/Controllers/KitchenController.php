@@ -237,7 +237,7 @@ class KitchenController extends Controller
 
         $billId = request('id');
 
-        $updateOrderKot = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('id', $billId)->update(['complete' => 'Y']);
+        $updateOrderKot = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('id', $billId)->update(['complete' => 'Y','completed_by' => $username]);
         $order_kot_item = DB::table('order_kot_item')->select('billNo')->where('PropertyID','=',Auth::user()->PropertyID)->where('id', '=', $billId)->first();
         $billNo = $order_kot_item->billNo;
         $checkOrderStatus = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', '=', $billNo)->where('complete', '!=', 'Y')->where('cancel','=','N')->get();

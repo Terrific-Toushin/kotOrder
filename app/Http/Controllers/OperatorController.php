@@ -331,8 +331,27 @@ class OperatorController extends Controller
         $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10)." ".date("H:i:s");
         $dbDateTime = date("Y-m-d H:i:s", strtotime($dbDateOnly));
 
-        $InsertOrderKot = DB::insert('insert into order_kot (PropertyID,billNo, tableNo, roomNo, terminal, serveTime, pax, waterName, gustName, companyName, email, contactNo, outlet, ResSL, userID, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)', [Auth::user()->PropertyID,$billNo, $tableNo, $roomNo, $terminal, $serveTime, $pax, $waterName, $gustName, $companyName, $email, $contactNo, $uotletName, $uotletID, $username, $dbDateTime]);
+//        $InsertOrderKot = DB::insert('insert into order_kot (PropertyID,billNo, tableNo, roomNo, terminal, serveTime, pax, waterName, gustName, companyName, email, contactNo, outlet, ResSL, userID, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)', [Auth::user()->PropertyID,$billNo, $tableNo, $roomNo, $terminal, $serveTime, $pax, $waterName, $gustName, $companyName, $email, $contactNo, $uotletName, $uotletID, $username, $dbDateTime]);
+        $InsertOrderKot = DB::table('order_kot')->insertGetId([
+            'PropertyID'   => Auth::user()->PropertyID,
+            'billNo'       => $billNo,
+            'tableNo'      => $tableNo,
+            'roomNo'       => $roomNo,
+            'terminal'     => $terminal,
+            'serveTime'    => $serveTime,
+            'pax'          => $pax,
+            'waterName'    => $waterName,
+            'gustName'     => $gustName,
+            'companyName'  => $companyName,
+            'email'        => $email,
+            'contactNo'    => $contactNo,
+            'outlet'       => $uotletName,
+            'ResSL'        => $uotletID,
+            'userID'       => $username,
+            'date'         => $dbDateTime
+        ]);
 
+        $autoPrint = 0;
         for($count=1;$count<=$itemCount;$count++){
             if(request('repid'.$count)!=""){
 
@@ -343,11 +362,15 @@ class OperatorController extends Controller
                 $remark = request('remark'.$count);
                 $checkKitchen = DB::connection('sqlsrv')->table('tblMenu')->select('PrintTo')->where('repid','=',$repid)->first();
                 if($InsertOrderKot && $checkKitchen->PrintTo=='Yes'){
-                    DB::insert('insert into order_kot_item (PropertyID,billNo, repID, price, qty, remark, complete, status, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $repid, $price, $qty,$remark, 'Y', '3', $kitchen, $dbDateTime]);
+                    DB::insert('insert into order_kot_item (PropertyID,billNo, order_kot_id, repID, price, qty, remark, complete, status, kitchen, completed_by, date) values (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $InsertOrderKot, $repid, $price, $qty,$remark, 'Y', '3', $kitchen, 'System', $dbDateTime]);
                 }elseif ($InsertOrderKot){
-                    DB::insert('insert into order_kot_item (PropertyID,billNo, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $repid, $price, $qty,$remark, $kitchen, $dbDateTime]);
+                    DB::insert('insert into order_kot_item (PropertyID,billNo, order_kot_id, repID, price, qty, remark, kitchen, date) values (?,?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $InsertOrderKot, $repid, $price, $qty,$remark, $kitchen, $dbDateTime]);
+                    $autoPrint++;
                 }
             }
+        }
+        if ($autoPrint == 0){
+            DB::table('order_kot')->where('PropertyID','=',Auth::user()->PropertyID)->where('id', $InsertOrderKot)->update(['status' => '3']);
         }
         if($checkKitchen->PrintTo == 'Yes'){
             $flug = '3';
@@ -393,11 +416,11 @@ class OperatorController extends Controller
         $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10)." ".date("H:i:s");
         $dbDateTime = date("Y-m-d H:i:s", strtotime($dbDateOnly));
         // $InsertOrderKot = DB::insert('insert into order_kot (billNo, tableNo, roomNo, terminal, serveTime, pax, waterName, gustName, companyName, email, contactNo, userID) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$billNo, $tableNo, $roomNo, $terminal, $serveTime, $pax, $waterName, $gustName, $companyName, $email, $contactNo, $username]);
-        $billState = DB::table('order_kot_item')->select('billState')->orderBy('date','DESC')->first();
+        $billState = DB::table('order_kot_item')->select('billState','order_kot_id')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', $billNo)->orderBy('date','DESC')->first();
         $nextBillState = $billState->billState;
         $nextBillState++;
 
-        $updateOrderKotItem = DB::table('order_kot_item')->where('billNo', $billNo)->update(['cancel' => 'Y']);
+        $updateOrderKotItem = DB::table('order_kot_item')->where('PropertyID','=',Auth::user()->PropertyID)->where('billNo', $billNo)->update(['cancel' => 'Y']);
         for($count=1;$count<=$itemCount;$count++){
             if(request('repid'.$count)!=""){
                 $repid = request('repid'.$count);
@@ -408,9 +431,9 @@ class OperatorController extends Controller
                 $checkKitchen = DB::connection('sqlsrv')->table('tblMenu')->select('PrintTo')->where('repid','=',$repid)->first();
 //                DB::insert('insert into order_kot_item (PropertyID, billNo, billState, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID, $billNo, $nextBillState, $repid, $price, $qty, $remark, $kitchen, $dbDateTime]);
                 if($checkKitchen->PrintTo=='Yes'){
-                    DB::insert('insert into order_kot_item (PropertyID,billNo, billState, repID, price, qty, remark, complete, status, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $nextBillState, $repid, $price, $qty, $remark,'Y','3', $kitchen, $dbDateTime]);
+                    DB::insert('insert into order_kot_item (PropertyID,billNo, order_kot_id, billState, repID, price, qty, remark, complete, status, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $billState->order_kot_id, $nextBillState, $repid, $price, $qty, $remark,'Y','3', $kitchen, $dbDateTime]);
                 }else {
-                    DB::insert('insert into order_kot_item (PropertyID,billNo, billState, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $nextBillState, $repid, $price, $qty,$remark, $kitchen, $dbDateTime]);
+                    DB::insert('insert into order_kot_item (PropertyID,billNo, order_kot_id, billState, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $billState->order_kot_id, $nextBillState, $repid, $price, $qty,$remark, $kitchen, $dbDateTime]);
                 }
 
             }

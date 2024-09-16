@@ -95,7 +95,7 @@
                                             <td>{{$allMenuItem['price']}}</td>
                                             <td>{{$allMenuItem['qty']}}</td>
                                             <td>{{$allMenuItem['kitchen']}}</td>
-                                            <td>{{$allMenuItem['complete'] == 'Y' ? 'Completed' : 'Pending'}}</td>
+                                            <td class="{{$allMenuItem['complete'] == 'Y' ? 'btn btn-success' : ''}}">{{$allMenuItem['complete'] == 'Y' ? 'Completed' : 'Pending'}}</td>
                                             @php
                                                 if ($allMenuItem['complete'] == 'Y' )
                                                 $showVoid = false;
@@ -191,7 +191,7 @@
 {{--                                        --}}{{-- </a> --}}
 {{--                                    </div>--}}
 {{--                                    @if($showVoid && Auth::user()->kot_void == 'Y')--}}
-                                    @if(Auth::user()->kot_void == 'Y')
+                                    @if(Auth::user()->kot_void == 'Y' && $status != '3')
                                         <div class="col-md-3">
                                             <a href="{{ route('orderCancle', ['billNo' => $billNo]) }}" onclick="return confirm('Are you sure to cancel KOT?')">
                                                 <button type="button" class="btn btn-danger btn-block" >KOT Void</button>
