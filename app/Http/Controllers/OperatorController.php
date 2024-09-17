@@ -361,7 +361,7 @@ class OperatorController extends Controller
                 $kitchen = request('kitchen'.$count);
                 $remark = request('remark'.$count);
                 $checkKitchen = DB::connection('sqlsrv')->table('tblMenu')->select('PrintTo')->where('repid','=',$repid)->first();
-                if($InsertOrderKot && $checkKitchen->PrintTo=='Yes'){
+                if($InsertOrderKot && $checkKitchen->PrintTo == 'No'){
                     DB::insert('insert into order_kot_item (PropertyID,billNo, order_kot_id, repID, price, qty, remark, complete, status, kitchen, completed_by, date) values (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $InsertOrderKot, $repid, $price, $qty,$remark, 'Y', '3', $kitchen, 'System', $dbDateTime]);
                 }elseif ($InsertOrderKot){
                     DB::insert('insert into order_kot_item (PropertyID,billNo, order_kot_id, repID, price, qty, remark, kitchen, date) values (?,?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $InsertOrderKot, $repid, $price, $qty,$remark, $kitchen, $dbDateTime]);
@@ -372,7 +372,7 @@ class OperatorController extends Controller
         if ($autoPrint == 0){
             DB::table('order_kot')->where('PropertyID','=',Auth::user()->PropertyID)->where('id', $InsertOrderKot)->update(['status' => '3']);
         }
-        if($checkKitchen->PrintTo == 'Yes'){
+        if($checkKitchen->PrintTo == 'No'){
             $flug = '3';
         }else{
             $flug = '1';
@@ -430,7 +430,7 @@ class OperatorController extends Controller
                 $remark = request('remark'.$count);
                 $checkKitchen = DB::connection('sqlsrv')->table('tblMenu')->select('PrintTo')->where('repid','=',$repid)->first();
 //                DB::insert('insert into order_kot_item (PropertyID, billNo, billState, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID, $billNo, $nextBillState, $repid, $price, $qty, $remark, $kitchen, $dbDateTime]);
-                if($checkKitchen->PrintTo=='Yes'){
+                if($checkKitchen->PrintTo == 'No'){
                     DB::insert('insert into order_kot_item (PropertyID,billNo, order_kot_id, billState, repID, price, qty, remark, complete, status, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $billState->order_kot_id, $nextBillState, $repid, $price, $qty, $remark,'Y','3', $kitchen, $dbDateTime]);
                 }else {
                     DB::insert('insert into order_kot_item (PropertyID,billNo, order_kot_id, billState, repID, price, qty, remark, kitchen, date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [Auth::user()->PropertyID,$billNo, $billState->order_kot_id, $nextBillState, $repid, $price, $qty,$remark, $kitchen, $dbDateTime]);
