@@ -28,7 +28,7 @@ class CheckPrivilege
             }else{
                 $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
             }
-            
+
             $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10);
             $dbDate = date("d-m-Y", strtotime($dbDateOnly));
             session()->put('dbDate',$dbDate);
