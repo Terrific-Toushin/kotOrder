@@ -38,6 +38,16 @@ class AdminDashboardController extends Controller
     }
 
     public function redirects(){
+        if(!empty(Auth::user()->PropertyID)){
+            $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->where('PropertyID','=',Auth::user()->PropertyID)->first();
+        }else{
+            $dbDateGet = DB::connection('sqlsrv')->table('tbldate')->first();
+        }
+
+        $dbDateOnly = mb_substr($dbDateGet->SDATE, 0, 10);
+        $dbDate = date("d-m-Y", strtotime($dbDateOnly));
+        session()->put('dbDate',$dbDate);
+
         $role = Auth::user()->role;
         if ($role == 'admin'){
             return redirect()->route('adminDashboard');
