@@ -705,9 +705,10 @@ class OperatorController extends Controller
             $time = date('H:m:s',strtotime($entyDate));
         }
 
-        $order_kot_items = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('status', '=', '1')->get();
+        $order_kot_items = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where(function ($q) {$q->where('status', '=', '1')->orWhere('status', '=', '3');})->get();
 
-
+//        dump($order_kot_items);
+//        die();
 
         foreach ($order_kot_items as $order_kot_item) {
 

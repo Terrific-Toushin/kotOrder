@@ -185,11 +185,11 @@
                         <div class="card-body" id="printButton">
                             <div class="row">
                                 @if($cancel == 'N' && $status!='2')
-{{--                                    <div class="col-md-3">--}}
-{{--                                        --}}{{-- <a href="{{ route('operator.qtyPrintPriview', ['billNo' => $billNo]) }}" class="btnprn"> --}}
-{{--                                        <button type="button" class=" btn btn-info btn-block" onclick="printContent('printQTY')" >Print KOT</button>--}}
-{{--                                        --}}{{-- </a> --}}
-{{--                                    </div>--}}
+                                    <div class="col-md-3">
+{{--                                         <a href="{{ route('qtyPrintPriview', ['billNo' => $billNo]) }}" class="btnprn">--}}
+                                        <button type="button" class=" btn btn-info btn-block" onclick="printContent('printQTY')" >Print KOT</button>
+{{--                                         </a>--}}
+                                    </div>
 {{--                                    @if($showVoid && Auth::user()->kot_void == 'Y')--}}
                                     @if(Auth::user()->kot_void == 'Y' && $status != '3')
                                         <div class="col-md-3">
@@ -223,13 +223,13 @@
                             <img src="{{ asset('/') }}assets/admin/layout/img/nice-removebg-preview.png" alt="logo" class="img-responsive" alt=""/>
                         </div>
                         <div class="col-xs-6">
-                            <p>
+                            <p style="float: right;">
                                 #{{str_pad($billNo, 7, '0', STR_PAD_LEFT)}} / {{$date}} {{$time}} <span class="muted"> </span>
                             </p>
                         </div>
                     </div>
                     <div class="row justify-content-end">
-                        <div class="col-xs-3 invoice-payment" style="float: right">
+                        <div class="col-xs-4 invoice-payment" style="float: right">
                             <h3>Payment Details:</h3>
                             <ul class="list-unstyled">
                                 <li>
@@ -293,26 +293,35 @@
                                     </tr>
                                     @php $totalAmount = $totalAmount+$allMenuItem_new['price'] @endphp
                                 @endforeach
+                                @foreach($allMenuItems as $allMenuItem)
+                                    <tr>
+                                        <td>
+                                            {{$loop->iteration}}
+                                        </td>
+                                        <td>
+                                            {{$allMenuItem['repname']}}
+                                        </td>
+                                        <td class="hidden-480">
+                                            {{$allMenuItem['qty']}}
+                                        </td>
+                                        <td class="hidden-480">
+                                            {{$allMenuItem['price']/$allMenuItem['qty']}}
+                                        </td>
+                                        <td>
+                                            {{$allMenuItem['price']}}
+                                        </td>
+                                    </tr>
+                                    @php $totalAmount = $totalAmount+$allMenuItem['price'] @endphp
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-4">
-                            {{--                        <div class="well">--}}
-                            {{--                            <address>--}}
-                            {{--                                <strong></strong><br/>--}}
-                            {{--                                <br/>--}}
-                            {{--                                <br/>--}}
-                            {{--                                <abbr title="Phone"></abbr></address>--}}
-                            {{--                            <address>--}}
-                            {{--                                <strong></strong><br/>--}}
-                            {{--                                <a href="mailto:#"></a>--}}
-                            {{--                            </address>--}}
-                            {{--                        </div>--}}
                         </div>
                         <div class="col-xs-8 invoice-block">
-                            <ul class="list-unstyled amounts">
+                            <ul class="list-unstyled amounts" style="float: right; text-align: end">
                                 <li>
                                     <strong>Sub - Total amount:</strong> {{$totalAmount}}
                                 </li>
