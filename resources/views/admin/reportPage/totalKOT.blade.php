@@ -237,6 +237,7 @@
         var table = $('#sample_pending').DataTable({
             lengthChange: false,
             responsive: true,
+            scrollX:true,
             buttons: ['csv', 'excel', 'pdf', 'print'],
             layout: {
                 topStart: 'buttons'

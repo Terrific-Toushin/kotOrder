@@ -163,6 +163,7 @@
         $('#sample_user').DataTable({
             lengthChange: false,
             responsive: true,
+            scrollX:true,
             buttons: ['csv', 'excel', 'pdf', 'print'],
             layout: {
                 topStart: 'buttons'
