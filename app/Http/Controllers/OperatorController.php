@@ -592,7 +592,7 @@ class OperatorController extends Controller
             $status = $order_kot->status;
 
             $date = date('Y-m-d',strtotime($entyDate));
-            $time = date('H:m:s',strtotime($entyDate));
+            $time = date('h:m:s A',strtotime($entyDate));
         }
 
         $order_kot_items = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('billState', '=', 'A')->get();
@@ -615,7 +615,7 @@ class OperatorController extends Controller
                 $kitchen = $kot_items_select->kitchen;
             }
 
-            array_push($allMenuItems, array("repID"=>$repID, "repname"=>$repname, "price"=>$price, "qty"=>$qty, "kitchen"=>$kitchen, "complete"=>$complete));
+            array_push($allMenuItems, array("repID"=>$repID, "repname"=>$repname, "price"=>$price, "qty"=>$qty, "kitchen"=>$kitchen, "complete"=>$complete, "remark"=>$order_kot_item->remark));
         }
 
         $order_kot_items_new = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'N')->where('billState', '!=', 'A')->get();
@@ -638,7 +638,7 @@ class OperatorController extends Controller
                 $kitchen_new = $kot_items_select_new->kitchen;
             }
 
-            array_push($allMenuItems_new, array("repID"=>$repID_new, "repname"=>$repname_new, "price"=>$price_new, "qty"=>$qty_new, "kitchen"=>$kitchen_new, "complete"=>$complete));
+            array_push($allMenuItems_new, array("repID"=>$repID_new, "repname"=>$repname_new, "price"=>$price_new, "qty"=>$qty_new, "kitchen"=>$kitchen_new, "complete"=>$complete, "remark"=>$order_kot_item_new->remark));
         }
 
         $cancel_order_kot_items = DB::table('order_kot_item')->where('billNo', '=', $billNo)->where('cancel', '=', 'Y')->get();
@@ -658,7 +658,7 @@ class OperatorController extends Controller
                 $cancel_kitchen = $cancel_kot_items_select->kitchen;
             }
 
-            array_push($cancel_allMenuItems, array("repID"=>$cancel_repID, "repname"=>$cancel_repname, "price"=>$cancel_price, "qty"=>$cancel_qty, "kitchen"=>$cancel_kitchen));
+            array_push($cancel_allMenuItems, array("repID"=>$cancel_repID, "repname"=>$cancel_repname, "price"=>$cancel_price, "qty"=>$cancel_qty, "kitchen"=>$cancel_kitchen, "remark"=>$cancel_order_kot_item->remark));
         }
 
         $itencount=1;

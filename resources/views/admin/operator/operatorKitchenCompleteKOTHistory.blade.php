@@ -179,6 +179,7 @@
             responsive: true,
             buttons: ['csv', 'excel', 'pdf', 'print'],
             scrollX:true,
+autoWidth: false,
             layout: {
                 topStart: 'buttons'
             }

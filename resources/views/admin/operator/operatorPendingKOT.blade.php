@@ -70,19 +70,19 @@
                         </div>
                     </div>
                     <div class="portlet-body">
-                        <table class="table table-hover table-striped table-bordered" id="sample_user">
+                        <table class="table table-hover table-striped table-bordered display nowrap" id="sample_user">
                             <thead>
-                            <tr role="row" class="heading">
-                                <th>SL</th>
-                                <th>Date</th>
-                                <th>Bill NO</th>
-                                <th >Terminal</th>
-                                <th >Serve Time</th>
-                                <th>Table/Room No</th>
-                                <th >PAX</th>
-                                <th >Served BY</th>
-                                <th >Action</th>
-                            </tr>
+                                <tr role="row" class="heading">
+                                    <th>SL</th>
+                                    <th>Date</th>
+                                    <th>Bill NO</th>
+                                    <th >Terminal</th>
+                                    <th >Serve Time</th>
+                                    <th>Table/Room No</th>
+                                    <th >PAX</th>
+                                    <th >Served BY</th>
+                                    <th >Action</th>
+                                </tr>
                             </thead>
                             <tbody>
                             @foreach($pending_kots as $kots)
@@ -163,9 +163,9 @@
 @section('documentJquery')
 {{--    <script>--}}
         $('#sample_user').DataTable({
-            lengthChange: false,
             responsive: true,
             scrollX:true,
+            autoWidth: false,
             buttons: ['csv', 'excel', 'pdf', 'print'],
             layout: {
                 topStart: 'buttons'

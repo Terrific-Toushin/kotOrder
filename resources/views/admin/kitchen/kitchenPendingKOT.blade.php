@@ -197,6 +197,7 @@
             lengthChange: false,
             responsive: true,
             scrollX:true,
+            autoWidth: false,
             buttons: ['csv', 'excel', 'pdf', 'print'],
             layout: {
                 topStart: 'buttons'

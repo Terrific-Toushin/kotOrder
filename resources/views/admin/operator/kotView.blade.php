@@ -53,7 +53,7 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Waiter Name :</strong></td><td> {{$waterName}} </td>
-                                    <td><strong>Gust Name :</strong></td><td  colspan="3"> {{$gustName}} </td>
+                                    <td><strong>Gust Name :</strong></td><td > {{$gustName}} </td>
                                 </tr>
                                 <tr>
                                     <td><strong>Company Name :</strong></td><td> {{$companyName}} </td>
@@ -218,33 +218,44 @@
                 <!-- /.card -->
 
                 <div class="invoice" id="printQTY" style="display: none">
-                    <div class="row invoice-logo">
-                        <div class="col-xs-6 invoice-logo-space">
-                            <img src="{{ asset('/') }}assets/admin/layout/img/nice-removebg-preview.png" alt="logo" class="img-responsive" alt=""/>
-                        </div>
-                        <div class="col-xs-6">
-                            <p style="float: right;">
-                                #{{str_pad($billNo, 7, '0', STR_PAD_LEFT)}} / {{$date}} {{$time}} <span class="muted"> </span>
-                            </p>
+
+                    <div class="row">
+                        <div class="d-flex justify-content-center invoice-payment" style="text-align: center">
+                            <h4><b>Kitchen Order Token </br> {{session('uotletName')}}</b></h4>
                         </div>
                     </div>
-                    <div class="row justify-content-end">
-                        <div class="col-xs-4 invoice-payment" style="float: right">
-                            <h3>Payment Details:</h3>
-                            <ul class="list-unstyled">
-                                <li>
-                                    <strong>V.A.T Reg #:</strong> **************
-                                </li>
-                                <li>
-                                    <strong>Account Name:</strong> *************
-                                </li>
-                                <li>
-                                    <strong>Branch:</strong> ************
-                                </li>
-                                <li>
-                                    <strong>Served By:</strong> {{$waterName}}
-                                </li>
-                            </ul>
+                    <div class="row">
+                        <div class="col-xs-6 justify-content-start">
+                            <table>
+                                <tr>
+                                    <td class="justify-content-start">Date:</td>
+                                    <td class="justify-content-end text-right">{{$date}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Bill No.:</td>
+                                    <td class="justify-content-end text-right">{{$billNo}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Waiter:</td>
+                                    <td class="justify-content-end text-right">{{$waterName}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-xs-6 justify-content-end text-right" style="text-align: -moz-right; text-align: -webkit-right !important;">
+                            <table>
+                                <tr>
+                                    <td>Time:</td>
+                                    <td class="justify-content-end text-right">{{$time}}</td>
+                                </tr>
+                                <tr>
+                                    <td>T/R No.:</td>
+                                    <td class="justify-content-end text-right">{{$tableNo}}{{$roomNo}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Cashier:</td>
+                                    <td class="justify-content-end text-right">ADMIN</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                     <div class="row">
@@ -253,89 +264,91 @@
                                 <thead>
                                 <tr>
                                     <th>
-                                        #
-                                    </th>
-                                    <th>
                                         Item
                                     </th>
-                                    <th class="hidden-480">
+                                    <th class="text-right">
                                         Quantity
-                                    </th>
-                                    <th class="hidden-480">
-                                        Unit Cost
-                                    </th>
-                                    <th>
-                                        Total
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @php
-                                    $totalAmount = 0;
-                                @endphp
-                                @foreach($allMenuItems_new as $allMenuItem_new)
+                                {{--@foreach($allMenuItems_new as $allMenuItem_new)
                                     <tr>
-                                        <td>
-                                            {{$loop->iteration}}
-                                        </td>
                                         <td>
                                             {{$allMenuItem_new['repname']}}
                                         </td>
-                                        <td class="hidden-480">
+                                        <td class="text-right">
                                             {{$allMenuItem_new['qty']}}
                                         </td>
-                                        <td class="hidden-480">
-                                            {{$allMenuItem_new['price']/$allMenuItem_new['qty']}}
-                                        </td>
-                                        <td>
-                                            {{$allMenuItem_new['price']}}
-                                        </td>
                                     </tr>
-                                    @php $totalAmount = $totalAmount+$allMenuItem_new['price'] @endphp
                                 @endforeach
                                 @foreach($allMenuItems as $allMenuItem)
                                     <tr>
                                         <td>
-                                            {{$loop->iteration}}
-                                        </td>
-                                        <td>
                                             {{$allMenuItem['repname']}}
                                         </td>
-                                        <td class="hidden-480">
+                                        <td class="text-right">
                                             {{$allMenuItem['qty']}}
                                         </td>
-                                        <td class="hidden-480">
-                                            {{$allMenuItem['price']/$allMenuItem['qty']}}
-                                        </td>
-                                        <td>
-                                            {{$allMenuItem['price']}}
-                                        </td>
                                     </tr>
-                                    @php $totalAmount = $totalAmount+$allMenuItem['price'] @endphp
-                                @endforeach
+                                @endforeach--}}
+                                @if(!empty($allMenuItems))
+                                    @php $remark = '' @endphp
+                                    <tr>
+                                        <td><strong>New Item</strong></td>
+                                    </tr>
+                                    @foreach($allMenuItems as $allMenuItem)
+                                        <tr>
+                                            <td>{{$allMenuItem['repname']}}</td>
+                                            <td class="text-right">{{$allMenuItem['qty']}}</td>
+                                        </tr>
+                                        @php $remark = $remark.$allMenuItem['remark'] @endphp
+                                    @endforeach
+                                        <tr>
+                                            <td>Remarks:</td>
+                                            <td>{{$remark}}</td>
+                                        </tr>
+                                @endif
+
+                                @if(!empty($allMenuItems_new))
+                                    @php $remark = '' @endphp
+                                    <tr>
+                                        <td><strong>Add Item</strong></td>
+                                    </tr>
+
+                                    @foreach($allMenuItems_new as $allMenuItem_new)
+                                        <tr>
+                                            <td>{{$allMenuItem_new['repname']}}</td>
+                                            <td class="text-right">{{$allMenuItem_new['qty']}}</td>
+                                        </tr>
+                                        @php $remark = $remark.$allMenuItem_new['remark'] @endphp
+                                    @endforeach
+                                        <tr>
+                                            <td>Remarks:</td>
+                                            <td>{{$remark}} </td>
+                                        </tr>
+                                @endif
+
+                                @if(!empty($cancel_allMenuItems))
+                                    @php $remark = '' @endphp
+                                    <tr>
+                                        <td><strong>Cancelled Item</strong></td>
+                                    </tr>
+
+                                    @foreach($cancel_allMenuItems as $cancel_allMenuItem)
+                                        <tr>
+                                            <td>{{$cancel_allMenuItem['repname']}}</td>
+                                            <td class="text-right">{{$cancel_allMenuItem['qty']}}</td>
+                                        </tr>
+                                        @php $remark = $remark.$cancel_allMenuItem['remark'] @endphp
+                                    @endforeach
+                                        <tr>
+                                            <td>Remarks:</td>
+                                            <td>{{$remark}} </td>
+                                        </tr>
+                                @endif
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-4">
-                        </div>
-                        <div class="col-xs-8 invoice-block">
-                            <ul class="list-unstyled amounts" style="float: right; text-align: end">
-                                <li>
-                                    <strong>Sub - Total amount:</strong> {{$totalAmount}}
-                                </li>
-                                <li>
-                                    <strong>Discount:</strong> 0.0%
-                                </li>
-                                <li>
-                                    <strong>VAT:</strong> -----
-                                </li>
-                                <li>
-                                    <strong>Grand Total:</strong> {{$totalAmount}}
-                                </li>
-                            </ul>
-                            <br/>
                         </div>
                     </div>
                 </div>
