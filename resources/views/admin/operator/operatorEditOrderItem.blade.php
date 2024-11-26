@@ -322,7 +322,7 @@
                                                             $orderNewItem = 0;
                                                         @endphp
                                                         @foreach($allMenuItems as $allMenuItem)
-                                                            <tr>
+                                                            <tr  data-id="{{$allMenuItem['repID']}}">
                                                                 @php
                                                                     $orderNewItem++
                                                                 @endphp
@@ -565,7 +565,7 @@
             for(var i = 0; i < divsToHide.length; i++){
                 divsToHide[i].style.display = "none"; // depending on what you're doing
             }
-            let str = '<tr><td><a class="btn default" data-target="#stack'+[itemCount]+'" data-toggle="modal"><i class="fa fa-comments-o"></i></a></td><td>'+repname+'</td>';
+            let str = '<tr data-id="'+repid+'"><td><a class="btn default" data-target="#stack'+[itemCount]+'" data-toggle="modal"><i class="fa fa-comments-o"></i></a></td><td>'+repname+'</td>';
             str += '<td><span id="priceT'+[itemCount]+'">'+parseFloat(price.replace(",", ""),'2')+'</span><input type="hidden"  readonly id="price'+[itemCount]+'" name="price'+[itemCount]+'" class="form-control-plaintext" size="7" value="'+parseFloat(price.replace(",", ""),'2')+'"></td>';
             str += '<td><div class="input-group"><div class="spinner-buttons input-group-btn"><div class="btn spinner-down red decrement" onclick="decrement('+[itemCount]+')"><i class="fa fa-minus"></i></div></div> <input type="number" class="spinner-input form-control quantity" style="min-width: 25px" id="qty'+[itemCount]+'" name="qty'+[itemCount]+'" min="1" size="2" value="1" onchange="indItem('+[itemCount]+')"><input type="hidden"  id="priviasQty'+[itemCount]+'" name="priviasQty'+[itemCount]+'" value="1""><div class="spinner-buttons input-group-btn"><div class="btn spinner-up blue increment" onclick="increment('+[itemCount]+')"><i class="fa fa-plus"></i></div></div></div></td>';
             str += '<td>'+kitchen+'</td>';
@@ -592,7 +592,8 @@
         $(document).on('click','.remove-table-row', function(){
 
             var price = $(this).closest('tr').find('td:eq(2)').text();
-            let productId = $(this).closest('tr').find('td:eq(0)').text();
+            let productId = $(this).closest('tr').data('id');
+            // let productId = $(this).closest('tr').find('td:eq(0)').text();
             var total = document.getElementById("total").value;
 
             document.getElementById("total").value=parseFloat(total) == parseFloat(price.replace(",", ""),'2') ? 0 : parseFloat(total) - parseFloat(price.replace(",", ""),'2');
